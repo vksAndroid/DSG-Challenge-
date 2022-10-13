@@ -5,19 +5,22 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.layoutId
 import coil.compose.AsyncImage
+import countryinfo.app.R
 
 @Composable
 fun ImageFullFlag(flagImageUrl: String) {
     AsyncImage(
         model = flagImageUrl,
+        placeholder = painterResource(id = R.drawable.default_loading),
         contentDescription = "Country Flag",
         contentScale = ContentScale.Crop,
         modifier = Modifier
             .fillMaxWidth()
-              .height(180.dp)
+            .height(180.dp)
             .layoutId("top_flag")
 
     )

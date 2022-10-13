@@ -16,4 +16,6 @@
     <string name="there_is_no_internet">No Internet connection</string>
     <string name="countries">Countries</string>
     <string name="your_current_location">Your Current Location</string>
+    <string name="search">Search</string>
+    <string name="saved">Saved</string>
 </resources>

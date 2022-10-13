@@ -6,6 +6,10 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.Priority
+import com.google.android.gms.tasks.CancellationToken
+import com.google.android.gms.tasks.CancellationTokenSource
+import com.google.android.gms.tasks.OnTokenCanceledListener
 import countryinfo.app.api.model.CountryData
 import countryinfo.app.api.model.CurrenciesName
 import countryinfo.app.di.hiltmodules.DefaultDispatcher
@@ -209,10 +213,12 @@ class CountryListVm @Inject constructor(
 
     @SuppressLint("MissingPermission")
     fun getCurrentLatLong(mFusedLocationClient: FusedLocationProviderClient) {
-        mFusedLocationClient.lastLocation
-            .addOnSuccessListener { location: Location? ->
-                if (location != null)
-                    currentLocationStateFlow.value = location
-            }
+
+        mFusedLocationClient.getCurrentLocation(Priority.PRIORITY_HIGH_ACCURACY, object : CancellationToken() {
+            override fun onCanceledRequested(p0: OnTokenCanceledListener) = CancellationTokenSource().token
+            override fun isCancellationRequested() = false
+        }).addOnSuccessListener {
+            location -> if (location!= null) { currentLocationStateFlow.value = location }
+        }
     }
 }
