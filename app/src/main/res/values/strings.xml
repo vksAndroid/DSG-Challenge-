@@ -1,0 +1,21 @@
+<resources>
+    <string name="app_name">DSG Challenge</string>
+
+    <!--Navigation Keys and parameters-->
+    <string name="country_list">country_list</string>
+    <string name="country_details">country_details</string>
+    <string name="country_cca3_id">cca3</string>
+    <string name="capital">Capital</string>
+    <string name="region">Region</string>
+    <string name="subregion">Subregion</string>
+    <string name="languages">Languages</string>
+    <string name="currencies">Currencies</string>
+    <string name="population">Population</string>
+    <string name="car_driver_side">Car Driver Side</string>
+    <string name="coat_of_arms">Coat of Arms</string>
+    <string name="country_flag">Country Flag</string>
+    <string name="country">Country</string>
+    <string name="there_is_no_internet">No Internet connection</string>
+    <string name="countries">Countries</string>
+    <string name="your_current_location">Your Current Location</string>
+</resources>
