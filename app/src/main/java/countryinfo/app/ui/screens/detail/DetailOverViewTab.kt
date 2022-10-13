@@ -2,6 +2,7 @@ package countryinfo.app.ui.screens.detail
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Scaffold
@@ -27,51 +28,35 @@ import countryinfo.app.vm.CountryListVm
 @Composable
 fun DetailOverViewTab(cca3: String, viewModel: CountryListVm) {
 
-    val countryList = viewModel?.observeCountryList()
+    val countryList = viewModel.observeCountryList()
     val countryDetails =
-        countryList?.value?.first { countryDetailItem -> cca3 == countryDetailItem.cca3 }
+        countryList.value.first { countryDetailItem -> cca3 == countryDetailItem.cca3 }
 
-    val scroll = rememberScrollState()
+    Scaffold(backgroundColor = Color.White,
+        content = {
+                itemPadding->
+            ConstraintLayout(setComponentsUsingConstraints(), modifier = Modifier
+                .fillMaxSize()
+                .padding(bottom = itemPadding.calculateBottomPadding() + 40.dp)
+                .verticalScroll(
+                    rememberScrollState()
+                )) {
 
-    Scaffold(
-        backgroundColor = Color.White,
-        modifier = Modifier
-            .verticalScroll(scroll)
-            .fillMaxSize()
-    ) {
+                ImageFullFlag(flagImageUrl = countryDetails.flags?.png!!)
 
+                CountryNameCard(title = countryDetails.name?.common!!, value =countryDetails.name?.official!! )
 
-        ConstraintLayout(setComponentsUsingConstraints(), modifier = Modifier.fillMaxSize()) {
+                CountryBasicDetail(countryDetails)
 
-            ImageFullFlag(flagImageUrl = countryDetails?.flags?.png!!)
+                CountryDetailComponent(title = labelLanguages, value = countryDetails.languages)
+                CountryDetailComponent(title = labelCurrencies, value = countryDetails.currencies)
+                CountryDetailComponent(title = labelPopulation, value = countryDetails.population.toString())
+                CountryDetailComponent(title = labelcarDriveSide, value = countryDetails.car?.side!!, isDriverItem = true)
+                CountryDetailComponent(title = "Timezone(s)", value = countryDetails.timezones)
+                CountryDetailComponent(isImage = true, imageUrl = countryDetails.coatOfArms?.png!!, title = "Coat of Arms", value = "")
 
-            CountryNameCard(
-                title = countryDetails.name?.common!!,
-                value = countryDetails.name?.official!!
-            )
-
-            CountryBasicDetail(countryDetails)
-
-            CountryDetailComponent(title = labelLanguages, value = countryDetails.languages)
-            CountryDetailComponent(title = labelCurrencies, value = countryDetails.currencies)
-            CountryDetailComponent(
-                title = labelPopulation,
-                value = countryDetails.population.toString()
-            )
-            CountryDetailComponent(
-                title = labelcarDriveSide,
-                value = countryDetails.car?.side!!,
-                isDriverItem = true
-            )
-            CountryDetailComponent(title = "Timezone(s)", value = countryDetails.timezones)
-            CountryDetailComponent(
-                isImage = true,
-                imageUrl = countryDetails.coatOfArms?.png!!,
-                title = "Coat of Arms",
-                value = ""
-            )
-        }
-    }
+            }
+        })
 }
 
 fun setComponentsUsingConstraints(): ConstraintSet {

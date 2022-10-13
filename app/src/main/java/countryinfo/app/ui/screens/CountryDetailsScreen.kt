@@ -5,8 +5,6 @@ import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material.Scaffold
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
@@ -16,10 +14,11 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.google.android.gms.location.FusedLocationProviderClient
+import countryinfo.app.ui.screens.detail.CountryMapScreen
 import countryinfo.app.ui.screens.detail.DetailOverViewTab
 import countryinfo.app.uicomponents.BottomMenu
 import countryinfo.app.uicomponents.TopBarDetailScreen
-import countryinfo.app.utils.tabs.DetailBottomTab
+import countryinfo.app.utils.tabs.BottomTab
 import countryinfo.app.vm.CountryListVm
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
@@ -31,14 +30,14 @@ fun CountryDetailsScreen(cca3: String, viewModel: CountryListVm,mFusedLocationCl
 
     val countryList = viewModel.observeCountryList().collectAsState().value
     val countryDetails =
-        countryList?.first { countryDetailItem -> cca3 == countryDetailItem.cca3 }
+        countryList.first { countryDetailItem -> cca3 == countryDetailItem.cca3 }
 
     Scaffold(topBar = {
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
             TopBarDetailScreen(
-                title = countryDetails?.name?.common!!,
-                Icons.Default.ArrowBack
-            ) {
+                isShowNavigation = true,
+                isShowSaveIcon = true,
+                title = countryDetails.name?.common ?: "",) {
                 onBackPress.invoke()
             }
         }
@@ -47,7 +46,7 @@ fun CountryDetailsScreen(cca3: String, viewModel: CountryListVm,mFusedLocationCl
         { BottomMenu(navController = navHostController) }) {
         DetailNavigationGraph(
             navController = navHostController, scrollState = scrollState,
-            countryId = cca3, viewModel = viewModel!!,
+            countryId = cca3, viewModel = viewModel,
             mFusedLocationClient
         )
     }
@@ -64,13 +63,13 @@ fun DetailNavigationGraph(
 ) {
 
     //"$countryDetailScreenNavId$cid"
-    NavHost(navController = navController, startDestination = DetailBottomTab.TabOverview.route) {
+    NavHost(navController = navController, startDestination = BottomTab.TabOverview.route) {
 
-        composable(DetailBottomTab.TabOverview.route) {
+        composable(BottomTab.TabOverview.route) {
             DetailOverViewTab(cca3 = countryId, viewModel = viewModel)
 
         }
-        composable(DetailBottomTab.TabMap.route) {
+        composable(BottomTab.TabMap.route) {
             CountryMapScreen(
                 navController = navController,
                 cca3 = countryId,

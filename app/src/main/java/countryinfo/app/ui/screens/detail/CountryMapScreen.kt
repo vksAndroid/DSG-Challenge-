@@ -1,4 +1,4 @@
-package countryinfo.app.ui.screens
+package countryinfo.app.ui.screens.detail
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.Column

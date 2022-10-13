@@ -27,30 +27,34 @@ import coil.compose.AsyncImage
 import com.google.gson.Gson
 import countryinfo.app.R
 import countryinfo.app.api.model.CountryData
+import countryinfo.app.repo.CountryListRepo
+import countryinfo.app.uicomponents.CountryItemView
+import countryinfo.app.uicomponents.TopBarDetailScreen
 import countryinfo.app.utils.networkconnection.ConnectionState
 import countryinfo.app.utils.networkconnection.connectivityState
 import countryinfo.app.vm.CountryListVm
+import kotlinx.coroutines.Dispatchers
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter", "StateFlowValueCalledInComposition")
 @Composable
-fun CountrySearchScreen(navController: NavController?, viewModel: CountryListVm) {
+fun CountrySearchScreen(navController: NavController?, viewModel: CountryListVm?) {
 
     val progressBar = remember { mutableStateOf(false) }
-    val countryList = viewModel.observeCountryList().collectAsState()
-    val searchList = viewModel.observeSearchCountryList().collectAsState()
+    val countryList = viewModel?.observeCountryList()?.collectAsState()
+    val searchList = viewModel?.observeSearchCountryList()?.collectAsState()
 
     val connection by connectivityState()
     val isConnected = connection === ConnectionState.Available
 
     Log.d("Search List", Gson().toJson(searchList))
 
-    if (searchList.value.isEmpty() && countryList.value.isEmpty()) {
+    if (searchList?.value?.isEmpty()!! && countryList?.value?.isEmpty()!!) {
         viewModel.getCountryList()
     }
 
     Scaffold(topBar = {
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
-            AppBar(title = "Countries")
+            TopBarDetailScreen( title = "Countries"){}
         }
     },
         snackbarHost = {
@@ -67,10 +71,10 @@ fun CountrySearchScreen(navController: NavController?, viewModel: CountryListVm)
         }) {
         Surface(modifier = Modifier.fillMaxSize(), color = Color.White) {
             Column(modifier = Modifier.fillMaxSize()) {
-                SearchTextField(viewModel)
+                SearchTextField(viewModel!!)
                 viewModel.data.value = "sjdhfbwks"
-                if (searchList.value.isEmpty()) {
-                    CountryListView(navController, countryList.value)
+                if (searchList?.value?.isEmpty()!!) {
+                    CountryListView(navController, countryList?.value!!)
                 } else {
                     CountryListView(navController, searchList.value)
                 }
@@ -134,60 +138,6 @@ fun CountryListView(navController: NavController?, countryList: List<CountryData
     }
 }
 
-@ExperimentalMaterialApi
-@Composable
-fun CountryItemView(
-    countryFlag: String?,
-    commonName: String?,
-    officialName: String?,
-    capitalName: String,
-    onItemClicked: () -> Unit
-) {
-
-    Card(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(12.dp),
-        onClick = { onItemClicked.invoke() },
-        elevation = 0.dp,
-    ) {
-        Row(
-            horizontalArrangement = Arrangement.Start,
-            verticalAlignment = CenterVertically
-        ) {
-
-            AsyncImage(
-                model = countryFlag, contentDescription = stringResource(R.string.country_flag),
-                modifier = Modifier
-                    .size(100.dp, 65.dp)
-                    .padding(8.dp)
-            )
-            Column(
-                modifier = Modifier
-                    .align(alignment = CenterVertically)
-                    .padding(4.dp)
-            ) {
-                CountryItemTextView(
-                    name = commonName ?: "",
-                    fontWeight = FontWeight.Bold,
-                    color = Color.Black
-                )
-                CountryItemTextView(
-                    name = officialName ?: "",
-                    fontWeight = FontWeight.Medium,
-                    color = Color.DarkGray
-                )
-                CountryItemTextView(
-                    name = capitalName,
-                    fontWeight = FontWeight.Medium,
-                    color = Color.Gray
-                )
-            }
-        }
-
-    }
-
-}
 
 @Composable
 fun CountryItemTextView(name: String, fontWeight: FontWeight, color: Color) {
@@ -199,23 +149,9 @@ fun CountryItemTextView(name: String, fontWeight: FontWeight, color: Color) {
     )
 }
 
-@Composable
-fun AppBar(title: String) {
-    TopAppBar(
-        navigationIcon = null,
-        title = {
-            Text(
-                text = title, modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(end = 16.dp), textAlign = TextAlign.Center
-            )
-        }
-    )
-
-}
 
 @Preview(showBackground = true)
 @Composable
-fun DefaultPreview1() {
-    //CountrySearchScreen(null, CountryListVm(CountryListRepo(), Dispatchers.Default))
+fun ShowCountrySearchScreenPreview() {
+    CountrySearchScreen(null, null)
 }

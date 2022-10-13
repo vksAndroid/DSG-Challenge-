@@ -5,18 +5,29 @@ import androidx.compose.material.icons.outlined.Map
 import androidx.compose.material.icons.outlined.Star
 import androidx.compose.ui.graphics.vector.ImageVector
 
-sealed class DetailBottomTab (var title : String,
+sealed class BottomTab (var title : String,
                               var route : String,
                               var imageVector : ImageVector,
                               var isSelected : Boolean) {
 
-    object TabOverview : DetailBottomTab(
+    object TabOverview : BottomTab(
         "Overview", "overview",
         Icons.Outlined.Star, false
     )
 
-    object TabMap : DetailBottomTab(
+    object TabMap : BottomTab(
         "Map", "map",
+        Icons.Outlined.Map, false
+    )
+
+// Country List Bottom Tab
+    object TabSearch : BottomTab(
+        "Search", "search",
+        Icons.Outlined.Star, false
+    )
+
+    object TabSaved : BottomTab(
+        "Saved", "saved",
         Icons.Outlined.Map, false
     )
 }
