@@ -139,8 +139,6 @@ fun SearchNavigationGraph(
         }
         composable(BottomTab.TabMap.route) {
             CountryMapScreen(
-                navController = navController,
-                cca3 = "ISR",
                 viewModel = viewModel,
                 mFusedLocationClient =  LocationServices.getFusedLocationProviderClient(
                     LocalContext.current)

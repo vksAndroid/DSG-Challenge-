@@ -1,6 +1,7 @@
 package countryinfo.app.uicomponents
 
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.MaterialTheme
@@ -9,7 +10,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
- import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -33,15 +35,20 @@ fun CountryItemView(
             .fillMaxWidth()
             .padding(12.dp),
         onClick = { onItemClicked.invoke() },
-        elevation = 0.dp,
+         elevation = 1.dp,
+        shape = RoundedCornerShape(12.dp)
+
     ) {
         Row(
             horizontalArrangement = Arrangement.Start,
-            verticalAlignment = Alignment.CenterVertically
+            verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier.padding(4.dp)
+
         ) {
 
             AsyncImage(
                 model = countryFlag, contentDescription = stringResource(R.string.country_flag),
+                placeholder = painterResource(id = R.drawable.default_loading),
                 modifier = Modifier
                     .size(100.dp, 65.dp)
                     .padding(8.dp)

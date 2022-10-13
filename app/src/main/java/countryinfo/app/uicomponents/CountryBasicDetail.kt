@@ -24,10 +24,9 @@ fun CountryBasicDetail(countryData: CountryData?) {
         elevation = 1.5.dp,
         modifier = Modifier
             .layoutId("BasicDetail")
-            .padding(start = 12.dp, end = 12.dp),
+            .padding(horizontal = 12.dp),
         shape = RoundedCornerShape(10.dp)
     ) {
-
         Row(
             modifier = Modifier
                 .padding(start = 12.dp, end = 12.dp)

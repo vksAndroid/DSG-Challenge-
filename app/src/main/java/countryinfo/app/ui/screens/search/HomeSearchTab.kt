@@ -20,6 +20,7 @@ import androidx.navigation.NavController
 import countryinfo.app.Graph
 import countryinfo.app.api.model.CountryData
 import countryinfo.app.uicomponents.CountryItemView
+import countryinfo.app.uicomponents.LoadingShimmerEffect
 import countryinfo.app.utils.ScreenOptions
 import countryinfo.app.utils.networkconnection.ConnectionState
 import countryinfo.app.utils.networkconnection.connectivityState
@@ -86,11 +87,12 @@ fun SearchTextField(viewModel: CountryListVm) {
             .fillMaxWidth()
             .border(width = 8.dp, color = Color.White, shape = RoundedCornerShape(20.dp)),
         singleLine = true,
-        textStyle = TextStyle(fontSize = 16.sp),
+        textStyle = TextStyle(fontSize = 16.sp,  color = Color.Black),
         leadingIcon = { Icon(Icons.Default.Search, contentDescription = "") },
         colors = TextFieldDefaults.textFieldColors(
             focusedIndicatorColor = Color.Transparent,
-            unfocusedIndicatorColor = Color.Transparent
+            unfocusedIndicatorColor = Color.Transparent,
+            cursorColor = Color.Gray
         ),
         shape = RoundedCornerShape(20.dp)
     )
@@ -99,24 +101,33 @@ fun SearchTextField(viewModel: CountryListVm) {
 @Composable
 fun CountryListView(navController: NavController?, countryList: List<CountryData>,changeState : (countryData : CountryData) ->Unit) {
 
-    LazyColumn {
-        items(items = countryList) { countryData ->
+    if (countryList.isEmpty()) {
+        LazyColumn() {
+            repeat(6) {
+                item { LoadingShimmerEffect() }
+            }
+        }
+    } else {
 
-            CountryItemView(
-                commonName = countryData.name?.common,
-                officialName = countryData.name?.official,
-                capitalName = if (countryData.capital.isNotEmpty()) {
-                    countryData.capital[0]
-                } else {
-                    ""
-                },
-                countryFlag = countryData.flags?.png,
-                onItemClicked = {
-                    changeState.invoke(countryData)
+        LazyColumn(modifier = Modifier.padding(top = 8.dp)) {
+            items(items = countryList) { countryData ->
 
-                    navController?.navigate(Graph.CountryDetail)
-                }
-            )
+                CountryItemView(
+                    commonName = countryData.name?.common,
+                    officialName = countryData.name?.official,
+                    capitalName = if (countryData.capital.isNotEmpty()) {
+                        countryData.capital[0]
+                    } else {
+                        ""
+                    },
+                    countryFlag = countryData.flags?.png,
+                    onItemClicked = {
+                        changeState.invoke(countryData)
+
+                        navController?.navigate(Graph.CountryDetail)
+                    }
+                )
+            }
         }
     }
 }

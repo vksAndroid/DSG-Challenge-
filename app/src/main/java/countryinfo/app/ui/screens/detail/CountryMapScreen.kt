@@ -37,51 +37,38 @@ import countryinfo.app.vm.CountryListVm
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter", "StateFlowValueCalledInComposition")
 @Composable
-fun CountryMapScreen(
-    navController: NavController?,
-    cca3: String,
-    viewModel: CountryListVm?,
-    mFusedLocationClient: FusedLocationProviderClient?
+fun CountryMapScreen(viewModel: CountryListVm,
+    mFusedLocationClient: FusedLocationProviderClient
 ) {
 
-    //Local response
-//    val countryList = viewModel?.getLocalCountryDetailsList(LocalContext.current)
-//    val countryDetails = countryList?.first { countryDetailItem -> cca3 == countryDetailItem.cca3 }
-    //Server response
-    val countryList = viewModel?.observeCountryList()?.collectAsState()
-    val countryDetails =
-        countryList?.value?.first { countryDetailItem -> cca3 == countryDetailItem.cca3 }
+    val countryDetail = viewModel.observeCountryData().collectAsState().value
 
     ConstraintLayout(
-        setComponentsUsingConstraints(), modifier = Modifier
+        setComponentsUsingConstraints1(), modifier = Modifier
             .fillMaxSize()
             .verticalScroll(
                 rememberScrollState()
             )
     ) {
 
-        ImageFullFlag(flagImageUrl = countryDetails?.flags?.png!!)
+        countryDetail.flags?.png?.let {
+            ImageFullFlag(flagImageUrl = it)
+        }
+        val official = countryDetail.name?.official ?: ""
+        val name = countryDetail.name?.common ?: ""
 
-        CountryNameCard(
-            title = countryDetails.name?.common!!,
-            value = countryDetails.name?.official!!
-        )
+        CountryNameCard(title = name, value = official)
 
-        CountryBasicDetail(countryDetails)
+        CountryBasicDetail(countryDetail)
 
         Column(
             modifier = Modifier
                 .fillMaxSize().padding(top = 8.dp)
                 .layoutId("mapColumn")
         ) {
-//            countryDetails?.flags?.png?.let { it1 -> ImageFullFlag(flagImageUrl = it1) }
-//            CountryNameCard(
-//                title = countryDetails?.name?.common!!,
-//                value = countryDetails.name?.official!!
-//            )
-//            CountryBasicDetail(countryDetails)
+
             if (isLocationPermissionGranted()) {
-                viewModel.getCurrentLatLong(mFusedLocationClient!!)
+                viewModel.getCurrentLatLong(mFusedLocationClient)
                 val currentLocation = viewModel.observeCurrentLocation().collectAsState().value
                 val currentLatLng = LatLng(currentLocation.latitude, currentLocation.longitude)
                 MapTextLabel(
@@ -90,24 +77,26 @@ fun CountryMapScreen(
                 )
                 MapViewComponent(currentLatLng, LOCATION_TYPE_CURRENT)
             }
+
             MapTextLabel(
                 textLabel = "${stringResource(id = R.string.country)} - ",
-                textValue = countryDetails?.name?.common!!
+                textValue = name
             )
+
             val countryLocation =
-                LatLng(countryDetails?.latlng?.get(0) ?: 0.0, countryDetails?.latlng?.get(1) ?: 0.0)
+                LatLng(countryDetail.latlng[0] ?: 0.0, countryDetail.latlng[1] ?: 0.0)
             MapViewComponent(countryLocation, LOCATION_TYPE_COUNTRY)
             MapTextLabel(
                 textLabel = "${stringResource(id = R.string.capital)} - ",
-                textValue = if (countryDetails.capital.isNotEmpty()) {
-                    countryDetails.capital[0]
+                textValue = if (countryDetail.capital.isNotEmpty()) {
+                    countryDetail.capital[0]
                 } else {
                     ""
                 }
             )
             val capitalLocation = LatLng(
-                countryDetails?.capitalInfo?.latlng?.get(0) ?: 0.0,
-                countryDetails?.capitalInfo?.latlng?.get(1) ?: 0.0
+                countryDetail.capitalInfo?.latlng?.get(0) ?: 0.0,
+                countryDetail.capitalInfo?.latlng?.get(1) ?: 0.0
             )
             MapViewComponent(capitalLocation, LOCATION_TYPE_CAPITAL)
         }
@@ -131,7 +120,7 @@ fun MapTextLabel(textLabel: String, textValue: String) {
     }
 }
 
-fun setComponentsUsingConstraints(): ConstraintSet {
+fun setComponentsUsingConstraints1(): ConstraintSet {
 
     return ConstraintSet {
 
@@ -161,6 +150,5 @@ fun setComponentsUsingConstraints(): ConstraintSet {
 @Preview(showBackground = true)
 @Composable
 fun MapDefaultPreview() {
-    val viewModel: CountryListVm = viewModel()
-    CountryMapScreen(null, "HKG", viewModel, null)
+   // CountryMapScreen(  viewModel, null)
 }

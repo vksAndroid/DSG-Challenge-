@@ -12,6 +12,7 @@ import androidx.compose.material.icons.outlined.Bookmark
 import androidx.compose.material.icons.outlined.BookmarkBorder
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -23,7 +24,7 @@ fun TopBar(title: String = "",
                        isSaved : Boolean = false,
                        isShowSaveIcon : Boolean = false,
                        clickAction: () -> Unit) {
-    TopAppBar(
+    TopAppBar(contentColor = Color.Black,
         title = {
             Text(
                 text = title,

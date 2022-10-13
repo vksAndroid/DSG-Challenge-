@@ -15,7 +15,6 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import countryinfo.app.R
 import countryinfo.app.utils.tabs.BottomTab
 import countryinfo.app.ui.theme.OffWhite
-import countryinfo.app.utils.tabs.DetailBottomTab
 
 
 

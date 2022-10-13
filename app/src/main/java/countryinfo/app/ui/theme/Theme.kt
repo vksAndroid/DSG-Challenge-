@@ -41,7 +41,7 @@ fun CountryInfoTheme(darkTheme: Boolean = isSystemInDarkTheme(), content: @Compo
     val systemUiController = rememberSystemUiController()
     SideEffect {
         systemUiController.setStatusBarColor(
-            color = Color.White,
+            color = Color.Gray,
             darkIcons = false,
         )
     }

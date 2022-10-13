@@ -1,23 +1,9 @@
 package countryinfo.app.ui.screens
 
 import android.annotation.SuppressLint
-import androidx.compose.foundation.ScrollState
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.navigation.NavHostController
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
-import androidx.navigation.compose.rememberNavController
-import com.google.android.gms.location.FusedLocationProviderClient
-import countryinfo.app.ui.screens.detail.CountryMapScreen
 import countryinfo.app.ui.screens.detail.DetailOverViewTab
-import countryinfo.app.uicomponents.BottomMenu
-import countryinfo.app.utils.tabs.BottomTab
 import countryinfo.app.vm.CountryListVm
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
@@ -25,58 +11,8 @@ import countryinfo.app.vm.CountryListVm
 fun CountryDetailsScreen( viewModel: CountryListVm) {
 
 
-    DetailOverViewTab( viewModel = viewModel)
-
-//    Scaffold(topBar = {
-//        Column(horizontalAlignment = Alignment.CenterHorizontally) {
-//            TopBarDetailScreen(
-//                isShowNavigation = true,
-//                isShowSaveIcon = true,
-//                title = countryDetails.name?.common ?: "",) {
-//                onBackPress.invoke()
-//            }
-//        }
-//    },
-//        bottomBar =
-//        {
-//            BottomMenu(navController = navHostController)
-//        }) {
-//        DetailNavigationGraph(
-//            navController = navHostController,
-//            countryId = cca3, viewModel = viewModel,
-//            mFusedLocationClient
-//        )
-//    }
+    DetailOverViewTab(viewModel = viewModel)
 }
-
-
-//@Composable
-//fun DetailNavigationGraph(
-//    navController: NavHostController,
-//     countryId: String,
-//    viewModel: CountryListVm
-//) {
-//
-//    //"$countryDetailScreenNavId$cid"
-//    NavHost(navController = navController, startDestination = BottomTab.TabOverview.route) {
-//
-//        composable(BottomTab.TabOverview.route) {
-//            DetailOverViewTab( viewModel = viewModel)
-//
-//        }
-//        composable(BottomTab.TabMap.route) {
-//            CountryMapScreen(
-//                navController = navController,
-//                cca3 = countryId,
-//                viewModel = viewModel,
-//                mFusedLocationClient = mFusedLocationClient
-//            )
-//
-//        }
-//
-//
-//    }
-//}
 
 @Preview(showBackground = true)
 @Composable
