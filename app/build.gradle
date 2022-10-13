@@ -114,5 +114,9 @@ dependencies {
     //App permission
     implementation 'com.google.accompanist:accompanist-permissions:0.21.1-beta'
 
+    //room
+    implementation "androidx.room:room-ktx:2.4.3"
+    kapt "androidx.room:room-compiler:2.4.3"
+
 
 }

@@ -22,6 +22,7 @@ fun TopBarDetailScreen(title: String = "",
                        isShowNavigation : Boolean = false ,
                        isSaved : Boolean = false,
                        isShowSaveIcon : Boolean = false,
+                       onFavClick :() ->Unit,
                        clickAction: () -> Unit) {
     TopAppBar(
         title = {
@@ -51,7 +52,7 @@ fun TopBarDetailScreen(title: String = "",
                 contentDescription = "",
                 modifier = Modifier
                     .padding(8.dp)
-                    .clickable { clickAction.invoke() }
+                    .clickable { onFavClick.invoke() }
             )
         }
     )

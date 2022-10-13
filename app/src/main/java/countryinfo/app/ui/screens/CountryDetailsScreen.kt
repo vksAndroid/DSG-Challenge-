@@ -5,8 +5,8 @@ import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material.Scaffold
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavHostController
@@ -23,21 +23,38 @@ import countryinfo.app.vm.CountryListVm
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
-fun CountryDetailsScreen(cca3: String, viewModel: CountryListVm,mFusedLocationClient: FusedLocationProviderClient, onBackPress: () -> Unit) {
+fun CountryDetailsScreen(
+    cca3: String,
+    viewModel: CountryListVm,
+    mFusedLocationClient: FusedLocationProviderClient,
+    onBackPress: () -> Unit
+) {
 
     val scrollState = rememberScrollState()
     val navHostController = rememberNavController()
 
     val countryList = viewModel.observeCountryList().collectAsState().value
-    val countryDetails =
+    val countryData =
         countryList.first { countryDetailItem -> cca3 == countryDetailItem.cca3 }
+    countryData.cca3?.let { viewModel.isCountryFav(it) }
+
+    var isFav by rememberSaveable { mutableStateOf(viewModel._isFav) }
 
     Scaffold(topBar = {
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
             TopBarDetailScreen(
                 isShowNavigation = true,
                 isShowSaveIcon = true,
-                title = countryDetails.name?.common ?: "",) {
+                title = countryData.name?.common ?: "",
+                isSaved = isFav.value,
+                onFavClick = {
+                    if (isFav.value) {
+                        viewModel.removeFavourite(countryData)
+                    } else {
+                        viewModel.addFavourite(countryData)
+                    }
+                }
+            ) {
                 onBackPress.invoke()
             }
         }
@@ -62,12 +79,10 @@ fun DetailNavigationGraph(
     mFusedLocationClient: FusedLocationProviderClient
 ) {
 
-    //"$countryDetailScreenNavId$cid"
     NavHost(navController = navController, startDestination = BottomTab.TabOverview.route) {
 
         composable(BottomTab.TabOverview.route) {
             DetailOverViewTab(cca3 = countryId, viewModel = viewModel)
-
         }
         composable(BottomTab.TabMap.route) {
             CountryMapScreen(

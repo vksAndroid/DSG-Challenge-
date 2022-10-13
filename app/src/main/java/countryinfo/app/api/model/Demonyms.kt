@@ -1,9 +1,10 @@
 package countryinfo.app.api.model
 
+import androidx.room.Entity
 import com.google.gson.annotations.SerializedName
 import countryinfo.app.api.model.translations.*
 
-
+@Entity
 data class Demonyms (
 
     
