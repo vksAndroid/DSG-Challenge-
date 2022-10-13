@@ -2,14 +2,20 @@ package countryinfo.app.ui.screens.search
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.border
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
@@ -40,28 +46,33 @@ fun HomeSearchTab(navController: NavController?, viewModel: CountryListVm) {
         viewModel.getCountryList()
     }
 
-         viewModel.title.value = "Search"
+    viewModel.title.value = "Search"
 
-        Surface(modifier = Modifier.fillMaxSize(), color = Color.White) {
-            Column(modifier = Modifier.fillMaxSize().padding()) {
+    Surface(modifier = Modifier.fillMaxSize(), color = Color.White) {
+        Column(modifier = Modifier
+            .fillMaxSize()
+            .padding()) {
 
-                SearchTextField(viewModel)
+            SearchTextField(viewModel)
 
-                if (searchList.value.isEmpty()) {
-                    countryList.value?.let {
-                        CountryListView(navController, it){
-                            viewModel.setSavedScreen(ScreenOptions.DetailScreen)
-                            viewModel.updateCountryData(it)
-                        }
-                    }
-                } else {
-                    CountryListView(navController, searchList.value){
+            if (searchList.value.isEmpty()) {
+                countryList.value?.let {
+                    CountryListView(navController, it) {
                         viewModel.setSavedScreen(ScreenOptions.DetailScreen)
                         viewModel.updateCountryData(it)
+                        viewModel.isCountryFav(it.cca3)
                     }
+                }
+            } else {
+                CountryListView(navController, searchList.value) {
+                    viewModel.setSavedScreen(ScreenOptions.DetailScreen)
+                    viewModel.updateCountryData(it)
+                    viewModel.isCountryFav(it.cca3)
+
                 }
             }
         }
+    }
 }
 
 @SuppressLint("CoroutineCreationDuringComposition", "FlowOperatorInvokedInComposition")
@@ -69,7 +80,7 @@ fun HomeSearchTab(navController: NavController?, viewModel: CountryListVm) {
 fun SearchTextField(viewModel: CountryListVm) {
     val query = viewModel.searchQuery().collectAsState().value
 
-    LaunchedEffect(key1 = query){
+    LaunchedEffect(key1 = query) {
         viewModel.scheduleSearch(query)
     }
 
@@ -87,7 +98,7 @@ fun SearchTextField(viewModel: CountryListVm) {
             .fillMaxWidth()
             .border(width = 8.dp, color = Color.White, shape = RoundedCornerShape(20.dp)),
         singleLine = true,
-        textStyle = TextStyle(fontSize = 16.sp,  color = Color.Black),
+        textStyle = TextStyle(fontSize = 16.sp, color = Color.Black),
         leadingIcon = { Icon(Icons.Default.Search, contentDescription = "") },
         colors = TextFieldDefaults.textFieldColors(
             focusedIndicatorColor = Color.Transparent,
@@ -99,7 +110,11 @@ fun SearchTextField(viewModel: CountryListVm) {
 }
 
 @Composable
-fun CountryListView(navController: NavController?, countryList: List<CountryData>,changeState : (countryData : CountryData) ->Unit) {
+fun CountryListView(
+    navController: NavController?,
+    countryList: List<CountryData>,
+    changeState: (countryData: CountryData) -> Unit
+) {
 
     if (countryList.isEmpty()) {
         LazyColumn() {

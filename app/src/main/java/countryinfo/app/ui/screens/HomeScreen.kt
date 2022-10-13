@@ -3,8 +3,12 @@ package countryinfo.app.ui.screens
 import android.annotation.SuppressLint
 import android.util.Log
 import androidx.activity.compose.BackHandler
-import androidx.compose.foundation.layout.*
-import androidx.compose.material.*
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material.Scaffold
+import androidx.compose.material.Snackbar
+import androidx.compose.material.Surface
+import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
@@ -25,7 +29,7 @@ import countryinfo.app.R
 import countryinfo.app.ui.screens.detail.CountryMapScreen
 import countryinfo.app.ui.screens.detail.DetailOverViewTab
 import countryinfo.app.ui.screens.search.HomeSavedTab
- import countryinfo.app.ui.screens.search.HomeSearchTab
+import countryinfo.app.ui.screens.search.HomeSearchTab
 import countryinfo.app.uicomponents.main.BottomBarConditional
 import countryinfo.app.uicomponents.main.TopBarConditional
 import countryinfo.app.utils.ScreenOptions
@@ -40,10 +44,10 @@ fun HomeScreen() {
 
     val navHostController = rememberNavController()
 
-    val viewModel : CountryListVm = hiltViewModel()
+    val viewModel: CountryListVm = hiltViewModel()
 
+    var isFav by rememberSaveable { mutableStateOf(viewModel._isFav) }
 
-    val progressBar = remember { mutableStateOf(false) }
     val countryList = viewModel.observeCountryList().collectAsState()
     val searchList = viewModel.observeSearchCountryList().collectAsState()
 
@@ -65,23 +69,35 @@ fun HomeScreen() {
     Scaffold(topBar = {
         getSaveScreen.value.let {
 
-            TopBarConditional(title = title.value, bar = it, onSavePress ={} ){
+            TopBarConditional(
+                title = title.value,
+                bar = it,
+                isSaved = isFav.value,
+                onSavePress = {
+                    if (isFav.value) {
+                        viewModel.removeFavourite(viewModel.observeCountryData().value)
+                    } else {
+                        viewModel.addFavourite(viewModel.observeCountryData().value)
+                    }
+
+                }) {
                 viewModel.setSavedScreen(ScreenOptions.SearchScreen)
                 navHostController.navigateUp()
             }
         }
     }, bottomBar = {
-            getSaveScreen.value.let {
-                BottomBarConditional(navController = navHostController, bar = it)
-            }
-        },
+        getSaveScreen.value.let {
+            BottomBarConditional(navController = navHostController, bar = it)
+        }
+    },
 
         snackbarHost = {
             if (isConnected.not()) {
                 Snackbar(
                     action = {},
                     modifier = Modifier
-                        .padding(8.dp)) {
+                        .padding(8.dp)
+                ) {
                     Text(text = stringResource(R.string.there_is_no_internet))
                 }
             }
@@ -90,14 +106,14 @@ fun HomeScreen() {
         Surface(modifier = Modifier.fillMaxSize(), color = Color.White) {
 
             getSaveScreen.value.let {
-                
-               val route =  if(it == ScreenOptions.SearchScreen)
-                   BottomTab.TabSearch.route
+
+                val route = if (it == ScreenOptions.SearchScreen)
+                    BottomTab.TabSearch.route
                 else
                     BottomTab.TabOverview.route
 
-                SearchNavigationGraph(navController = navHostController
-                    , viewModel = viewModel,route
+                SearchNavigationGraph(
+                    navController = navHostController, viewModel = viewModel, route
                 )
             }
 
@@ -117,37 +133,46 @@ fun HomeScreen() {
 fun SearchNavigationGraph(
     navController: NavHostController,
     viewModel: CountryListVm,
-    route : String) {
+    route: String
+) {
 
-    NavHost(navController = navController,
-        startDestination =route) {
+    NavHost(
+        navController = navController,
+        startDestination = route
+    ) {
 
         composable(BottomTab.TabSearch.route) {
-            HomeSearchTab( navController = navController,
-                viewModel = viewModel)
+            HomeSearchTab(
+                navController = navController,
+                viewModel = viewModel
+            )
 
         }
         composable(BottomTab.TabSaved.route) {
-            HomeSavedTab( navController = navController,
-                viewModel = viewModel)
+            HomeSavedTab(
+                navController = navController,
+                viewModel = viewModel
+            )
         }
 
-        composable(route = BottomTab.TabOverview.route
+        composable(
+            route = BottomTab.TabOverview.route
         ) {
-            DetailOverViewTab( viewModel = viewModel)
+            DetailOverViewTab(viewModel = viewModel)
 
         }
         composable(BottomTab.TabMap.route) {
             CountryMapScreen(
                 viewModel = viewModel,
-                mFusedLocationClient =  LocationServices.getFusedLocationProviderClient(
-                    LocalContext.current)
+                mFusedLocationClient = LocationServices.getFusedLocationProviderClient(
+                    LocalContext.current
+                )
             )
 
         }
 
-        composable(route = Graph.CountryDetail,) {
-                        CountryDetailsScreen(viewModel)
+        composable(route = Graph.CountryDetail) {
+            CountryDetailsScreen(viewModel)
 
 
         }

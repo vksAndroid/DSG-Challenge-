@@ -6,14 +6,14 @@ import countryinfo.app.uicomponents.BottomMenu
 import countryinfo.app.utils.ScreenOptions
 
 @Composable
-fun BottomBarConditional(navController: NavController,bar : ScreenOptions) {
+fun BottomBarConditional(navController: NavController, bar: ScreenOptions) {
 
-    when(bar){
+    when (bar) {
 
-        ScreenOptions.SearchScreen->{
+        ScreenOptions.SearchScreen -> {
             BottomMenu(navController, false)
         }
-        ScreenOptions.DetailScreen->{
+        ScreenOptions.DetailScreen -> {
             BottomMenu(navController, true)
         }
 

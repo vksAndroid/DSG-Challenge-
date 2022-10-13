@@ -11,13 +11,14 @@ import coil.compose.AsyncImage
 import countryinfo.app.R
 
 @Composable
-fun ImageCoatOfArm(imageUrl : String) {
+fun ImageCoatOfArm(imageUrl: String) {
 
     AsyncImage(
         model = imageUrl,
         placeholder = painterResource(id = R.drawable.default_loading),
         contentDescription = "Country Flag",
-        modifier = Modifier.layoutId("title")
+        modifier = Modifier
+            .layoutId("title")
             .size(40.dp, 40.dp)
             .padding(top = 4.dp)
     )

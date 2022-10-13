@@ -20,8 +20,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.ConstraintSet
-import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavController
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.maps.model.LatLng
 import countryinfo.app.R
@@ -37,7 +35,8 @@ import countryinfo.app.vm.CountryListVm
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter", "StateFlowValueCalledInComposition")
 @Composable
-fun CountryMapScreen(viewModel: CountryListVm,
+fun CountryMapScreen(
+    viewModel: CountryListVm,
     mFusedLocationClient: FusedLocationProviderClient
 ) {
 
@@ -63,7 +62,8 @@ fun CountryMapScreen(viewModel: CountryListVm,
 
         Column(
             modifier = Modifier
-                .fillMaxSize().padding(top = 8.dp)
+                .fillMaxSize()
+                .padding(top = 8.dp)
                 .layoutId("mapColumn")
         ) {
 
@@ -150,5 +150,5 @@ fun setComponentsUsingConstraints1(): ConstraintSet {
 @Preview(showBackground = true)
 @Composable
 fun MapDefaultPreview() {
-   // CountryMapScreen(  viewModel, null)
+    // CountryMapScreen(  viewModel, null)
 }

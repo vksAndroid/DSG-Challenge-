@@ -1,7 +1,5 @@
 package countryinfo.app.repo
 
-import android.util.Log
-import com.google.gson.Gson
 import countryinfo.app.api.ApiInterface
 import countryinfo.app.api.RetrofitClient
 import countryinfo.app.api.model.CountryData
@@ -55,22 +53,19 @@ class CountryListRepo @Inject constructor(var client: ApiInterface, var dao: Cou
 
     suspend fun addtoFavourite(countryItem: CountryData) {
         dao.insertFavourite(countryItem)
-        Log.d("Insert", "INsert called")
     }
 
 
-    suspend fun removeFromFavourite(name:String) {
+    suspend fun removeFromFavourite(name: String) {
         dao.deleteFavourite(name)
-        Log.d("Insert", "INsert called")
     }
 
 
-    suspend fun getALlFavourite()  {
-        val list = dao.getAllFavorite()
-        Log.d("ALl fav", Gson().toJson(list))
+    suspend fun getALlFavourite(): List<CountryData> {
+        return dao.getAllFavorite()
     }
 
-    suspend fun isCountryFav(name : String) : CountryData? {
+    suspend fun isCountryFav(name: String): CountryData {
         return dao.isFav(name)
     }
 

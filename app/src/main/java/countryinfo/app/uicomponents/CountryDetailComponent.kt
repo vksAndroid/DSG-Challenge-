@@ -37,7 +37,8 @@ fun CountryDetailComponent(
         Column(
             modifier = Modifier
                 .padding(bottom = 8.dp, top = 8.dp),
-            horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Top,
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Top,
         ) {
             Text(
                 text = title, fontWeight = FontWeight.Bold,

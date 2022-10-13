@@ -21,12 +21,13 @@ fun DriveSide(driverSide: String, clickAction: () -> Unit) {
 
     val isLeft = driverSide.toLowerCase().contains("left")
 
-    Row(verticalAlignment = Alignment.CenterVertically
-    , modifier = Modifier.padding(top = 12.dp)) {
+    Row(
+        verticalAlignment = Alignment.CenterVertically, modifier = Modifier.padding(top = 12.dp)
+    ) {
 
         Text(
             text = "Left", fontWeight = FontWeight.Normal,
-            color = if(isLeft) Color.DarkGray else Color.LightGray,
+            color = if (isLeft) Color.DarkGray else Color.LightGray,
             fontSize = 16.sp,
             modifier = Modifier.padding(start = 0.dp, end = 10.dp)
         )
@@ -38,7 +39,7 @@ fun DriveSide(driverSide: String, clickAction: () -> Unit) {
         )
         Text(
             text = "Right", fontWeight = FontWeight.Normal,
-            color = if(isLeft) Color.LightGray else Color.DarkGray,
+            color = if (isLeft) Color.LightGray else Color.DarkGray,
             fontSize = 16.sp,
             modifier = Modifier.padding(start = 10.dp, end = 10.dp)
         )

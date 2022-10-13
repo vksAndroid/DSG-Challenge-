@@ -9,7 +9,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.ParagraphStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextIndent
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
@@ -18,7 +17,7 @@ import countryinfo.app.api.model.CurrenciesName
 
 
 @Composable
-fun ValueComponent( value: Any) {
+fun ValueComponent(value: Any) {
 
     when (value) {
         is String -> {
@@ -26,57 +25,57 @@ fun ValueComponent( value: Any) {
         }
         is ArrayList<*> -> {
 
-            if(value.size<=1)
+            if (value.size <= 1)
                 ValueText(value[0].toString())
             else
-            Column {
-                value.forEach { data ->
-                    bulletItem(data.toString())
+                Column {
+                    value.forEach { data ->
+                        bulletItem(data.toString())
+                    }
                 }
-            }
         }
-        is Map<*,*> -> {
+        is Map<*, *> -> {
 
-            if(value.size<=1)
-            for (currency in value) {
+            if (value.size <= 1)
+                for (currency in value) {
 
-                val name = if(currency.value is String)
-                    currency.value
-                else
-                    (currency.value as CurrenciesName).name
+                    val name = if (currency.value is String)
+                        currency.value
+                    else
+                        (currency.value as CurrenciesName).name
 
-                ValueText("${currency.key} ($name)")
-            }
-            else
-            Column {
-
-                value.forEach { data ->
-                    bulletItem(value[data.key.toString()].toString())
-
+                    ValueText("${currency.key} ($name)")
                 }
-            }
+            else
+                Column {
+
+                    value.forEach { data ->
+                        bulletItem(value[data.key.toString()].toString())
+
+                    }
+                }
         }
     }
 
 }
 
 @Composable
-fun bulletItem(data : String) {
+fun bulletItem(data: String) {
 
     val bullet = "\u2022"
 
     val paragraphStyle = ParagraphStyle(textIndent = TextIndent(restLine = 12.sp))
     Text(
         buildAnnotatedString {
-                withStyle(style = paragraphStyle) {
-                    append(bullet)
-                    append("\t")
-                    append(data)
-                }
+            withStyle(style = paragraphStyle) {
+                append(bullet)
+                append("\t")
+                append(data)
+            }
         },
         color = Color.Gray,
         fontWeight = FontWeight.Medium, fontSize = 14.sp,
         modifier = Modifier.padding(2.dp)
     )
-    
+
 }

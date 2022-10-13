@@ -12,13 +12,13 @@ import java.lang.reflect.Type
 class Converters {
 
     @TypeConverter
-    fun toName(name: String) : Name {
-        return Gson().fromJson(name,Name::class.java)
+    fun toName(name: String): Name {
+        return Gson().fromJson(name, Name::class.java)
     }
 
 
     @TypeConverter
-    fun fromName(name: Name) : String {
+    fun fromName(name: Name): String {
         return Gson().toJson(name)
     }
 
@@ -34,49 +34,49 @@ class Converters {
     }
 
     @TypeConverter
-    fun toCurrenciesName(name: String) : CurrenciesName {
-        return Gson().fromJson(name,CurrenciesName::class.java)
+    fun toCurrenciesName(name: String): CurrenciesName {
+        return Gson().fromJson(name, CurrenciesName::class.java)
     }
 
 
     @TypeConverter
-    fun fromCurrenciesName(name: CurrenciesName) : String {
+    fun fromCurrenciesName(name: CurrenciesName): String {
         return Gson().toJson(name)
     }
 
     @TypeConverter
-    fun toCurrencies(name: String) : Map<String,CurrenciesName> {
-        val mapType: Type? = object : TypeToken<Map<String,CurrenciesName>?>() {}.type
-        return Gson().fromJson(name,mapType)
+    fun toCurrencies(name: String): Map<String, CurrenciesName> {
+        val mapType: Type? = object : TypeToken<Map<String, CurrenciesName>?>() {}.type
+        return Gson().fromJson(name, mapType)
     }
 
 
     @TypeConverter
-    fun fromCurrencies(name: Map<String,CurrenciesName>) : String {
+    fun fromCurrencies(name: Map<String, CurrenciesName>): String {
         return Gson().toJson(name)
     }
 
 
     @TypeConverter
-    fun toIdd(name: String) : Idd {
-        return Gson().fromJson(name,Idd::class.java)
+    fun toIdd(name: String): Idd {
+        return Gson().fromJson(name, Idd::class.java)
     }
 
 
     @TypeConverter
-    fun fromIdd(name: Idd) : String {
+    fun fromIdd(name: Idd): String {
         return Gson().toJson(name)
     }
 
     @TypeConverter
-    fun toLanguages(name: String) : Map<String,String> {
-        val mapType: Type? = object : TypeToken<Map<String,String>?>() {}.type
-        return Gson().fromJson(name,mapType)
+    fun toLanguages(name: String): Map<String, String> {
+        val mapType: Type? = object : TypeToken<Map<String, String>?>() {}.type
+        return Gson().fromJson(name, mapType)
     }
 
 
     @TypeConverter
-    fun fromLanguages(name: Map<String,String>) : String {
+    fun fromLanguages(name: Map<String, String>): String {
         return Gson().toJson(name)
     }
 
@@ -93,54 +93,54 @@ class Converters {
 
 
     @TypeConverter
-    fun toCar(name: String) : Car {
-        return Gson().fromJson(name,Car::class.java)
+    fun toCar(name: String): Car {
+        return Gson().fromJson(name, Car::class.java)
     }
 
     @TypeConverter
-    fun fromCar(name: Car) : String {
+    fun fromCar(name: Car): String {
         return Gson().toJson(name)
     }
 
     @TypeConverter
-    fun toFlags(name: String) : Flags {
-        return Gson().fromJson(name,Flags::class.java)
+    fun toFlags(name: String): Flags {
+        return Gson().fromJson(name, Flags::class.java)
     }
 
     @TypeConverter
-    fun fromFlags(name: Flags) : String {
+    fun fromFlags(name: Flags): String {
         return Gson().toJson(name)
     }
 
     @TypeConverter
-    fun toCoatOfArms(name: String) : CoatOfArms {
-        return Gson().fromJson(name,CoatOfArms::class.java)
+    fun toCoatOfArms(name: String): CoatOfArms {
+        return Gson().fromJson(name, CoatOfArms::class.java)
     }
 
     @TypeConverter
-    fun fromCoatOfArms(name: CoatOfArms) : String {
+    fun fromCoatOfArms(name: CoatOfArms): String {
         return Gson().toJson(name)
     }
 
     @TypeConverter
-    fun toCapitalInfo(name: String) : CapitalInfo {
-        return Gson().fromJson(name,CapitalInfo::class.java)
+    fun toCapitalInfo(name: String): CapitalInfo {
+        return Gson().fromJson(name, CapitalInfo::class.java)
     }
 
     @TypeConverter
-    fun fromCapitalInfo(name: CapitalInfo) : String {
+    fun fromCapitalInfo(name: CapitalInfo): String {
         return Gson().toJson(name)
     }
 
 
     @TypeConverter
-    fun toNativeName(name: String) : NativeName {
+    fun toNativeName(name: String): NativeName {
         return Gson().fromJson(name, NativeName::class.java)
     }
 
 
     @TypeConverter
-    fun fromNativeName(name: String) : String {
+    fun fromNativeName(name: String): String {
         return Gson().toJson(name)
     }
 

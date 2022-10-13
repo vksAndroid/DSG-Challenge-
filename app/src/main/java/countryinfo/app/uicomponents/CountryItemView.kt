@@ -15,7 +15,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
- import coil.compose.AsyncImage
+import coil.compose.AsyncImage
 import countryinfo.app.R
 
 
@@ -35,14 +35,14 @@ fun CountryItemView(
             .fillMaxWidth()
             .padding(12.dp),
         onClick = { onItemClicked.invoke() },
-         elevation = 1.dp,
+        elevation = 1.dp,
         shape = RoundedCornerShape(12.dp)
 
     ) {
         Row(
             horizontalArrangement = Arrangement.Start,
             verticalAlignment = Alignment.CenterVertically,
-                    modifier = Modifier.padding(4.dp)
+            modifier = Modifier.padding(4.dp)
 
         ) {
 
@@ -95,5 +95,5 @@ fun CountryItemTextView(name: String, fontWeight: FontWeight, color: Color) {
 @Preview(showBackground = true)
 @Composable
 fun showCountryItemView() {
-    CountryItemView("","","","", { } )
+    CountryItemView("", "", "", "", { })
 }

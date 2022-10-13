@@ -12,6 +12,6 @@ interface ApiInterface {
     suspend fun getCountryList(): Response<List<CountryData>>
 
     @GET("/v3.1/name/{query}")
-    suspend fun getCountryByName(@Path("query") query : String): Response<List<CountryData>>
+    suspend fun getCountryByName(@Path("query") query: String): Response<List<CountryData>>
 
 }

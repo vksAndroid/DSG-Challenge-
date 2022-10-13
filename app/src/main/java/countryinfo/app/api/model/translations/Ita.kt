@@ -4,9 +4,9 @@ import androidx.room.Entity
 import com.google.gson.annotations.SerializedName
 
 @Entity
-data class Ita (
+data class Ita(
 
-    @SerializedName("official" ) var official : String? = null,
-    @SerializedName("common"   ) var common   : String? = null
+    @SerializedName("official") var official: String? = null,
+    @SerializedName("common") var common: String? = null
 
 )

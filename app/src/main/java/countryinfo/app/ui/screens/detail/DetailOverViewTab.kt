@@ -8,7 +8,6 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
@@ -28,27 +27,31 @@ import countryinfo.app.vm.CountryListVm
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter", "StateFlowValueCalledInComposition")
 @Composable
-fun DetailOverViewTab( viewModel: CountryListVm) {
+fun DetailOverViewTab(viewModel: CountryListVm) {
 
-  val countryDetail = viewModel.observeCountryData().collectAsState().value
+    val countryDetail = viewModel.observeCountryData().collectAsState().value
 
-     countryDetail.name?.common?.let {
+    countryDetail.name?.common?.let {
         viewModel.title.value = it
     }
 
     Scaffold(backgroundColor = Color.White,
-        content = {
-                itemPadding->
-            ConstraintLayout(setComponentsUsingConstraints(), modifier = Modifier
-                .fillMaxSize()
-                .padding(bottom = itemPadding.calculateBottomPadding() + 40.dp)
-                .verticalScroll(
-                    rememberScrollState()
-                )) {
+        content = { itemPadding ->
+            ConstraintLayout(
+                setComponentsUsingConstraints(), modifier = Modifier
+                    .fillMaxSize()
+                    .padding(bottom = itemPadding.calculateBottomPadding() + 40.dp)
+                    .verticalScroll(
+                        rememberScrollState()
+                    )
+            ) {
 
                 ImageFullFlag(flagImageUrl = countryDetail.flags?.png!!)
 
-                CountryNameCard(title = countryDetail.name?.common!!, value =countryDetail.name?.official!! )
+                CountryNameCard(
+                    title = countryDetail.name?.common!!,
+                    value = countryDetail.name?.official!!
+                )
 
                 CountryBasicDetail(countryDetail)
 
@@ -70,7 +73,12 @@ fun DetailOverViewTab( viewModel: CountryListVm) {
                     CountryDetailComponent(title = "Timezone(s)", value = it)
                 }
                 countryDetail.coatOfArms?.png?.let {
-                    CountryDetailComponent(isImage = true, imageUrl = it, title = "Coat of Arms", value = "")
+                    CountryDetailComponent(
+                        isImage = true,
+                        imageUrl = it,
+                        title = "Coat of Arms",
+                        value = ""
+                    )
                 }
 
             }

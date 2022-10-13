@@ -1,4 +1,3 @@
-
 package countryinfo.app.uicomponents
 
 import androidx.compose.foundation.layout.*
@@ -46,7 +45,11 @@ fun CountryNameCard(title: String, value: String) {
                 color = Color.Black,
                 maxLines = 1,
                 fontSize = 22.sp,
-                style = MaterialTheme.typography.body1.copy(platformStyle = PlatformTextStyle(includeFontPadding = false))
+                style = MaterialTheme.typography.body1.copy(
+                    platformStyle = PlatformTextStyle(
+                        includeFontPadding = false
+                    )
+                )
             )
             Text(
                 text = value, color = Color.DarkGray,
@@ -54,7 +57,11 @@ fun CountryNameCard(title: String, value: String) {
                 maxLines = 2,
                 fontWeight = FontWeight.Medium,
                 modifier = Modifier.padding(top = 0.dp),
-                style = MaterialTheme.typography.body1.copy(platformStyle = PlatformTextStyle(includeFontPadding = false))
+                style = MaterialTheme.typography.body1.copy(
+                    platformStyle = PlatformTextStyle(
+                        includeFontPadding = false
+                    )
+                )
             )
         }
     }

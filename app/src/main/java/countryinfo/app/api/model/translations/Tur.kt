@@ -4,9 +4,9 @@ import androidx.room.Entity
 import com.google.gson.annotations.SerializedName
 
 @Entity
-data class Tur (
+data class Tur(
 
-    @SerializedName("official" ) var official : String? = null,
-    @SerializedName("common"   ) var common   : String? = null
+    @SerializedName("official") var official: String? = null,
+    @SerializedName("common") var common: String? = null
 
 )

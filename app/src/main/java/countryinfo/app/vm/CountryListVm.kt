@@ -2,7 +2,6 @@ package countryinfo.app.vm
 
 import android.annotation.SuppressLint
 import android.location.Location
-import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -12,7 +11,6 @@ import com.google.android.gms.tasks.CancellationToken
 import com.google.android.gms.tasks.CancellationTokenSource
 import com.google.android.gms.tasks.OnTokenCanceledListener
 import countryinfo.app.api.model.CountryData
-import countryinfo.app.api.model.CurrenciesName
 import countryinfo.app.di.hiltmodules.DefaultDispatcher
 import countryinfo.app.repo.CountryListRepo
 import countryinfo.app.utils.ApiResult
@@ -26,7 +24,6 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.util.*
 import javax.inject.Inject
-import kotlin.collections.set
 
 @HiltViewModel
 class CountryListVm @Inject constructor(
@@ -53,7 +50,8 @@ class CountryListVm @Inject constructor(
     fun observeCountryData(): StateFlow<CountryData> {
         return countryData
     }
-    fun updateCountryData(_countryData : CountryData) {
+
+    fun updateCountryData(_countryData: CountryData) {
 
         countryData.value = _countryData
     }
@@ -75,14 +73,14 @@ class CountryListVm @Inject constructor(
     }
 
 
-    private val saveScreenOptions: MutableStateFlow<ScreenOptions>
-    = MutableStateFlow(ScreenOptions.SearchScreen)
+    private val saveScreenOptions: MutableStateFlow<ScreenOptions> =
+        MutableStateFlow(ScreenOptions.SearchScreen)
 
     fun getSavedScreen(): StateFlow<ScreenOptions> {
         return saveScreenOptions
     }
 
-    fun setSavedScreen(data : ScreenOptions) {
+    fun setSavedScreen(data: ScreenOptions) {
         saveScreenOptions.value = data
     }
 
@@ -183,45 +181,20 @@ class CountryListVm @Inject constructor(
         }
     }
 
-    fun getFormattedData(countryItem: CountryData): LinkedHashMap<String, String> {
-        var currenciesFormatted = String()
-        for (currency in countryItem.currencies) {
-            currenciesFormatted = "$currenciesFormatted ${currency.key} (${currency.value.name}), "
-        }
-        currenciesFormatted = currenciesFormatted.removeSuffix(", ")
-        val formattedLanguages = countryItem.languages.values.toString().removeSurrounding("[", "]")
-
-        val formattedCountryDetail = linkedMapOf<String, String>()
-        formattedCountryDetail["Capital"] = countryItem.capital[0]
-        formattedCountryDetail["Region"] = countryItem?.region!!
-        formattedCountryDetail["Subregion"] = countryItem?.subregion!!
-        formattedCountryDetail["Languages"] = formattedLanguages
-        formattedCountryDetail["Currencies"] = currenciesFormatted
-        formattedCountryDetail["Population"] = countryItem.population.toString()
-        formattedCountryDetail["Car Driver Side"] = countryItem?.car?.side!!
-        return formattedCountryDetail
-    }
-
-    fun getFormattedLanguages(languages: Map<String, String>): String {
-        return languages.values.toString().removeSurrounding("[", "]")
-    }
-
-    fun getFormattedCurrencies(currencies: Map<String, CurrenciesName>): String {
-        var currenciesFormatted = String()
-        for (currency in currencies) {
-            currenciesFormatted = "$currenciesFormatted ${currency.key} (${currency.value.name}), "
-        }
-        return currenciesFormatted.removeSuffix(", ")
-    }
-
     @SuppressLint("MissingPermission")
     fun getCurrentLatLong(mFusedLocationClient: FusedLocationProviderClient) {
 
-        mFusedLocationClient.getCurrentLocation(Priority.PRIORITY_HIGH_ACCURACY, object : CancellationToken() {
-            override fun onCanceledRequested(p0: OnTokenCanceledListener) = CancellationTokenSource().token
-            override fun isCancellationRequested() = false
-        }).addOnSuccessListener {
-            location -> if (location!= null) { currentLocationStateFlow.value = location }
+        mFusedLocationClient.getCurrentLocation(
+            Priority.PRIORITY_HIGH_ACCURACY,
+            object : CancellationToken() {
+                override fun onCanceledRequested(p0: OnTokenCanceledListener) =
+                    CancellationTokenSource().token
+
+                override fun isCancellationRequested() = false
+            }).addOnSuccessListener { location ->
+            if (location != null) {
+                currentLocationStateFlow.value = location
+            }
         }
     }
 
@@ -239,8 +212,10 @@ class CountryListVm @Inject constructor(
     fun removeFavourite(countryItem: CountryData) {
         viewModelScope.launch {
             withContext(dispatcher) {
-                countryItem.cca3?.let { countryListRepo.removeFromFavourite(it)
-                    _isFav.value = false}
+                countryItem.cca3?.let {
+                    countryListRepo.removeFromFavourite(it)
+                    _isFav.value = false
+                }
             }
         }
 
@@ -249,15 +224,16 @@ class CountryListVm @Inject constructor(
     fun getALlFavourite() {
         viewModelScope.launch {
             withContext(dispatcher) {
-                countryListRepo.getALlFavourite()
+
+                savedCountryListState.value = countryListRepo.getALlFavourite()
             }
         }
     }
 
-    fun isCountryFav(name: String){
+    fun isCountryFav(name: String) {
         viewModelScope.launch {
-            withContext(dispatcher){
-               val data = countryListRepo.isCountryFav(name)
+            withContext(dispatcher) {
+                val data = countryListRepo.isCountryFav(name)
                 _isFav.value = data != null
             }
         }

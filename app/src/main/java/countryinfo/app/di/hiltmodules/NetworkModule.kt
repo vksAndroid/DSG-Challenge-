@@ -26,6 +26,7 @@ object NetworkModule {
     fun provideBaseURL(): String {
         return "https://restcountries.com/"
     }
+
     /**
      * Provides LoggingInterceptor for api information
      */
@@ -34,6 +35,7 @@ object NetworkModule {
     fun provideLoggingInterceptor(): HttpLoggingInterceptor {
         return HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY)
     }
+
     /**
      * Provides custom OkkHttp
      */
@@ -50,6 +52,7 @@ object NetworkModule {
         okHttpClient.build()
         return okHttpClient.build()
     }
+
     /**
      * Provides converter factory for retrofit
      */
@@ -58,6 +61,7 @@ object NetworkModule {
     fun provideConverterFactory(): Converter.Factory {
         return GsonConverterFactory.create()
     }
+
     /**
      * Provides ApiServices client for Retrofit
      */
@@ -74,12 +78,13 @@ object NetworkModule {
             .addConverterFactory(converterFactory)
             .build()
     }
+
     /**
      * Provides Api Service using retrofit
      */
     @Singleton
     @Provides
-    fun provideRestApiService(retrofit: Retrofit): ApiInterface  {
+    fun provideRestApiService(retrofit: Retrofit): ApiInterface {
         return retrofit.create(ApiInterface::class.java)
     }
 }

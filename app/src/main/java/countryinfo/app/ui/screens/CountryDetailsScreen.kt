@@ -8,7 +8,7 @@ import countryinfo.app.vm.CountryListVm
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
-fun CountryDetailsScreen( viewModel: CountryListVm) {
+fun CountryDetailsScreen(viewModel: CountryListVm) {
 
 
     DetailOverViewTab(viewModel = viewModel)

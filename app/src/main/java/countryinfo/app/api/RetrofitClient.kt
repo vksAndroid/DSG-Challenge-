@@ -41,7 +41,7 @@ object RetrofitClient {
             .build()
     }
 
-    val retrofit : ApiInterface
+    val retrofit: ApiInterface
         get() = getInstance().create(ApiInterface::class.java)
 
 }

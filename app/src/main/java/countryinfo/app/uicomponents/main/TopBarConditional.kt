@@ -5,23 +5,28 @@ import countryinfo.app.uicomponents.TopBar
 import countryinfo.app.utils.ScreenOptions
 
 @Composable
-fun TopBarConditional(title : String,
-                      bar : ScreenOptions,
-                      onSavePress : ()->Unit,
-                      onBackPress : ()->Unit) {
+fun TopBarConditional(
+    title: String,
+    bar: ScreenOptions,
+    isSaved: Boolean = false,
+    onSavePress: () -> Unit,
+    onBackPress: () -> Unit
+) {
 
-    when(bar){
+    when (bar) {
 
-        ScreenOptions.SearchScreen->{
-            TopBar( title = title){
-            }
+        ScreenOptions.SearchScreen -> {
+            TopBar(title = title, onFavClick = {}) {}
         }
 
-        ScreenOptions.DetailScreen->{
+        ScreenOptions.DetailScreen -> {
             TopBar(
                 isShowNavigation = true,
                 isShowSaveIcon = true,
-                title = title){
+                isSaved = isSaved,
+                title = title, onFavClick = {
+                    onSavePress.invoke()
+                }) {
                 onBackPress.invoke()
             }
         }

@@ -15,8 +15,8 @@ internal class CountryListVmTest {
 
     val mockApiInterface = mockk<ApiInterface>()
 
-    val repo : CountryListRepo = mockk(relaxed = true)
-    val vm : CountryListVm = CountryListVm(repo, StandardTestDispatcher())
+    val repo: CountryListRepo = mockk(relaxed = true)
+    val vm: CountryListVm = CountryListVm(repo, StandardTestDispatcher())
 
     @Before
     fun setUp() {
@@ -28,9 +28,9 @@ internal class CountryListVmTest {
     }
 
     @Test
-    fun getCountryList() = runTest{
+    fun getCountryList() = runTest {
         vm.getCountryList()
-        vm.observeCountryList().collectLatest {  }
+        vm.observeCountryList().collectLatest { }
 
     }
 

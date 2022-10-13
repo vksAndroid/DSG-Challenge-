@@ -1,7 +1,6 @@
 package countryinfo.app.local
 
 import androidx.room.Dao
-import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
 import countryinfo.app.api.model.CountryData
@@ -20,5 +19,5 @@ interface CountriesDao {
     suspend fun getAllFavorite(): List<CountryData>
 
     @Query("Select * from countries where cca3 = :name")
-    suspend fun isFav(name: String) : CountryData
+    suspend fun isFav(name: String): CountryData
 }
