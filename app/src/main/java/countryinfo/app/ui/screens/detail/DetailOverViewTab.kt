@@ -29,6 +29,7 @@ import countryinfo.app.vm.CountryListVm
 fun DetailOverViewTab(cca3: String, viewModel: CountryListVm) {
 
     val countryList = viewModel.observeCountryList()
+
     val countryDetails =
         countryList.value.first { countryDetailItem -> cca3 == countryDetailItem.cca3 }
 
