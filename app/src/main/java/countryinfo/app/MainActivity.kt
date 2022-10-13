@@ -35,43 +35,6 @@ class MainActivity : ComponentActivity() {
     }
 }
 
-//@Composable
-//private fun SearchCountries() {
-//
-//    val navController = rememberNavController()
-//    RootNavigationGraph(navController)
-//}
-
-//@Composable
-//fun RootNavigationGraph(navController: NavHostController) {
-//    val vm: CountryListVm = hiltViewModel()
-//    val countryItemId = stringResource(id = R.string.country_cca3_id)
-//    NavHost(
-//        navController = navController,
-//        route = Graph.Root, startDestination = Graph.CountryList
-//    ) {
-//        composable(Graph.CountryList) {
-//            HomeScreen(navController, vm)
-//        }
-//        composable(
-//            route = "${Graph.CountryDetail}/{$countryItemId}",
-//            arguments = listOf(navArgument(countryItemId) {
-//                type = NavType.StringType
-//            })
-//        ) { navBackStackEntry ->
-//            navBackStackEntry.arguments?.let {
-//                it.getString(countryItemId)
-//                    ?.let { it1 ->
-//                        CountryDetailsScreen(it1, vm, LocationServices.getFusedLocationProviderClient(
-//                            LocalContext.current)) {
-//                            navController.navigateUp()
-//                        }
-//                    }
-//            }
-//        }
-//    }
-//}
-
 object Graph {
     const val Root = "root_graph"
     const val CountryList = "country_list"
