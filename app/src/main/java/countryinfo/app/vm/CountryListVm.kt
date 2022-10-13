@@ -2,6 +2,7 @@ package countryinfo.app.vm
 
 import android.annotation.SuppressLint
 import android.location.Location
+import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -35,7 +36,9 @@ class CountryListVm @Inject constructor(
 
     var timer: Timer? = null
 
-    var data = mutableStateOf("")
+
+    var _isFav = mutableStateOf(false)
+
 
     private val countryListState: MutableStateFlow<List<CountryData>> =
         MutableStateFlow(emptyList())
@@ -219,6 +222,44 @@ class CountryListVm @Inject constructor(
             override fun isCancellationRequested() = false
         }).addOnSuccessListener {
             location -> if (location!= null) { currentLocationStateFlow.value = location }
+        }
+    }
+
+
+    fun addFavourite(countryItem: CountryData) {
+        viewModelScope.launch {
+            withContext(dispatcher) {
+                countryListRepo.addtoFavourite(countryItem)
+                _isFav.value = true
+            }
+        }
+
+    }
+
+    fun removeFavourite(countryItem: CountryData) {
+        viewModelScope.launch {
+            withContext(dispatcher) {
+                countryItem.cca3?.let { countryListRepo.removeFromFavourite(it)
+                    _isFav.value = false}
+            }
+        }
+
+    }
+
+    fun getALlFavourite() {
+        viewModelScope.launch {
+            withContext(dispatcher) {
+                countryListRepo.getALlFavourite()
+            }
+        }
+    }
+
+    fun isCountryFav(name: String){
+        viewModelScope.launch {
+            withContext(dispatcher){
+               val data = countryListRepo.isCountryFav(name)
+                _isFav.value = data != null
+            }
         }
     }
 }

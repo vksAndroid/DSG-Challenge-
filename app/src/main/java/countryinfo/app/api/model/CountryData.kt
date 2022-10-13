@@ -1,16 +1,20 @@
 package countryinfo.app.api.model
 
+import androidx.room.Entity
+import androidx.room.Ignore
+import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
 import countryinfo.app.api.model.translations.Idd
 import countryinfo.app.api.model.translations.Name
+import org.jetbrains.annotations.NotNull
 
+@Entity(tableName = "countries")
 data class CountryData(
-
     @SerializedName("name"         ) var name         : Name?             = Name(),
     @SerializedName("tld"          ) var tld          : ArrayList<String> = arrayListOf(),
     @SerializedName("cca2"         ) var cca2         : String?           = null,
     @SerializedName("ccn3"         ) var ccn3         : String?           = null,
-    @SerializedName("cca3"         ) var cca3         : String?           = null,
+    @PrimaryKey @NotNull @SerializedName("cca3"         ) var cca3         : String,
     @SerializedName("cioc"         ) var cioc         : String?           = null,
     @SerializedName("independent"  ) var independent  : Boolean?          = null,
     @SerializedName("status"       ) var status       : String?           = null,
@@ -24,15 +28,15 @@ data class CountryData(
     @SerializedName("subregion"    ) var subregion    : String?           = null,
     @SerializedName("languages"    ) var languages: Map<String, String> = mapOf(),
 //    @SerializedName("languages"    ) var languages    : Languages?        = Languages(),
-    @SerializedName("translations" ) var translations : Translations?     = Translations(),
+    //@Ignore @SerializedName("translations" ) var translations : Translations?     = Translations(),
     @SerializedName("latlng"       ) var latlng       : ArrayList<Double>    = arrayListOf(),
     @SerializedName("landlocked"   ) var landlocked   : Boolean?          = null,
     @SerializedName("area"         ) var area         : Double?              = null,
-    @SerializedName("demonyms"     ) var demonyms     : Demonyms?         = Demonyms(),
+   // @SerializedName("demonyms"     ) var demonyms     : Demonyms?         = Demonyms(),
     @SerializedName("flag"         ) var flag         : String?           = null,
-    @SerializedName("maps"         ) var maps         : Maps?             = Maps(),
+    //@SerializedName("maps"         ) var maps         : Maps?             = Maps(),
     @SerializedName("population"   ) var population   : Int?              = null,
-    @SerializedName("gini"         ) var gini         : Gini?             = Gini(),
+    //@SerializedName("gini"         ) var gini         : Gini?             = Gini(),
     @SerializedName("fifa"         ) var fifa         : String?           = null,
     @SerializedName("car"          ) var car          : Car?              = Car(),
     @SerializedName("timezones"    ) var timezones    : ArrayList<String> = arrayListOf(),
@@ -41,6 +45,6 @@ data class CountryData(
     @SerializedName("coatOfArms"   ) var coatOfArms   : CoatOfArms?       = CoatOfArms(),
     @SerializedName("startOfWeek"  ) var startOfWeek  : String?           = null,
     @SerializedName("capitalInfo"  ) var capitalInfo  : CapitalInfo?      = CapitalInfo(),
-    @SerializedName("postalCode"   ) var postalCode   : PostalCode?       = PostalCode()
+    //@SerializedName("postalCode"   ) var postalCode   : PostalCode?       = PostalCode()
 
 )
