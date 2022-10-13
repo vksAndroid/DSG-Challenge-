@@ -47,6 +47,15 @@ class CountryListVm @Inject constructor(
         return searchCountryListState
     }
 
+    private val savedCountryListState: MutableStateFlow<List<CountryData>> = MutableStateFlow(
+        emptyList()
+    )
+
+    fun observeSavedCountryList(): StateFlow<List<CountryData>> {
+        return savedCountryListState
+    }
+
+
     fun clearSearch() {
         searchCountryListState.value = emptyList()
         timer?.cancel()

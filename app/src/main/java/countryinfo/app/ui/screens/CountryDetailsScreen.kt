@@ -25,8 +25,7 @@ import countryinfo.app.vm.CountryListVm
 @Composable
 fun CountryDetailsScreen(cca3: String, viewModel: CountryListVm,mFusedLocationClient: FusedLocationProviderClient, onBackPress: () -> Unit) {
 
-    val scrollState = rememberScrollState()
-    val navHostController = rememberNavController()
+     val navHostController = rememberNavController()
 
     val countryList = viewModel.observeCountryList().collectAsState().value
     val countryDetails =
@@ -45,7 +44,7 @@ fun CountryDetailsScreen(cca3: String, viewModel: CountryListVm,mFusedLocationCl
         bottomBar =
         { BottomMenu(navController = navHostController) }) {
         DetailNavigationGraph(
-            navController = navHostController, scrollState = scrollState,
+            navController = navHostController,
             countryId = cca3, viewModel = viewModel,
             mFusedLocationClient
         )
@@ -56,8 +55,7 @@ fun CountryDetailsScreen(cca3: String, viewModel: CountryListVm,mFusedLocationCl
 @Composable
 fun DetailNavigationGraph(
     navController: NavHostController,
-    scrollState: ScrollState,
-    countryId: String,
+     countryId: String,
     viewModel: CountryListVm,
     mFusedLocationClient: FusedLocationProviderClient
 ) {

@@ -3,6 +3,8 @@ package countryinfo.app.uicomponents
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Card
 import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -13,7 +15,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
  import coil.compose.AsyncImage
 import countryinfo.app.R
- import countryinfo.app.ui.screens.CountryItemTextView
 
 
 @OptIn(ExperimentalMaterialApi::class)
@@ -72,6 +73,16 @@ fun CountryItemView(
 
 }
 
+
+@Composable
+fun CountryItemTextView(name: String, fontWeight: FontWeight, color: Color) {
+    Text(
+        text = name,
+        fontWeight = fontWeight,
+        style = MaterialTheme.typography.body1,
+        color = color
+    )
+}
 
 
 @Preview(showBackground = true)

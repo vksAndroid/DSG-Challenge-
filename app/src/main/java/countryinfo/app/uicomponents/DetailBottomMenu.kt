@@ -11,16 +11,22 @@ import androidx.compose.ui.res.colorResource
 import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import countryinfo.app.R
-import countryinfo.app.utils.tabs.DetailBottomTab
+import countryinfo.app.utils.tabs.BottomTab
 
 
 
 @Composable
-fun BottomMenu(navController: NavController) {
+fun BottomMenu(navController: NavController,isDetailScreen : Boolean = true) {
 
-    val menuItems = listOf(
-        DetailBottomTab.TabOverview,
-        DetailBottomTab.TabMap
+    val menuItems = if(isDetailScreen)
+        listOf(
+        BottomTab.TabOverview,
+        BottomTab.TabMap
+    )
+    else
+    listOf(
+        BottomTab.TabSearch,
+        BottomTab.TabSaved
     )
 
     BottomNavigation(contentColor = colorResource(id = R.color.white))
