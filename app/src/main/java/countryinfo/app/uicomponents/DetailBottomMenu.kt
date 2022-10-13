@@ -16,7 +16,8 @@ import countryinfo.app.utils.tabs.BottomTab
 
 
 @Composable
-fun BottomMenu(navController: NavController,isDetailScreen : Boolean = true) {
+fun BottomMenu(navController: NavController,
+               isDetailScreen : Boolean = true) {
 
     val menuItems = if(isDetailScreen)
         listOf(

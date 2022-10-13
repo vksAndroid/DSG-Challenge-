@@ -17,15 +17,17 @@ import countryinfo.app.vm.CountryListVm
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter", "StateFlowValueCalledInComposition")
 @Composable
-fun HomeSavedTab(navController: NavController?, viewModel: CountryListVm?) {
+fun HomeSavedTab(navController: NavController?, viewModel: CountryListVm) {
 
-    val countrySavedList = viewModel?.observeSavedCountryList()?.collectAsState()
+
+    val countrySavedList = viewModel.observeSavedCountryList()?.collectAsState()
+    viewModel.title.value = "Saved"
 
         Surface(modifier = Modifier.fillMaxSize(), color = Color.White) {
             Column(modifier = Modifier.fillMaxSize()) {
+                CountryListView(navController, countrySavedList?.value!!){
 
-                CountryListView(navController, countrySavedList?.value!!)
-
+                }
                 Text(text = "SAVED SCREEN", modifier = Modifier.padding(30.dp))
 
             }
@@ -38,5 +40,5 @@ fun HomeSavedTab(navController: NavController?, viewModel: CountryListVm?) {
 @Preview(showBackground = true)
 @Composable
 fun ShowSavedTabPreview() {
-    HomeSavedTab(null, null)
+    //HomeSavedTab(null, null)
 }

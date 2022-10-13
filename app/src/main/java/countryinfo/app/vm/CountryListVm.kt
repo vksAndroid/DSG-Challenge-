@@ -11,6 +11,7 @@ import countryinfo.app.api.model.CurrenciesName
 import countryinfo.app.di.hiltmodules.DefaultDispatcher
 import countryinfo.app.repo.CountryListRepo
 import countryinfo.app.utils.ApiResult
+import countryinfo.app.utils.WhichComponent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -39,6 +40,17 @@ class CountryListVm @Inject constructor(
         return countryListState
     }
 
+    private val countryData: MutableStateFlow<CountryData> =
+        MutableStateFlow(CountryData())
+
+    fun observeCountryData(): StateFlow<CountryData> {
+        return countryData
+    }
+    fun updateCountryData(_countryData : CountryData) {
+
+        countryData.value = _countryData
+    }
+
     private val searchCountryListState: MutableStateFlow<List<CountryData>> = MutableStateFlow(
         emptyList()
     )
@@ -54,6 +66,20 @@ class CountryListVm @Inject constructor(
     fun observeSavedCountryList(): StateFlow<List<CountryData>> {
         return savedCountryListState
     }
+
+
+    private val saveWhichComponent: MutableStateFlow<WhichComponent>
+    = MutableStateFlow(WhichComponent.SearchScreen)
+
+    fun getSavedComponent(): StateFlow<WhichComponent> {
+        return saveWhichComponent
+    }
+
+    fun saveWhichComponent(data : WhichComponent) {
+        saveWhichComponent.value = data
+    }
+
+    var title = mutableStateOf("")
 
 
     fun clearSearch() {

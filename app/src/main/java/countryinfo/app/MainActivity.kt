@@ -7,14 +7,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavHostController
-import androidx.navigation.NavType
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
-import androidx.navigation.compose.rememberNavController
-import androidx.navigation.navArgument
-import com.google.android.gms.location.LocationServices
-import countryinfo.app.ui.screens.CountryDetailsScreen
 import countryinfo.app.ui.screens.HomeScreen
 import countryinfo.app.ui.theme.CountryInfoTheme
 import countryinfo.app.vm.CountryListVm

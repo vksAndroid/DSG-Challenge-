@@ -23,37 +23,44 @@ import com.google.gson.Gson
 import countryinfo.app.R
 import countryinfo.app.api.model.CountryData
 import countryinfo.app.uicomponents.CountryItemView
+import countryinfo.app.utils.WhichComponent
 import countryinfo.app.utils.networkconnection.ConnectionState
 import countryinfo.app.utils.networkconnection.connectivityState
 import countryinfo.app.vm.CountryListVm
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter", "StateFlowValueCalledInComposition")
 @Composable
-fun HomeSearchTab(navController: NavController?, viewModel: CountryListVm?) {
+fun HomeSearchTab(navController: NavController?, viewModel: CountryListVm) {
 
-    val countryList = viewModel?.observeCountryList()?.collectAsState()
-    val searchList = viewModel?.observeSearchCountryList()?.collectAsState()
+    val countryList = viewModel.observeCountryList().collectAsState()
+    val searchList = viewModel.observeSearchCountryList().collectAsState()
 
     val connection by connectivityState()
     val isConnected = connection === ConnectionState.Available
 
-    Log.d("Search List", Gson().toJson(searchList))
-
-    if (searchList?.value?.isEmpty()!! && countryList?.value?.isEmpty()!!) {
+    if (searchList.value.isEmpty() && countryList.value.isEmpty()) {
         viewModel.getCountryList()
     }
+
+         viewModel.title.value = "Search"
 
         Surface(modifier = Modifier.fillMaxSize(), color = Color.White) {
             Column(modifier = Modifier.fillMaxSize().padding()) {
 
                 SearchTextField(viewModel)
 
-                viewModel.data.value = "sjdhfbwks"
-
                 if (searchList.value.isEmpty()) {
-                    CountryListView(navController, countryList?.value!!)
+                    countryList.value?.let {
+                        CountryListView(navController, it){
+                            viewModel.saveWhichComponent(WhichComponent.DetailScreen)
+                            viewModel.updateCountryData(it)
+                        }
+                    }
                 } else {
-                    CountryListView(navController, searchList.value)
+                    CountryListView(navController, searchList.value){
+                        viewModel.saveWhichComponent(WhichComponent.DetailScreen)
+                        viewModel.updateCountryData(it)
+                    }
                 }
             }
         }
@@ -93,7 +100,7 @@ fun SearchTextField(viewModel: CountryListVm) {
 }
 
 @Composable
-fun CountryListView(navController: NavController?, countryList: List<CountryData>) {
+fun CountryListView(navController: NavController?, countryList: List<CountryData>,changeState : (countryData : CountryData) ->Unit) {
     val countryDetailScreenNavId = stringResource(id = R.string.country_details)
     LazyColumn {
         items(items = countryList) { countryData ->
@@ -108,7 +115,10 @@ fun CountryListView(navController: NavController?, countryList: List<CountryData
                 },
                 countryFlag = countryData.flags?.png,
                 onItemClicked = {
-                    navController?.navigate("$countryDetailScreenNavId/${countryData.cca3}") }
+                    changeState.invoke(countryData)
+
+                    navController?.navigate("$countryDetailScreenNavId/${countryData.cca3}")
+                }
             )
         }
     }
@@ -118,5 +128,5 @@ fun CountryListView(navController: NavController?, countryList: List<CountryData
 @Preview(showBackground = true)
 @Composable
 fun ShowCountrySearchScreenPreview() {
-    HomeSearchTab(null, null)
+    //HomeSearchTab(null, null)
 }

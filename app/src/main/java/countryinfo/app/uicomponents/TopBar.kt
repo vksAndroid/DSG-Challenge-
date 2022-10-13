@@ -18,7 +18,7 @@ import androidx.compose.ui.unit.dp
 
 
 @Composable
-fun TopBarDetailScreen(title: String = "",
+fun TopBar(title: String = "",
                        isShowNavigation : Boolean = false ,
                        isSaved : Boolean = false,
                        isShowSaveIcon : Boolean = false,
