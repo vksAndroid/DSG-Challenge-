@@ -9,10 +9,10 @@ public val labelPopulation = "Population"
 public val labelcarDriveSide = "Car Driver Side"
 public val labelCoatOfArm = "Coat of Arms"
 
-sealed class WhichComponent {
+sealed class ScreenOptions {
 
-    object SearchScreen : WhichComponent()
-    object DetailScreen : WhichComponent()
+    object SearchScreen : ScreenOptions()
+    object DetailScreen : ScreenOptions()
 
 }
 

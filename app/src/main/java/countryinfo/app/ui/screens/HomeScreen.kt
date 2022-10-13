@@ -7,20 +7,17 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
-import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import androidx.navigation.navArgument
 import com.google.android.gms.location.LocationServices
 import com.google.gson.Gson
 import countryinfo.app.Graph
@@ -31,7 +28,7 @@ import countryinfo.app.ui.screens.search.HomeSavedTab
  import countryinfo.app.ui.screens.search.HomeSearchTab
 import countryinfo.app.uicomponents.main.BottomBarConditional
 import countryinfo.app.uicomponents.main.TopBarConditional
-import countryinfo.app.utils.WhichComponent
+import countryinfo.app.utils.ScreenOptions
 import countryinfo.app.utils.networkconnection.ConnectionState
 import countryinfo.app.utils.networkconnection.connectivityState
 import countryinfo.app.utils.tabs.BottomTab
@@ -39,9 +36,12 @@ import countryinfo.app.vm.CountryListVm
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter", "StateFlowValueCalledInComposition")
 @Composable
-fun HomeScreen(viewModel: CountryListVm) {
+fun HomeScreen() {
 
     val navHostController = rememberNavController()
+
+    val viewModel : CountryListVm = hiltViewModel()
+
 
     val progressBar = remember { mutableStateOf(false) }
     val countryList = viewModel.observeCountryList().collectAsState()
@@ -51,7 +51,7 @@ fun HomeScreen(viewModel: CountryListVm) {
         viewModel.title
     }
 
-    val getSaveComponent = viewModel.getSavedComponent().collectAsState()
+    val getSaveScreen = viewModel.getSavedScreen().collectAsState()
 
     val connection by connectivityState()
     val isConnected = connection === ConnectionState.Available
@@ -63,21 +63,18 @@ fun HomeScreen(viewModel: CountryListVm) {
     }
 
     Scaffold(topBar = {
-        getSaveComponent.value.let {
+        getSaveScreen.value.let {
 
             TopBarConditional(title = title.value, bar = it, onSavePress ={} ){
-                viewModel.saveWhichComponent(WhichComponent.SearchScreen)
+                viewModel.setSavedScreen(ScreenOptions.SearchScreen)
                 navHostController.navigateUp()
             }
         }
-    }, bottomBar =
-        {
-            getSaveComponent.value.let {
+    }, bottomBar = {
+            getSaveScreen.value.let {
                 BottomBarConditional(navController = navHostController, bar = it)
-
             }
         },
-
 
         snackbarHost = {
             if (isConnected.not()) {
@@ -91,14 +88,25 @@ fun HomeScreen(viewModel: CountryListVm) {
         }) {
 
         Surface(modifier = Modifier.fillMaxSize(), color = Color.White) {
-            SearchNavigationGraph(navController = navHostController
-                , viewModel = viewModel
-            )
+
+            getSaveScreen.value.let {
+                
+               val route =  if(it == ScreenOptions.SearchScreen)
+                   BottomTab.TabSearch.route
+                else
+                    BottomTab.TabOverview.route
+
+                SearchNavigationGraph(navController = navHostController
+                    , viewModel = viewModel,route
+                )
+            }
+
+
         }
 
         BackHandler(enabled = true) {
             viewModel.title.value = "Search"
-            viewModel.saveWhichComponent(WhichComponent.SearchScreen)
+            viewModel.setSavedScreen(ScreenOptions.SearchScreen)
             navHostController.navigateUp()
         }
     }
@@ -108,10 +116,11 @@ fun HomeScreen(viewModel: CountryListVm) {
 @Composable
 fun SearchNavigationGraph(
     navController: NavHostController,
-    viewModel: CountryListVm) {
+    viewModel: CountryListVm,
+    route : String) {
 
     NavHost(navController = navController,
-        startDestination = BottomTab.TabSearch.route) {
+        startDestination =route) {
 
         composable(BottomTab.TabSearch.route) {
             HomeSearchTab( navController = navController,
@@ -139,19 +148,9 @@ fun SearchNavigationGraph(
 
         }
 
-        composable(
-            route = "${Graph.CountryDetail}/{cca3}",
-            arguments = listOf(navArgument("cca3") {
-                type = NavType.StringType
-            })
-        ) { navBackStackEntry ->
-            navBackStackEntry.arguments?.let {
-                it.getString("cca3")
-                    ?.let { it1 ->
+        composable(route = Graph.CountryDetail,) {
                         CountryDetailsScreen(viewModel)
 
-                    }
-            }
 
         }
     }

@@ -3,8 +3,6 @@
 
     <!--Navigation Keys and parameters-->
     <string name="country_list">country_list</string>
-    <string name="country_details">country_details</string>
-    <string name="country_cca3_id">cca3</string>
     <string name="capital">Capital</string>
     <string name="region">Region</string>
     <string name="subregion">Subregion</string>

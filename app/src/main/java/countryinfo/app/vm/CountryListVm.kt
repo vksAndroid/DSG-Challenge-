@@ -11,7 +11,7 @@ import countryinfo.app.api.model.CurrenciesName
 import countryinfo.app.di.hiltmodules.DefaultDispatcher
 import countryinfo.app.repo.CountryListRepo
 import countryinfo.app.utils.ApiResult
-import countryinfo.app.utils.WhichComponent
+import countryinfo.app.utils.ScreenOptions
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -68,15 +68,15 @@ class CountryListVm @Inject constructor(
     }
 
 
-    private val saveWhichComponent: MutableStateFlow<WhichComponent>
-    = MutableStateFlow(WhichComponent.SearchScreen)
+    private val saveScreenOptions: MutableStateFlow<ScreenOptions>
+    = MutableStateFlow(ScreenOptions.SearchScreen)
 
-    fun getSavedComponent(): StateFlow<WhichComponent> {
-        return saveWhichComponent
+    fun getSavedScreen(): StateFlow<ScreenOptions> {
+        return saveScreenOptions
     }
 
-    fun saveWhichComponent(data : WhichComponent) {
-        saveWhichComponent.value = data
+    fun setSavedScreen(data : ScreenOptions) {
+        saveScreenOptions.value = data
     }
 
     var title = mutableStateOf("")

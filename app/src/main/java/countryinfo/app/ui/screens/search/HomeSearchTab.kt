@@ -1,7 +1,6 @@
 package countryinfo.app.ui.screens.search
 
 import android.annotation.SuppressLint
-import android.util.Log
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -13,17 +12,15 @@ import androidx.compose.material.icons.filled.Search
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import com.google.gson.Gson
-import countryinfo.app.R
+import countryinfo.app.Graph
 import countryinfo.app.api.model.CountryData
 import countryinfo.app.uicomponents.CountryItemView
-import countryinfo.app.utils.WhichComponent
+import countryinfo.app.utils.ScreenOptions
 import countryinfo.app.utils.networkconnection.ConnectionState
 import countryinfo.app.utils.networkconnection.connectivityState
 import countryinfo.app.vm.CountryListVm
@@ -52,13 +49,13 @@ fun HomeSearchTab(navController: NavController?, viewModel: CountryListVm) {
                 if (searchList.value.isEmpty()) {
                     countryList.value?.let {
                         CountryListView(navController, it){
-                            viewModel.saveWhichComponent(WhichComponent.DetailScreen)
+                            viewModel.setSavedScreen(ScreenOptions.DetailScreen)
                             viewModel.updateCountryData(it)
                         }
                     }
                 } else {
                     CountryListView(navController, searchList.value){
-                        viewModel.saveWhichComponent(WhichComponent.DetailScreen)
+                        viewModel.setSavedScreen(ScreenOptions.DetailScreen)
                         viewModel.updateCountryData(it)
                     }
                 }
@@ -101,7 +98,7 @@ fun SearchTextField(viewModel: CountryListVm) {
 
 @Composable
 fun CountryListView(navController: NavController?, countryList: List<CountryData>,changeState : (countryData : CountryData) ->Unit) {
-    val countryDetailScreenNavId = stringResource(id = R.string.country_details)
+
     LazyColumn {
         items(items = countryList) { countryData ->
 
@@ -117,7 +114,7 @@ fun CountryListView(navController: NavController?, countryList: List<CountryData
                 onItemClicked = {
                     changeState.invoke(countryData)
 
-                    navController?.navigate("$countryDetailScreenNavId/${countryData.cca3}")
+                    navController?.navigate(Graph.CountryDetail)
                 }
             )
         }

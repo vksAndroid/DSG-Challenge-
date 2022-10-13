@@ -18,17 +18,15 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
          setContent {
-             val vm: CountryListVm = hiltViewModel()
+
 
             CountryInfoTheme {
-                HomeScreen( vm)
+                HomeScreen()
             }
         }
     }
 }
 
 object Graph {
-    const val Root = "root_graph"
-    const val CountryList = "country_list"
     const val CountryDetail = "country_details"
 }
