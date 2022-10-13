@@ -29,6 +29,9 @@ import countryinfo.app.uicomponents.CountryBasicDetail
 import countryinfo.app.uicomponents.CountryNameCard
 import countryinfo.app.uicomponents.ImageFullFlag
 import countryinfo.app.uicomponents.MapViewComponent
+import countryinfo.app.utils.LOCATION_TYPE_CAPITAL
+import countryinfo.app.utils.LOCATION_TYPE_COUNTRY
+import countryinfo.app.utils.LOCATION_TYPE_CURRENT
 import countryinfo.app.utils.isLocationPermissionGranted
 import countryinfo.app.vm.CountryListVm
 
@@ -85,7 +88,7 @@ fun CountryMapScreen(
                     textLabel = stringResource(id = R.string.your_current_location),
                     textValue = ""
                 )
-                MapViewComponent(currentLatLng, true)
+                MapViewComponent(currentLatLng, LOCATION_TYPE_CURRENT)
             }
             MapTextLabel(
                 textLabel = "${stringResource(id = R.string.country)} - ",
@@ -93,7 +96,7 @@ fun CountryMapScreen(
             )
             val countryLocation =
                 LatLng(countryDetails?.latlng?.get(0) ?: 0.0, countryDetails?.latlng?.get(1) ?: 0.0)
-            MapViewComponent(countryLocation, false)
+            MapViewComponent(countryLocation, LOCATION_TYPE_COUNTRY)
             MapTextLabel(
                 textLabel = "${stringResource(id = R.string.capital)} - ",
                 textValue = if (countryDetails.capital.isNotEmpty()) {
@@ -106,7 +109,7 @@ fun CountryMapScreen(
                 countryDetails?.capitalInfo?.latlng?.get(0) ?: 0.0,
                 countryDetails?.capitalInfo?.latlng?.get(1) ?: 0.0
             )
-            MapViewComponent(capitalLocation, false)
+            MapViewComponent(capitalLocation, LOCATION_TYPE_CAPITAL)
         }
     }
 }
