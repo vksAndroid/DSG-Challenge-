@@ -1,8 +1,10 @@
 package countryinfo.app.uicomponents
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -24,17 +26,18 @@ fun CountryDetailComponent(
 ) {
 
     Card(
-        elevation = 6.dp,
+        elevation = 1.5.dp,
         modifier = Modifier
-            .padding(top = 12.dp, bottom = 12.dp, end = 2.dp, start = 12.dp)
+            .padding(top = 12.dp, start = 12.dp, end = 12.dp)
             .layoutId(title)
-            .fillMaxWidth(0.47f)
+            .fillMaxWidth(0.46f),
+        shape = RoundedCornerShape(12.dp)
     ) {
 
         Column(
             modifier = Modifier
                 .padding(bottom = 8.dp, top = 8.dp),
-            horizontalAlignment = Alignment.CenterHorizontally,
+            horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Top,
         ) {
             Text(
                 text = title, fontWeight = FontWeight.Bold,

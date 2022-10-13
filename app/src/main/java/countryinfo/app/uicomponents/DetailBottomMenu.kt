@@ -11,6 +11,7 @@ import androidx.compose.ui.res.colorResource
 import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import countryinfo.app.R
+import countryinfo.app.ui.theme.OffWhite
 import countryinfo.app.utils.tabs.DetailBottomTab
 
 
@@ -23,7 +24,7 @@ fun BottomMenu(navController: NavController) {
         DetailBottomTab.TabMap
     )
 
-    BottomNavigation(contentColor = colorResource(id = R.color.white))
+    BottomNavigation(contentColor = colorResource(id = R.color.white), backgroundColor = OffWhite)
     {
 
          val navBackStackEntry by navController.currentBackStackEntryAsState()
@@ -33,7 +34,7 @@ fun BottomMenu(navController: NavController) {
             BottomNavigationItem(
                 label = { Text(text = it.title) },
                 alwaysShowLabel = true,
-                selectedContentColor = Color.White,
+                selectedContentColor = Color.Blue,
                 unselectedContentColor = Color.Gray,
                 selected = currentRoute == it.route,
                 onClick = {

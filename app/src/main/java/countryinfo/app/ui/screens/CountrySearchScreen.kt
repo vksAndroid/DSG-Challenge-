@@ -11,10 +11,10 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.CenterVertically
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -27,6 +27,8 @@ import coil.compose.AsyncImage
 import com.google.gson.Gson
 import countryinfo.app.R
 import countryinfo.app.api.model.CountryData
+import countryinfo.app.uicomponents.CustomAppBar
+import countryinfo.app.uicomponents.LoadingShimmerEffect
 import countryinfo.app.utils.networkconnection.ConnectionState
 import countryinfo.app.utils.networkconnection.connectivityState
 import countryinfo.app.vm.CountryListVm
@@ -35,7 +37,6 @@ import countryinfo.app.vm.CountryListVm
 @Composable
 fun CountrySearchScreen(navController: NavController?, viewModel: CountryListVm) {
 
-    val progressBar = remember { mutableStateOf(false) }
     val countryList = viewModel.observeCountryList().collectAsState()
     val searchList = viewModel.observeSearchCountryList().collectAsState()
 
@@ -49,9 +50,10 @@ fun CountrySearchScreen(navController: NavController?, viewModel: CountryListVm)
     }
 
     Scaffold(topBar = {
-        Column(horizontalAlignment = Alignment.CenterHorizontally) {
-            AppBar(title = "Countries")
-        }
+        CustomAppBar(
+            title = stringResource(id = R.string.search),
+            isBackNavAvailable = false
+        ) {}
     },
         snackbarHost = {
             if (isConnected.not()) {
@@ -84,7 +86,7 @@ fun CountrySearchScreen(navController: NavController?, viewModel: CountryListVm)
 fun SearchTextField(viewModel: CountryListVm) {
     val query = viewModel.searchQuery().collectAsState().value
 
-    LaunchedEffect(key1 = query){
+    LaunchedEffect(key1 = query) {
         viewModel.scheduleSearch(query)
     }
 
@@ -98,15 +100,16 @@ fun SearchTextField(viewModel: CountryListVm) {
         },
         placeholder = { Text(text = "Search") },
         modifier = Modifier
-            .padding(all = 8.dp)
+            .padding(start = 8.dp, end = 8.dp)
             .fillMaxWidth()
             .border(width = 8.dp, color = Color.White, shape = RoundedCornerShape(20.dp)),
         singleLine = true,
-        textStyle = TextStyle(fontSize = 16.sp),
+        textStyle = TextStyle(fontSize = 16.sp,  color = Color.Black, ),
         leadingIcon = { Icon(Icons.Default.Search, contentDescription = "") },
         colors = TextFieldDefaults.textFieldColors(
             focusedIndicatorColor = Color.Transparent,
-            unfocusedIndicatorColor = Color.Transparent
+            unfocusedIndicatorColor = Color.Transparent,
+            cursorColor = Color.Gray
         ),
         shape = RoundedCornerShape(20.dp)
     )
@@ -116,7 +119,14 @@ fun SearchTextField(viewModel: CountryListVm) {
 @Composable
 fun CountryListView(navController: NavController?, countryList: List<CountryData>) {
     val countryDetailScreenNavId = stringResource(id = R.string.country_details)
-    LazyColumn {
+    if (countryList.isEmpty()) {
+        LazyColumn() {
+            repeat(6) {
+                item { LoadingShimmerEffect() }
+            }
+        }
+    }
+    LazyColumn(modifier = Modifier.padding(top = 8.dp)) {
         items(items = countryList) { countryData ->
 
             CountryItemView(
@@ -149,19 +159,20 @@ fun CountryItemView(
             .fillMaxWidth()
             .padding(12.dp),
         onClick = { onItemClicked.invoke() },
-        elevation = 0.dp,
+        elevation = 1.dp,
+        shape = RoundedCornerShape(12.dp)
     ) {
         Row(
             horizontalArrangement = Arrangement.Start,
-            verticalAlignment = CenterVertically
+            verticalAlignment = CenterVertically,
+            modifier = Modifier.padding(4.dp)
         ) {
 
-            AsyncImage(
-                model = countryFlag, contentDescription = stringResource(R.string.country_flag),
+            AsyncImage(model = countryFlag, placeholder = painterResource(id = R.drawable.default_loading), contentDescription = stringResource(R.string.country_flag),
                 modifier = Modifier
                     .size(100.dp, 65.dp)
-                    .padding(8.dp)
-            )
+                    .padding(8.dp))
+
             Column(
                 modifier = Modifier
                     .align(alignment = CenterVertically)
@@ -199,20 +210,19 @@ fun CountryItemTextView(name: String, fontWeight: FontWeight, color: Color) {
     )
 }
 
-@Composable
-fun AppBar(title: String) {
-    TopAppBar(
-        navigationIcon = null,
-        title = {
-            Text(
-                text = title, modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(end = 16.dp), textAlign = TextAlign.Center
-            )
-        }
-    )
-
-}
+//@Composable
+//fun AppBar(title: String) {
+//    TopAppBar(
+//        navigationIcon = null,
+//        title = {
+//            Text(
+//                text = title, modifier = Modifier
+//                    .fillMaxWidth()
+//                    .padding(end = 16.dp), textAlign = TextAlign.Center
+//            )
+//        }
+//    )
+//}
 
 @Preview(showBackground = true)
 @Composable

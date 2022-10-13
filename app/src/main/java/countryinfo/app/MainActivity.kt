@@ -4,8 +4,11 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.SideEffect
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.core.content.ContextCompat
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
@@ -13,6 +16,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.google.android.gms.location.LocationServices
 import countryinfo.app.ui.screens.CountryDetailsScreen
 import countryinfo.app.ui.screens.CountrySearchScreen
@@ -25,6 +29,8 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+//        this.window.statusBarColor = ContextCompat.getColor(this,R.color.white)
+
 
         setContent {
             CountryInfoTheme {
@@ -36,7 +42,6 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 private fun SearchCountries() {
-
     val navController = rememberNavController()
     RootNavigationGraph(navController)
 }
