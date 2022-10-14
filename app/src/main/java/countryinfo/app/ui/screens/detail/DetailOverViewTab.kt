@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
@@ -34,25 +33,22 @@ fun DetailOverViewTab(viewModel: CountryListVm) {
         viewModel.title.value = it
     }
 
-    Scaffold(backgroundColor = Color.White,
-        content = { itemPadding ->
-            ConstraintLayout(
-                setComponentsUsingConstraints(), modifier = Modifier
-                    .fillMaxSize()
-                    .padding(bottom = itemPadding.calculateBottomPadding() + 40.dp)
-                    .verticalScroll(
-                        rememberScrollState()
-                    )
-            ) {
+    ConstraintLayout(
+        setComponentsUsingConstraints(), modifier = Modifier
+            .fillMaxSize()
+            .padding(bottom = 40.dp)
+            .verticalScroll(
+                rememberScrollState()
+            )
+    ) {
+        ImageFullFlag(flagImageUrl = countryDetail.flags?.png!!)
 
-                ImageFullFlag(flagImageUrl = countryDetail.flags?.png!!)
+        CountryNameCard(
+            title = countryDetail.name?.common!!,
+            value = countryDetail.name?.official!!
+        )
 
-                CountryNameCard(
-                    title = countryDetail.name?.common!!,
-                    value = countryDetail.name?.official!!
-                )
-
-                CountryBasicDetail(countryDetail)
+        CountryBasicDetail(countryDetail)
 
                 countryDetail.languages?.let {
                     CountryDetailComponent(title = stringResource(id = R.string.languages), value = it)
@@ -80,8 +76,8 @@ fun DetailOverViewTab(viewModel: CountryListVm) {
                     )
                 }
 
-            }
-        })
+    }
+
 }
 
 fun setComponentsUsingConstraints(): ConstraintSet {

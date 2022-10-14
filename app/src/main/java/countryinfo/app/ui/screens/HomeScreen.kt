@@ -1,8 +1,8 @@
 package countryinfo.app.ui.screens
 
 import android.annotation.SuppressLint
-import android.util.Log
 import androidx.activity.compose.BackHandler
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Scaffold
@@ -44,10 +44,7 @@ fun HomeScreen() {
 
     val viewModel: CountryListVm = hiltViewModel()
 
-    var isFav by rememberSaveable { mutableStateOf(viewModel._isFav) }
-
-    val countryList = viewModel.observeCountryList().collectAsState()
-    val searchList = viewModel.observeSearchCountryList().collectAsState()
+    var isFav by rememberSaveable { mutableStateOf(viewModel.isFav) }
 
     var title = rememberSaveable {
         viewModel.title
@@ -57,12 +54,6 @@ fun HomeScreen() {
 
     val connection by connectivityState()
     val isConnected = connection === ConnectionState.Available
-
-    Log.d("Search List", Gson().toJson(searchList))
-
-    if (searchList.value.isEmpty() && countryList.value.isEmpty()) {
-        viewModel.getCountryList()
-    }
 
     Scaffold(topBar = {
         TopBarConditional(
@@ -96,21 +87,30 @@ fun HomeScreen() {
             }
         }) {
 
-        Surface(modifier = Modifier.fillMaxSize(), color = Color.White) {
-
-            getSaveScreen.value.let {
-
-                val route = if (it == ScreenOptions.SearchScreen)
-                    BottomTab.TabSearch.route
-                else
-                    BottomTab.TabOverview.route
-
-                SearchNavigationGraph(
-                    navController = navHostController, viewModel = viewModel, route
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(
+                    bottom = it.calculateBottomPadding()
                 )
+        ) {
+
+            Surface(modifier = Modifier.fillMaxSize(), color = Color.White) {
+
+                getSaveScreen.value.let {
+
+                    val route = if (it == ScreenOptions.SearchScreen)
+                        BottomTab.TabSearch.route
+                    else
+                        BottomTab.TabOverview.route
+
+                    SearchNavigationGraph(
+                        navController = navHostController, viewModel = viewModel, route
+                    )
+                }
+
+
             }
-
-
         }
 
         BackHandler(enabled = true) {
@@ -163,8 +163,6 @@ fun SearchNavigationGraph(
 
         composable(route = Graph.CountryDetail) {
             CountryDetailsScreen(viewModel)
-
-
         }
     }
 }

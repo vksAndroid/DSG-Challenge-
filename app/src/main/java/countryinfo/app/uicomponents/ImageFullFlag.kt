@@ -17,7 +17,7 @@ fun ImageFullFlag(flagImageUrl: String) {
         model = flagImageUrl,
         placeholder = painterResource(id = R.drawable.default_loading),
         contentDescription = "Country Flag",
-        contentScale = ContentScale.Crop,
+        contentScale = ContentScale.Fit,
         modifier = Modifier
             .fillMaxWidth()
             .height(180.dp)
