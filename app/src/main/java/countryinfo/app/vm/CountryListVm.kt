@@ -8,6 +8,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.Priority
+import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.tasks.CancellationToken
 import com.google.android.gms.tasks.CancellationTokenSource
 import com.google.android.gms.tasks.OnTokenCanceledListener
@@ -16,6 +17,7 @@ import countryinfo.app.api.model.CountryData
 import countryinfo.app.di.hiltmodules.DefaultDispatcher
 import countryinfo.app.di.hiltmodules.IoDispatcher
 import countryinfo.app.repo.CountryListRepo
+import countryinfo.app.ui.screens.detail.MapType
 import countryinfo.app.utils.ApiResult
 import countryinfo.app.utils.EMPTY_STRING
 import countryinfo.app.utils.ScreenOptions

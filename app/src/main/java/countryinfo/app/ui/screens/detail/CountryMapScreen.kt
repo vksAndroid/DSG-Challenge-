@@ -122,7 +122,7 @@ fun loadContent(
                     } catch (ex: Exception) {
                         countryLocation = LatLng(0.0, 0.0)
                     }
-                        MapViewComponent(countryLocation, MapType.Capital)
+                        MapViewComponent(countryLocation, MapType.Country)
 
                 }
                 is MapType.Capital -> {
