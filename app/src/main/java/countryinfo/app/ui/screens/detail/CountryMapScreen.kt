@@ -11,12 +11,16 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.layoutId
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.ConstraintSet
+import com.google.android.gms.location.LocationServices
+import androidx.constraintlayout.compose.Dimension
 import com.google.android.gms.maps.model.LatLng
 import com.google.gson.Gson
 import countryinfo.app.R
@@ -25,6 +29,8 @@ import countryinfo.app.uicomponents.CountryBasicDetail
 import countryinfo.app.uicomponents.CountryNameCard
 import countryinfo.app.uicomponents.ImageFullFlag
 import countryinfo.app.uicomponents.MapViewComponent
+import countryinfo.app.utils.*
+import countryinfo.app.utils.isLocationPermissionGranted
 import countryinfo.app.utils.CheckLocationPermission
 import countryinfo.app.vm.CountryListVm
 
@@ -63,7 +69,7 @@ fun loadContent(
     LazyColumn(
         modifier = Modifier
             .wrapContentHeight()
-            .fillMaxWidth(),
+            .fillMaxWidth().padding(bottom = 12.dp),
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
 
@@ -117,14 +123,14 @@ fun loadContent(
                     } catch (ex: Exception) {
                         countryLocation = LatLng(0.0, 0.0)
                     }
-                        MapViewComponent(countryLocation, MapType.Capital)
+                        MapViewComponent(countryLocation, MapType.Country)
 
                 }
                 is MapType.Capital -> {
                     MapTextLabel(
                         textLabel = "${stringResource(id = R.string.capital)} - ",
                         textValue = if (countryDetail.capital.isNullOrEmpty()) {
-                            ""
+                            EMPTY_STRING
                         } else {
                             countryDetail.capital[0]
                         }
@@ -155,7 +161,7 @@ fun loadContent(
 
 @Composable
 fun MapTextLabel(textLabel: String, textValue: String) {
-    Row(modifier = Modifier.padding(start = 12.dp, end = 12.dp)) {
+    Row(modifier = Modifier.padding(start = 12.dp, end = 12.dp, top = 12.dp)) {
         Text(
             text = textLabel,
             style = MaterialTheme.typography.body1,

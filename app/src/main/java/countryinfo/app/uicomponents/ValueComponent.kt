@@ -54,7 +54,8 @@ fun ValueComponent(value: Any) {
 
                     }
                 }
-        }
+        } else -> { ValueText("$value") }
+
     }
 
 }

@@ -45,11 +45,11 @@ fun LoadingShimmerEffect() {
             y = translateAnimation.value
         )
     )
-    ShimmerGridItem(brush = brush)
+    ShimmerListItem(brush = brush)
 }
 
 @Composable
-fun ShimmerGridItem(brush: Brush) {
+fun ShimmerListItem(brush: Brush) {
     Row(
         modifier = Modifier
             .fillMaxSize()

@@ -19,22 +19,41 @@ import countryinfo.app.ui.screens.detail.MapType
 
 @Composable
 fun MapViewComponent(location: LatLng, locationType: MapType) {
-    val cameraPositionState = rememberCameraPositionState {
-        position = when (locationType) {
-            MapType.CurrentLocation -> CameraPosition.fromLatLngZoom(location, 15f)
-            MapType.Country -> CameraPosition.fromLatLngZoom(location, 15f)
-            else -> CameraPosition.fromLatLngZoom(location, 10f)
-        }
+    val cameraCurrentLocation = rememberCameraPositionState {
+        position = CameraPosition.fromLatLngZoom(location, 15f)
     }
+
+    val cameraCountry = rememberCameraPositionState {
+        position = CameraPosition.fromLatLngZoom(location, 6f)
+    }
+
+    val cameraCapital = rememberCameraPositionState {
+        position = CameraPosition.fromLatLngZoom(location, 11f)
+    }
+
+    val zoom = when (locationType) {
+        is MapType.CurrentLocation -> {
+            cameraCurrentLocation
+        }
+        is MapType.Country -> {
+            cameraCountry
+        }
+        is MapType.Capital -> {
+            cameraCapital
+        }
+        else -> {cameraCapital}
+    }
+
     GoogleMap(
         modifier = Modifier
             .fillMaxWidth()
             .height(400.dp)
-            .padding(start = 12.dp, end = 12.dp, bottom = 12.dp),
-        cameraPositionState = cameraPositionState
+            .padding(start = 12.dp, end = 12.dp),
+        cameraPositionState = zoom
     ) {
+        zoom.move(CameraUpdateFactory.newLatLng(location))
         if (locationType == MapType.CurrentLocation) {
-            cameraPositionState.move(CameraUpdateFactory.newLatLng(location))
+
             Marker(
                 state = MarkerState(location),
                 title = stringResource(id = R.string.your_current_location),

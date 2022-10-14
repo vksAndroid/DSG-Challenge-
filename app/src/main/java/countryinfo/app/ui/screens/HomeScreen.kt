@@ -21,6 +21,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.google.gson.Gson
 import countryinfo.app.Graph
 import countryinfo.app.R
 import countryinfo.app.ui.screens.detail.CountryMapScreen
@@ -56,28 +57,23 @@ fun HomeScreen() {
     val isConnected = connection === ConnectionState.Available
 
     Scaffold(topBar = {
-        getSaveScreen.value.let {
+        TopBarConditional(
+            title = title.value,
+            bar = getSaveScreen.value,
+            isSaved = isFav.value,
+            onSavePress = {
+                if (isFav.value) {
+                    viewModel.removeFavourite(viewModel.observeCountryData().value)
+                } else {
+                    viewModel.addFavourite(viewModel.observeCountryData().value)
+                }
 
-            TopBarConditional(
-                title = title.value,
-                bar = it,
-                isSaved = isFav.value,
-                onSavePress = {
-                    if (isFav.value) {
-                        viewModel.removeFavourite(viewModel.observeCountryData().value)
-                    } else {
-                        viewModel.addFavourite(viewModel.observeCountryData().value)
-                    }
-
-                }) {
-                viewModel.setSavedScreen(ScreenOptions.SearchScreen)
-                navHostController.navigateUp()
-            }
+            }) {
+            viewModel.setSavedScreen(ScreenOptions.SearchScreen)
+            navHostController.navigateUp()
         }
     }, bottomBar = {
-        getSaveScreen.value.let {
-            BottomBarConditional(navController = navHostController, bar = it)
-        }
+        BottomBarConditional(navController = navHostController, bar = getSaveScreen.value)
     },
 
         snackbarHost = {
