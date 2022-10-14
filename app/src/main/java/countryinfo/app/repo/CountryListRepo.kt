@@ -1,7 +1,6 @@
 package countryinfo.app.repo
 
 import countryinfo.app.api.ApiInterface
-import countryinfo.app.api.RetrofitClient
 import countryinfo.app.api.model.CountryData
 import countryinfo.app.local.CountriesDao
 import countryinfo.app.utils.ApiResult
@@ -12,8 +11,6 @@ import javax.inject.Singleton
 
 @Singleton
 class CountryListRepo @Inject constructor(var client: ApiInterface, var dao: CountriesDao) {
-
-
     /**
      * Get country list
      *
@@ -40,7 +37,7 @@ class CountryListRepo @Inject constructor(var client: ApiInterface, var dao: Cou
      */
     fun getCountriesByName(name: String): Flow<ApiResult<List<CountryData>>> = flow {
         emit(ApiResult.Loading)
-        val response = RetrofitClient.retrofit.getCountryByName(name)
+        val response = client.getCountryByName(name)
         if (response.isSuccessful) {
             response.body()?.let {
                 emit(ApiResult.Success(it))

@@ -5,11 +5,9 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
@@ -35,54 +33,51 @@ fun DetailOverViewTab(viewModel: CountryListVm) {
         viewModel.title.value = it
     }
 
-    Scaffold(backgroundColor = Color.White,
-        content = { itemPadding ->
-            ConstraintLayout(
-                setComponentsUsingConstraints(), modifier = Modifier
-                    .fillMaxSize()
-                    .padding(bottom = itemPadding.calculateBottomPadding() + 40.dp)
-                    .verticalScroll(
-                        rememberScrollState()
-                    )
-            ) {
+    ConstraintLayout(
+        setComponentsUsingConstraints(), modifier = Modifier
+            .fillMaxSize()
+            .padding(bottom = 40.dp)
+            .verticalScroll(
+                rememberScrollState()
+            )
+    ) {
+        ImageFullFlag(flagImageUrl = countryDetail.flags?.png!!)
 
-                ImageFullFlag(flagImageUrl = countryDetail.flags?.png!!)
+        CountryNameCard(
+            title = countryDetail.name?.common!!,
+            value = countryDetail.name?.official!!
+        )
 
-                CountryNameCard(
-                    title = countryDetail.name?.common!!,
-                    value = countryDetail.name?.official!!
-                )
+        CountryBasicDetail(countryDetail)
 
-                CountryBasicDetail(countryDetail)
+        countryDetail.languages?.let {
+            CountryDetailComponent(title = labelLanguages, value = it)
+        }
+        countryDetail.currencies?.let {
+            CountryDetailComponent(title = labelCurrencies, value = it)
+        }
 
-                countryDetail.languages?.let {
-                    CountryDetailComponent(title = labelLanguages, value = it)
-                }
-                countryDetail.currencies?.let {
-                    CountryDetailComponent(title = labelCurrencies, value = it)
-                }
+        countryDetail.car?.side?.let {
+            CountryDetailComponent(title = labelcarDriveSide, value = it)
+        }
 
-                countryDetail.car?.side?.let {
-                    CountryDetailComponent(title = labelcarDriveSide, value = it)
-                }
+        countryDetail.population?.let {
+            CountryDetailComponent(title = labelPopulation, value = it)
+        }
+        countryDetail.timezones?.let {
+            CountryDetailComponent(title = "Timezone(s)", value = it)
+        }
+        countryDetail.coatOfArms?.png?.let {
+            CountryDetailComponent(
+                isImage = true,
+                imageUrl = it,
+                title = "Coat of Arms",
+                value = ""
+            )
+        }
 
-                countryDetail.population?.let {
-                    CountryDetailComponent(title = labelPopulation, value = it)
-                }
-                countryDetail.timezones?.let {
-                    CountryDetailComponent(title = "Timezone(s)", value = it)
-                }
-                countryDetail.coatOfArms?.png?.let {
-                    CountryDetailComponent(
-                        isImage = true,
-                        imageUrl = it,
-                        title = "Coat of Arms",
-                        value = ""
-                    )
-                }
+    }
 
-            }
-        })
 }
 
 fun setComponentsUsingConstraints(): ConstraintSet {

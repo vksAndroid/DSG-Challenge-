@@ -2,6 +2,7 @@ package countryinfo.app.vm
 
 import android.annotation.SuppressLint
 import android.location.Location
+import android.util.Log
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -10,13 +11,16 @@ import com.google.android.gms.location.Priority
 import com.google.android.gms.tasks.CancellationToken
 import com.google.android.gms.tasks.CancellationTokenSource
 import com.google.android.gms.tasks.OnTokenCanceledListener
+import com.google.gson.Gson
 import countryinfo.app.api.model.CountryData
 import countryinfo.app.di.hiltmodules.DefaultDispatcher
+import countryinfo.app.di.hiltmodules.IoDispatcher
 import countryinfo.app.repo.CountryListRepo
 import countryinfo.app.utils.ApiResult
 import countryinfo.app.utils.ScreenOptions
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.catch
@@ -28,13 +32,17 @@ import javax.inject.Inject
 @HiltViewModel
 class CountryListVm @Inject constructor(
     private val countryListRepo: CountryListRepo,
-    @DefaultDispatcher private val dispatcher: CoroutineDispatcher
+    @IoDispatcher private val dispatcher: CoroutineDispatcher
 ) : ViewModel() {
+
+    @Inject
+    lateinit var mFusedLocationClient: FusedLocationProviderClient
 
     var timer: Timer? = null
 
+    var isFav = mutableStateOf(false)
 
-    var _isFav = mutableStateOf(false)
+    var title = mutableStateOf("")
 
 
     private val countryListState: MutableStateFlow<List<CountryData>> =
@@ -52,7 +60,6 @@ class CountryListVm @Inject constructor(
     }
 
     fun updateCountryData(_countryData: CountryData) {
-
         countryData.value = _countryData
     }
 
@@ -72,7 +79,6 @@ class CountryListVm @Inject constructor(
         return savedCountryListState
     }
 
-
     private val saveScreenOptions: MutableStateFlow<ScreenOptions> =
         MutableStateFlow(ScreenOptions.SearchScreen)
 
@@ -83,9 +89,6 @@ class CountryListVm @Inject constructor(
     fun setSavedScreen(data: ScreenOptions) {
         saveScreenOptions.value = data
     }
-
-    var title = mutableStateOf("")
-
 
     fun clearSearch() {
         searchCountryListState.value = emptyList()
@@ -104,7 +107,6 @@ class CountryListVm @Inject constructor(
         return currentLocationStateFlow
     }
 
-
     fun updateSearchQuery(query: String) {
         _searchQuery.value = query
     }
@@ -119,10 +121,10 @@ class CountryListVm @Inject constructor(
                 countryListRepo.getCountryList()
                     .catch { exception ->
                         ApiResult.Failure(exception.message, exception.cause)
-
                     }.collect {
                         when (it) {
                             is ApiResult.Success<List<CountryData>> -> {
+
                                 countryListState.emit(it.value)
                             }
                             is ApiResult.Failure -> {
@@ -182,18 +184,21 @@ class CountryListVm @Inject constructor(
     }
 
     @SuppressLint("MissingPermission")
-    fun getCurrentLatLong(mFusedLocationClient: FusedLocationProviderClient) {
+    fun getCurrentLatLong() {
+        viewModelScope.launch {
+            withContext(dispatcher) {
+                mFusedLocationClient?.getCurrentLocation(
+                    Priority.PRIORITY_HIGH_ACCURACY,
+                    object : CancellationToken() {
+                        override fun onCanceledRequested(p0: OnTokenCanceledListener) =
+                            CancellationTokenSource().token
 
-        mFusedLocationClient.getCurrentLocation(
-            Priority.PRIORITY_HIGH_ACCURACY,
-            object : CancellationToken() {
-                override fun onCanceledRequested(p0: OnTokenCanceledListener) =
-                    CancellationTokenSource().token
-
-                override fun isCancellationRequested() = false
-            }).addOnSuccessListener { location ->
-            if (location != null) {
-                currentLocationStateFlow.value = location
+                        override fun isCancellationRequested() = false
+                    })?.addOnSuccessListener { location ->
+                    if (location != null) {
+                        currentLocationStateFlow.value = location
+                    }
+                }
             }
         }
     }
@@ -203,7 +208,7 @@ class CountryListVm @Inject constructor(
         viewModelScope.launch {
             withContext(dispatcher) {
                 countryListRepo.addtoFavourite(countryItem)
-                _isFav.value = true
+                isFav.value = true
             }
         }
 
@@ -214,7 +219,7 @@ class CountryListVm @Inject constructor(
             withContext(dispatcher) {
                 countryItem.cca3?.let {
                     countryListRepo.removeFromFavourite(it)
-                    _isFav.value = false
+                    isFav.value = false
                 }
             }
         }
@@ -234,7 +239,7 @@ class CountryListVm @Inject constructor(
         viewModelScope.launch {
             withContext(dispatcher) {
                 val data = countryListRepo.isCountryFav(name)
-                _isFav.value = data != null
+                isFav.value = data != null
             }
         }
     }

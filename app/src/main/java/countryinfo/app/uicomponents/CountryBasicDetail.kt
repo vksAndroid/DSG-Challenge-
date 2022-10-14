@@ -18,7 +18,7 @@ import countryinfo.app.api.model.CountryData
 
 
 @Composable
-fun CountryBasicDetail(countryData: CountryData?) {
+fun CountryBasicDetail(countryData: CountryData) {
 
     Card(
         elevation = 1.5.dp,
@@ -88,5 +88,5 @@ fun showItem(title: String, value: String) {
 @Preview(showBackground = true)
 @Composable
 fun getCountryBasicDetail() {
-    CountryBasicDetail(null)
+    CountryBasicDetail(CountryData())
 }

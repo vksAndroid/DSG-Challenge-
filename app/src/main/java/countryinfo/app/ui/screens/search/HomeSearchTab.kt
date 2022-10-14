@@ -42,7 +42,11 @@ fun HomeSearchTab(navController: NavController?, viewModel: CountryListVm) {
     val connection by connectivityState()
     val isConnected = connection === ConnectionState.Available
 
-    if (searchList.value.isEmpty() && countryList.value.isEmpty()) {
+    /*if (searchList.value.isEmpty() && countryList.value.isEmpty()) {
+        viewModel.getCountryList()
+    }*/
+
+    LaunchedEffect(key1 = countryList){
         viewModel.getCountryList()
     }
 

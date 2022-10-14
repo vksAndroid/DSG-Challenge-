@@ -6,6 +6,5 @@ import com.google.gson.annotations.SerializedName
 
 @Entity
 data class CapitalInfo(
-    @Expose(serialize = true, deserialize = true)
     @SerializedName("latlng") var latlng: List<Double> = listOf()
 )

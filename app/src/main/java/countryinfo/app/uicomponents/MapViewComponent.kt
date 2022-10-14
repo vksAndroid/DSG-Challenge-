@@ -15,15 +15,14 @@ import com.google.maps.android.compose.Marker
 import com.google.maps.android.compose.MarkerState
 import com.google.maps.android.compose.rememberCameraPositionState
 import countryinfo.app.R
-import countryinfo.app.utils.LOCATION_TYPE_COUNTRY
-import countryinfo.app.utils.LOCATION_TYPE_CURRENT
+import countryinfo.app.ui.screens.detail.MapType
 
 @Composable
-fun MapViewComponent(location: LatLng, locationType: Int) {
+fun MapViewComponent(location: LatLng, locationType: MapType) {
     val cameraPositionState = rememberCameraPositionState {
         position = when (locationType) {
-            LOCATION_TYPE_CURRENT -> CameraPosition.fromLatLngZoom(location, 15f)
-            LOCATION_TYPE_COUNTRY -> CameraPosition.fromLatLngZoom(location, 5f)
+            MapType.CurrentLocation -> CameraPosition.fromLatLngZoom(location, 15f)
+            MapType.Country -> CameraPosition.fromLatLngZoom(location, 1f)
             else -> CameraPosition.fromLatLngZoom(location, 10f)
         }
     }
@@ -34,7 +33,7 @@ fun MapViewComponent(location: LatLng, locationType: Int) {
             .padding(start = 12.dp, end = 12.dp, bottom = 12.dp),
         cameraPositionState = cameraPositionState
     ) {
-        if (locationType == LOCATION_TYPE_CURRENT) {
+        if (locationType == MapType.CurrentLocation) {
             cameraPositionState.move(CameraUpdateFactory.newLatLng(location))
             Marker(
                 state = MarkerState(location),
