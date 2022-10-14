@@ -68,7 +68,7 @@ fun loadContent(
     LazyColumn(
         modifier = Modifier
             .wrapContentHeight()
-            .fillMaxWidth(),
+            .fillMaxWidth().padding(bottom = 12.dp),
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
 
@@ -160,7 +160,7 @@ fun loadContent(
 
 @Composable
 fun MapTextLabel(textLabel: String, textValue: String) {
-    Row(modifier = Modifier.padding(start = 12.dp, end = 12.dp)) {
+    Row(modifier = Modifier.padding(start = 12.dp, end = 12.dp, top = 12.dp)) {
         Text(
             text = textLabel,
             style = MaterialTheme.typography.body1,
