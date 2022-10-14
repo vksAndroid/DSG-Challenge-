@@ -106,7 +106,6 @@ fun HomeScreen() {
                          BottomTab.TabSearch.route
                         else
                             BottomTab.TabSaved.route
-
                     }
                     else
                         BottomTab.TabOverview.route
@@ -115,13 +114,11 @@ fun HomeScreen() {
                         navController = navHostController, viewModel = viewModel, route
                     )
                 }
-
-
             }
         }
 
         BackHandler(enabled = true) {
-            viewModel.title.value = "Countries"
+            viewModel.title.value = "Search"
             viewModel.setSavedScreen(ScreenOptions.SearchScreen)
             navHostController.navigateUp()
         }

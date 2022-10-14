@@ -53,7 +53,7 @@ fun HomeSearchTab(navController: NavController?, viewModel: CountryListVm) {
         viewModel.getCountryList()
     }
 
-    viewModel.title.value = "Countries"
+    viewModel.title.value = "Search"
 
     Surface(modifier = Modifier.fillMaxSize(), color = Color.White) {
         Column(modifier = Modifier
