@@ -209,8 +209,6 @@ fun mapHeaderConstraints(): ConstraintSet {
         val idBasicDetail = createRefFor("BasicDetail")
         val idCountry = createRefFor("Country")
 
-
-
         constrain(idTopFlag) {
             top.linkTo(parent.top, margin = 0.dp)
         }

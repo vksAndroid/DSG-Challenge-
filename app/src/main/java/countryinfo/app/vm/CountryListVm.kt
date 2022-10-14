@@ -19,13 +19,10 @@ import countryinfo.app.repo.CountryListRepo
 import countryinfo.app.utils.ApiResult
 import countryinfo.app.utils.ScreenOptions
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import java.util.*
 import javax.inject.Inject
 
@@ -43,6 +40,8 @@ class CountryListVm @Inject constructor(
     var isFav = mutableStateOf(false)
 
     var title = mutableStateOf("")
+
+    var selectedTab = mutableStateOf("search")
 
 
     private val countryListState: MutableStateFlow<List<CountryData>> =
@@ -153,6 +152,24 @@ class CountryListVm @Inject constructor(
                     getCountriesByName(name)
                 }
             }, 1000)
+        }
+    }
+
+    fun searchUsingCoroutine(name: String,
+    scope  :CoroutineScope,
+    onBackResult : (Any)-> Unit) {
+        if (name.length > 2) {
+
+            val throttleJob  : Job? = null
+
+            var latestParam : Any
+
+            scope.launch {
+
+                delay(1000L)
+
+            }
+
         }
     }
 

@@ -44,6 +44,7 @@ fun HomeScreen() {
     val viewModel: CountryListVm = hiltViewModel()
 
     var isFav by rememberSaveable { mutableStateOf(viewModel.isFav) }
+    var clickedTab by rememberSaveable { mutableStateOf(viewModel.selectedTab) }
 
     var title = rememberSaveable {
         viewModel.title
@@ -103,8 +104,14 @@ fun HomeScreen() {
 
                 getSaveScreen.value.let {
 
-                    val route = if (it == ScreenOptions.SearchScreen)
-                        BottomTab.TabSearch.route
+                    val route = if (it == ScreenOptions.SearchScreen) {
+
+                        if(clickedTab.value == "search")
+                         BottomTab.TabSearch.route
+                        else
+                            BottomTab.TabSaved.route
+
+                    }
                     else
                         BottomTab.TabOverview.route
 
@@ -143,13 +150,15 @@ fun SearchNavigationGraph(
                 navController = navController,
                 viewModel = viewModel
             )
-
+            viewModel.selectedTab.value = "search"
         }
         composable(BottomTab.TabSaved.route) {
             HomeSavedTab(
                 navController = navController,
                 viewModel = viewModel
             )
+            viewModel.selectedTab.value = "saved"
+
         }
 
         composable(
