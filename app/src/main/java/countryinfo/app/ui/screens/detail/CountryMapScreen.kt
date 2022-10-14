@@ -14,30 +14,27 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.layoutId
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.ConstraintSet
-import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.model.LatLng
 import countryinfo.app.R
 import countryinfo.app.uicomponents.CountryBasicDetail
 import countryinfo.app.uicomponents.CountryNameCard
 import countryinfo.app.uicomponents.ImageFullFlag
 import countryinfo.app.uicomponents.MapViewComponent
-import countryinfo.app.utils.LOCATION_TYPE_CAPITAL
-import countryinfo.app.utils.LOCATION_TYPE_COUNTRY
-import countryinfo.app.utils.LOCATION_TYPE_CURRENT
-import countryinfo.app.utils.isLocationPermissionGranted
+import countryinfo.app.utils.*
 import countryinfo.app.vm.CountryListVm
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter", "StateFlowValueCalledInComposition")
 @Composable
 fun CountryMapScreen(
-    viewModel: CountryListVm,
-    mFusedLocationClient: FusedLocationProviderClient
+    viewModel: CountryListVm
 ) {
 
     val countryDetail = viewModel.observeCountryData().collectAsState().value
@@ -53,8 +50,8 @@ fun CountryMapScreen(
         countryDetail.flags?.png?.let {
             ImageFullFlag(flagImageUrl = it)
         }
-        val official = countryDetail.name?.official ?: ""
-        val name = countryDetail.name?.common ?: ""
+        val official = countryDetail.name?.official ?: EMPTY_STRING
+        val name = countryDetail.name?.common ?: EMPTY_STRING
 
         CountryNameCard(title = name, value = official)
 
@@ -68,12 +65,15 @@ fun CountryMapScreen(
         ) {
 
             if (isLocationPermissionGranted()) {
-                viewModel.getCurrentLatLong(mFusedLocationClient)
+                viewModel.getCurrentLatLong(
+                    LocationServices.getFusedLocationProviderClient(
+                    LocalContext.current
+                ))
                 val currentLocation = viewModel.observeCurrentLocation().collectAsState().value
                 val currentLatLng = LatLng(currentLocation.latitude, currentLocation.longitude)
                 MapTextLabel(
                     textLabel = stringResource(id = R.string.your_current_location),
-                    textValue = ""
+                    textValue = EMPTY_STRING
                 )
                 MapViewComponent(currentLatLng, LOCATION_TYPE_CURRENT)
             }
@@ -91,7 +91,7 @@ fun CountryMapScreen(
                 textValue = if (countryDetail.capital.isNotEmpty()) {
                     countryDetail.capital[0]
                 } else {
-                    ""
+                    EMPTY_STRING
                 }
             )
             val capitalLocation = LatLng(

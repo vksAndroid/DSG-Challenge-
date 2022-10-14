@@ -14,9 +14,11 @@ import countryinfo.app.api.model.CountryData
 import countryinfo.app.di.hiltmodules.DefaultDispatcher
 import countryinfo.app.repo.CountryListRepo
 import countryinfo.app.utils.ApiResult
+import countryinfo.app.utils.EMPTY_STRING
 import countryinfo.app.utils.ScreenOptions
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.catch
@@ -31,9 +33,9 @@ class CountryListVm @Inject constructor(
     @DefaultDispatcher private val dispatcher: CoroutineDispatcher
 ) : ViewModel() {
 
-    var timer: Timer? = null
+    private var timer: Timer? = null
 
-
+    private var apiJob: Job? = null
     var _isFav = mutableStateOf(false)
 
 
@@ -84,7 +86,7 @@ class CountryListVm @Inject constructor(
         saveScreenOptions.value = data
     }
 
-    var title = mutableStateOf("")
+    var title = mutableStateOf(EMPTY_STRING)
 
 
     fun clearSearch() {
@@ -92,13 +94,13 @@ class CountryListVm @Inject constructor(
         timer?.cancel()
     }
 
-    private var _searchQuery = MutableStateFlow("")
+    private var _searchQuery = MutableStateFlow(EMPTY_STRING)
     fun searchQuery(): StateFlow<String> {
         return _searchQuery
     }
 
     private val currentLocationStateFlow: MutableStateFlow<Location> =
-        MutableStateFlow(Location(""))
+        MutableStateFlow(Location(EMPTY_STRING))
 
     fun observeCurrentLocation(): StateFlow<Location> {
         return currentLocationStateFlow
@@ -160,7 +162,8 @@ class CountryListVm @Inject constructor(
      * @param query : It is a search query used to search countries by name
      */
     fun getCountriesByName(query: String) {
-        viewModelScope.launch {
+        apiJob?.cancel()
+        apiJob = viewModelScope.launch {
             countryListRepo.getCountriesByName(query)
                 .catch {
 
@@ -183,7 +186,6 @@ class CountryListVm @Inject constructor(
 
     @SuppressLint("MissingPermission")
     fun getCurrentLatLong(mFusedLocationClient: FusedLocationProviderClient) {
-
         mFusedLocationClient.getCurrentLocation(
             Priority.PRIORITY_HIGH_ACCURACY,
             object : CancellationToken() {

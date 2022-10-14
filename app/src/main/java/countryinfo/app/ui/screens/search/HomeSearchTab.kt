@@ -18,6 +18,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -27,10 +28,12 @@ import countryinfo.app.Graph
 import countryinfo.app.api.model.CountryData
 import countryinfo.app.uicomponents.CountryItemView
 import countryinfo.app.uicomponents.LoadingShimmerEffect
+import countryinfo.app.utils.EMPTY_STRING
 import countryinfo.app.utils.ScreenOptions
 import countryinfo.app.utils.networkconnection.ConnectionState
 import countryinfo.app.utils.networkconnection.connectivityState
 import countryinfo.app.vm.CountryListVm
+import countryinfo.app.R
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter", "StateFlowValueCalledInComposition")
 @Composable
@@ -57,14 +60,14 @@ fun HomeSearchTab(navController: NavController?, viewModel: CountryListVm) {
 
             if (searchList.value.isEmpty()) {
                 countryList.value?.let {
-                    CountryListView(navController, it) {
+                    CountryListView(true, navController, it) {
                         viewModel.setSavedScreen(ScreenOptions.DetailScreen)
                         viewModel.updateCountryData(it)
                         viewModel.isCountryFav(it.cca3)
                     }
                 }
             } else {
-                CountryListView(navController, searchList.value) {
+                CountryListView(true, navController, searchList.value) {
                     viewModel.setSavedScreen(ScreenOptions.DetailScreen)
                     viewModel.updateCountryData(it)
                     viewModel.isCountryFav(it.cca3)
@@ -92,14 +95,14 @@ fun SearchTextField(viewModel: CountryListVm) {
             }
             viewModel.updateSearchQuery(it)
         },
-        placeholder = { Text(text = "Search") },
+        placeholder = { Text(text = stringResource(id = R.string.search)) },
         modifier = Modifier
             .padding(all = 8.dp)
             .fillMaxWidth()
             .border(width = 8.dp, color = Color.White, shape = RoundedCornerShape(20.dp)),
         singleLine = true,
         textStyle = TextStyle(fontSize = 16.sp, color = Color.Black),
-        leadingIcon = { Icon(Icons.Default.Search, contentDescription = "") },
+        leadingIcon = { Icon(Icons.Default.Search, contentDescription = EMPTY_STRING) },
         colors = TextFieldDefaults.textFieldColors(
             focusedIndicatorColor = Color.Transparent,
             unfocusedIndicatorColor = Color.Transparent,
@@ -111,14 +114,15 @@ fun SearchTextField(viewModel: CountryListVm) {
 
 @Composable
 fun CountryListView(
+    showShimmer: Boolean,
     navController: NavController?,
     countryList: List<CountryData>,
     changeState: (countryData: CountryData) -> Unit
 ) {
 
-    if (countryList.isEmpty()) {
+    if (countryList.isEmpty() && showShimmer) {
         LazyColumn() {
-            repeat(6) {
+            repeat(7) {
                 item { LoadingShimmerEffect() }
             }
         }
@@ -133,7 +137,7 @@ fun CountryListView(
                     capitalName = if (countryData.capital.isNotEmpty()) {
                         countryData.capital[0]
                     } else {
-                        ""
+                        EMPTY_STRING
                     },
                     countryFlag = countryData.flags?.png,
                     onItemClicked = {

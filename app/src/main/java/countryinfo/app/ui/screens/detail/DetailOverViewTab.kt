@@ -10,19 +10,18 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.ConstraintSet
 import androidx.constraintlayout.compose.Dimension
+import countryinfo.app.R
 import countryinfo.app.uicomponents.CountryBasicDetail
 import countryinfo.app.uicomponents.CountryDetailComponent
 import countryinfo.app.uicomponents.CountryNameCard
 import countryinfo.app.uicomponents.ImageFullFlag
-import countryinfo.app.utils.labelCurrencies
-import countryinfo.app.utils.labelLanguages
-import countryinfo.app.utils.labelPopulation
-import countryinfo.app.utils.labelcarDriveSide
+import countryinfo.app.utils.*
 import countryinfo.app.vm.CountryListVm
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter", "StateFlowValueCalledInComposition")
@@ -56,28 +55,28 @@ fun DetailOverViewTab(viewModel: CountryListVm) {
                 CountryBasicDetail(countryDetail)
 
                 countryDetail.languages?.let {
-                    CountryDetailComponent(title = labelLanguages, value = it)
+                    CountryDetailComponent(title = stringResource(id = R.string.languages), value = it)
                 }
                 countryDetail.currencies?.let {
-                    CountryDetailComponent(title = labelCurrencies, value = it)
+                    CountryDetailComponent(title = stringResource(id = R.string.currencies), value = it)
                 }
 
                 countryDetail.car?.side?.let {
-                    CountryDetailComponent(title = labelcarDriveSide, value = it)
+                    CountryDetailComponent(title = stringResource(id = R.string.car_driver_side), value = it)
                 }
 
                 countryDetail.population?.let {
-                    CountryDetailComponent(title = labelPopulation, value = it)
+                    CountryDetailComponent(title = stringResource(id = R.string.population), value = it)
                 }
                 countryDetail.timezones?.let {
-                    CountryDetailComponent(title = "Timezone(s)", value = it)
+                    CountryDetailComponent(title = stringResource(id = R.string.timezones), value = it)
                 }
                 countryDetail.coatOfArms?.png?.let {
                     CountryDetailComponent(
                         isImage = true,
                         imageUrl = it,
-                        title = "Coat of Arms",
-                        value = ""
+                        title = stringResource(id = R.string.coat_of_arms),
+                        value = EMPTY_STRING
                     )
                 }
 

@@ -13,7 +13,6 @@ import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -22,7 +21,6 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.google.android.gms.location.LocationServices
 import com.google.gson.Gson
 import countryinfo.app.Graph
 import countryinfo.app.R
@@ -67,28 +65,23 @@ fun HomeScreen() {
     }
 
     Scaffold(topBar = {
-        getSaveScreen.value.let {
+        TopBarConditional(
+            title = title.value,
+            bar = getSaveScreen.value,
+            isSaved = isFav.value,
+            onSavePress = {
+                if (isFav.value) {
+                    viewModel.removeFavourite(viewModel.observeCountryData().value)
+                } else {
+                    viewModel.addFavourite(viewModel.observeCountryData().value)
+                }
 
-            TopBarConditional(
-                title = title.value,
-                bar = it,
-                isSaved = isFav.value,
-                onSavePress = {
-                    if (isFav.value) {
-                        viewModel.removeFavourite(viewModel.observeCountryData().value)
-                    } else {
-                        viewModel.addFavourite(viewModel.observeCountryData().value)
-                    }
-
-                }) {
-                viewModel.setSavedScreen(ScreenOptions.SearchScreen)
-                navHostController.navigateUp()
-            }
+            }) {
+            viewModel.setSavedScreen(ScreenOptions.SearchScreen)
+            navHostController.navigateUp()
         }
     }, bottomBar = {
-        getSaveScreen.value.let {
-            BottomBarConditional(navController = navHostController, bar = it)
-        }
+        BottomBarConditional(navController = navHostController, bar = getSaveScreen.value)
     },
 
         snackbarHost = {
@@ -163,10 +156,7 @@ fun SearchNavigationGraph(
         }
         composable(BottomTab.TabMap.route) {
             CountryMapScreen(
-                viewModel = viewModel,
-                mFusedLocationClient = LocationServices.getFusedLocationProviderClient(
-                    LocalContext.current
-                )
+                viewModel = viewModel
             )
 
         }

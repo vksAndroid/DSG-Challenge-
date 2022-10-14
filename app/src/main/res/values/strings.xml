@@ -10,6 +10,7 @@
     <string name="currencies">Currencies</string>
     <string name="population">Population</string>
     <string name="car_driver_side">Car Driver Side</string>
+    <string name="timezones">Timezone(s)</string>
     <string name="coat_of_arms">Coat of Arms</string>
     <string name="country_flag">Country Flag</string>
     <string name="country">Country</string>
