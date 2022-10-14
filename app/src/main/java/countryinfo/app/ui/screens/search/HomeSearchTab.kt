@@ -121,7 +121,7 @@ fun CountryListView(
 ) {
 
     if (countryList.isEmpty()) {
-        LazyColumn() {
+        LazyColumn {
             repeat(6) {
                 item { LoadingShimmerEffect() }
             }

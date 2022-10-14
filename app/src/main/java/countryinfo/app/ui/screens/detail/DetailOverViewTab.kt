@@ -36,7 +36,6 @@ fun DetailOverViewTab(viewModel: CountryListVm) {
     ConstraintLayout(
         setComponentsUsingConstraints(), modifier = Modifier
             .fillMaxSize()
-            .padding(bottom = 40.dp)
             .verticalScroll(
                 rememberScrollState()
             )
