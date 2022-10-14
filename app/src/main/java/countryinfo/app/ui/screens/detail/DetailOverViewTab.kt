@@ -29,9 +29,9 @@ fun DetailOverViewTab(viewModel: CountryListVm) {
 
     val countryDetail = viewModel.observeCountryData().collectAsState().value
 
-    countryDetail.name?.common?.let {
-        viewModel.title.value = it
-    }
+    //countryDetail.name?.common?.let {
+    //    viewModel.title.value = it
+    //}
 
     ConstraintLayout(
         setComponentsUsingConstraints(), modifier = Modifier

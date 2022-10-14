@@ -11,14 +11,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.layoutId
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.ConstraintSet
-import androidx.constraintlayout.compose.Dimension
 import com.google.android.gms.maps.model.LatLng
 import com.google.gson.Gson
 import countryinfo.app.R
@@ -27,7 +25,7 @@ import countryinfo.app.uicomponents.CountryBasicDetail
 import countryinfo.app.uicomponents.CountryNameCard
 import countryinfo.app.uicomponents.ImageFullFlag
 import countryinfo.app.uicomponents.MapViewComponent
-import countryinfo.app.utils.isLocationPermissionGranted
+import countryinfo.app.utils.CheckLocationPermission
 import countryinfo.app.vm.CountryListVm
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter", "StateFlowValueCalledInComposition")
@@ -45,7 +43,7 @@ fun CountryMapScreen(
         loadContent(
             countryDetail = countryDetail,
             viewModel = viewModel,
-            locationEnabled = isLocationPermissionGranted()
+            locationEnabled = CheckLocationPermission()
         )
     }
 }
@@ -112,7 +110,7 @@ fun loadContent(
                             countryLocation = LatLng(0.0, 0.0)
                         } else {
                             countryLocation = LatLng(
-                                countryDetail?.latlng?.get(0) ?: 0.0, countryDetail?.latlng?.get(1)
+                                countryDetail.latlng.get(0) ?: 0.0, countryDetail?.latlng?.get(1)
                                     ?: 0.0
                             )
                         }

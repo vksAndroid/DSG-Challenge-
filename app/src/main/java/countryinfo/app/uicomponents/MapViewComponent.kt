@@ -22,7 +22,7 @@ fun MapViewComponent(location: LatLng, locationType: MapType) {
     val cameraPositionState = rememberCameraPositionState {
         position = when (locationType) {
             MapType.CurrentLocation -> CameraPosition.fromLatLngZoom(location, 15f)
-            MapType.Country -> CameraPosition.fromLatLngZoom(location, 1f)
+            MapType.Country -> CameraPosition.fromLatLngZoom(location, 15f)
             else -> CameraPosition.fromLatLngZoom(location, 10f)
         }
     }

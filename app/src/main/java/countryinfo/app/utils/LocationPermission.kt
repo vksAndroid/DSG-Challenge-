@@ -11,11 +11,9 @@ import com.google.accompanist.permissions.rememberPermissionState
 
 @OptIn(ExperimentalPermissionsApi::class)
 @Composable
-fun isLocationPermissionGranted(): Boolean {
+fun LocationPermission() {
 
-    var isPermissionGranted = true
-    val permissionState =
-        rememberPermissionState(permission = Manifest.permission.ACCESS_FINE_LOCATION)
+    val permissionState = rememberPermissionState(permission = Manifest.permission.ACCESS_FINE_LOCATION)
     val lifecycleOwner = LocalLifecycleOwner.current
 
     DisposableEffect(key1 = lifecycleOwner, effect = {
@@ -33,21 +31,4 @@ fun isLocationPermissionGranted(): Boolean {
             lifecycleOwner.lifecycle.removeObserver(observer)
         }
     })
-
-    when {
-        permissionState.hasPermission -> {
-//            Text(text = "Location permission has been granted")
-            isPermissionGranted = true
-        }
-        permissionState.shouldShowRationale -> {
-//            Column {
-//                Text(text = "Location permission is needed")
-//            }
-            isPermissionGranted = false
-        }
-        !permissionState.hasPermission && !permissionState.shouldShowRationale -> {
-//            Text(text = "Navigate to settings and enable the Location permission")
-        }
-    }
-    return isPermissionGranted
 }

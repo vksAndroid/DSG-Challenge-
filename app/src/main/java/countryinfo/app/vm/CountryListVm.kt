@@ -156,19 +156,18 @@ class CountryListVm @Inject constructor(
     }
 
     fun searchUsingCoroutine(name: String,
-    scope  :CoroutineScope,
-    onBackResult : (Any)-> Unit) {
+    scope  :CoroutineScope) {
         if (name.length > 2) {
 
-            val throttleJob  : Job? = null
-
-            var latestParam : Any
-
-            scope.launch {
+            val scope = scope.launch {
 
                 delay(1000L)
+                getCountriesByName(name)
+
 
             }
+
+            scope.cancel()
 
         }
     }

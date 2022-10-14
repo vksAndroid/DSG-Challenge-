@@ -125,7 +125,7 @@ fun HomeScreen() {
         }
 
         BackHandler(enabled = true) {
-            viewModel.title.value = "Search"
+            viewModel.title.value = "Countries"
             viewModel.setSavedScreen(ScreenOptions.SearchScreen)
             navHostController.navigateUp()
         }
