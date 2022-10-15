@@ -17,7 +17,8 @@ import countryinfo.app.utils.ApiResult
 import countryinfo.app.utils.EMPTY_STRING
 import countryinfo.app.utils.ScreenOptions
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.catch
@@ -38,11 +39,20 @@ class CountryListVm @Inject constructor(
     var timer: Timer? = null
 
     private var apiJob: Job? = null
+
     var isFav = mutableStateOf(false)
 
     var title = mutableStateOf("Search")
 
     var selectedTab = mutableStateOf("search")
+
+    private val errorSate: MutableStateFlow<String> = MutableStateFlow(
+        EMPTY_STRING
+    )
+
+    fun observeErrorState(): StateFlow<String> {
+        return errorSate
+    }
 
 
     private val countryListState: MutableStateFlow<List<CountryData>> =
@@ -118,23 +128,25 @@ class CountryListVm @Inject constructor(
     fun getCountryList() {
         viewModelScope.launch {
             withContext(dispatcher) {
-                val result = countryListRepo.getCountryList()
-                result.catch { exception ->
-                    ApiResult.Failure(exception.message, exception.cause)
-                }
-                result.collect {
-                    when (it) {
-                        is ApiResult.Success<List<CountryData>> -> {
-                            countryListState.emit(it.value)
-                        }
-                        is ApiResult.Failure -> {
-                            ApiResult.Failure(it.message, it.throwable)
-                        }
-                        else -> {
-                            ApiResult.Failure("", Throwable(""))
+                countryListRepo.getCountryList()
+                    .catch { exception ->
+                        ApiResult.Failure(exception.message, exception.cause)
+                    }.collect {
+                        when (it) {
+                            is ApiResult.Success<List<CountryData>> -> {
+
+                                countryListState.emit(it.value)
+
+                            }
+                            is ApiResult.Failure -> {
+                                it.message?.let { errorSate.value }
+                            }
+                            else -> {
+                                ApiResult.Failure("", Throwable(""))
+
+                            }
                         }
                     }
-                }
             }
         }
     }
@@ -174,7 +186,7 @@ class CountryListVm @Inject constructor(
                             searchCountryListState.emit(it.value)
                         }
                         is ApiResult.Failure -> {
-                            ApiResult.Failure(it.message, it.throwable)
+                            it.message?.let { errorSate.value }
                         }
                         else -> {
                             ApiResult.Failure("", Throwable(""))
