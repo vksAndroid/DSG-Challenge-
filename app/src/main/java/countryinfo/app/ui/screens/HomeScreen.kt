@@ -6,28 +6,26 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Scaffold
-import androidx.compose.material.Snackbar
 import androidx.compose.material.Surface
-import androidx.compose.material.Text
+import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.google.gson.Gson
 import countryinfo.app.Graph
-import countryinfo.app.R
 import countryinfo.app.ui.screens.detail.CountryMapScreen
 import countryinfo.app.ui.screens.detail.DetailOverViewTab
 import countryinfo.app.ui.screens.search.HomeSavedTab
 import countryinfo.app.ui.screens.search.HomeSearchTab
+import countryinfo.app.uicomponents.DefaultSnackBar
 import countryinfo.app.uicomponents.main.BottomBarConditional
 import countryinfo.app.uicomponents.main.TopBarConditional
 import countryinfo.app.utils.ScreenOptions
@@ -35,8 +33,9 @@ import countryinfo.app.utils.networkconnection.ConnectionState
 import countryinfo.app.utils.networkconnection.connectivityState
 import countryinfo.app.utils.tabs.BottomTab
 import countryinfo.app.vm.CountryListVm
+import countryinfo.app.R
 
-@SuppressLint("UnusedMaterialScaffoldPaddingParameter", "StateFlowValueCalledInComposition")
+
 @Composable
 fun HomeScreen() {
 
@@ -45,6 +44,7 @@ fun HomeScreen() {
     val viewModel: CountryListVm = hiltViewModel()
 
     var isFav by rememberSaveable { mutableStateOf(viewModel.isFav) }
+
     var clickedTab by rememberSaveable { mutableStateOf(viewModel.selectedTab) }
 
     var title = rememberSaveable {
@@ -56,37 +56,56 @@ fun HomeScreen() {
     val connection by connectivityState()
     val isConnected = connection === ConnectionState.Available
 
-    Scaffold(topBar = {
-        TopBarConditional(
-            title = title.value,
-            bar = getSaveScreen.value,
-            isSaved = isFav.value,
-            onSavePress = {
-                if (isFav.value) {
-                    viewModel.removeFavourite(viewModel.observeCountryData().value)
-                } else {
-                    viewModel.addFavourite(viewModel.observeCountryData().value)
-                }
+    val scaffoldState = rememberScaffoldState()
 
-            }) {
-            viewModel.setSavedScreen(ScreenOptions.SearchScreen)
-            navHostController.navigateUp()
+    val errorState = viewModel.observeErrorState().collectAsState()
+
+    val noInterNetMessage =stringResource(id = R.string.there_is_no_internet)
+
+    LaunchedEffect(key1 = errorState.value, key2 = isConnected) {
+
+        if (!isConnected) {
+            scaffoldState.snackbarHostState.showSnackbar(noInterNetMessage)
+        } else if (errorState.value.isNotEmpty()) {
+            scaffoldState.snackbarHostState.showSnackbar(errorState.value)
         }
-    }, bottomBar = {
-        BottomBarConditional(navController = navHostController, bar = getSaveScreen.value)
-    },
+    }
 
-        snackbarHost = {
-            if (isConnected.not()) {
-                Snackbar(
-                    action = {},
-                    modifier = Modifier
-                        .padding(8.dp)
-                ) {
-                    Text(text = stringResource(R.string.there_is_no_internet))
-                }
+    Scaffold(
+        topBar = {
+            TopBarConditional(
+                title = title.value,
+                bar = getSaveScreen.value,
+                isSaved = isFav.value,
+                onSavePress = {
+                    if (isFav.value) {
+                        viewModel.removeFavourite(viewModel.observeCountryData().value)
+                    } else {
+                        viewModel.addFavourite(viewModel.observeCountryData().value)
+                    }
+
+                }) {
+                viewModel.setSavedScreen(ScreenOptions.SearchScreen)
+                navHostController.navigateUp()
             }
-        }) {
+        },
+        bottomBar = {
+            BottomBarConditional(navController = navHostController, bar = getSaveScreen.value)
+        },
+        scaffoldState = scaffoldState,
+
+
+        //   DefaultSnackBar(snackbarHostState = scaffoldState.snackbarHostState, {})
+//            if (isConnected.not()) {
+//                Snackbar(
+//                    action = {},
+//                    modifier = Modifier
+//                        .padding(8.dp)
+//                ) {
+//                    Text(text = stringResource(R.string.there_is_no_internet))
+//                }
+//            }
+    ) {
 
         Box(
             modifier = Modifier
@@ -96,25 +115,34 @@ fun HomeScreen() {
                 )
         ) {
 
+
+
             Surface(modifier = Modifier.fillMaxSize(), color = Color.White) {
 
                 getSaveScreen.value.let {
 
                     val route = if (it == ScreenOptions.SearchScreen) {
 
-                        if(clickedTab.value == "search")
-                         BottomTab.TabSearch.route
+                        if (clickedTab.value == "search")
+                            BottomTab.TabSearch.route
                         else
                             BottomTab.TabSaved.route
-                    }
-                    else
+                    } else
                         BottomTab.TabOverview.route
 
                     SearchNavigationGraph(
                         navController = navHostController, viewModel = viewModel, route
                     )
+
+                    DefaultSnackBar(
+                        snackbarHostState = scaffoldState.snackbarHostState,
+                        onDismiss = { scaffoldState.snackbarHostState.currentSnackbarData?.dismiss() },
+                        modifier = Modifier.align(Alignment.BottomCenter)
+                    )
                 }
             }
+
+
         }
 
         BackHandler(enabled = true) {

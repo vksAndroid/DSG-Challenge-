@@ -2,6 +2,7 @@ package countryinfo.app.vm
 
 import android.annotation.SuppressLint
 import android.location.Location
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -38,11 +39,20 @@ class CountryListVm @Inject constructor(
     var timer: Timer? = null
 
     private var apiJob: Job? = null
+
     var isFav = mutableStateOf(false)
 
     var title = mutableStateOf("Search")
 
     var selectedTab = mutableStateOf("search")
+
+    private val errorSate: MutableStateFlow<String> = MutableStateFlow(
+        EMPTY_STRING
+    )
+
+    fun observeErrorState(): StateFlow<String> {
+        return errorSate
+    }
 
 
     private val countryListState: MutableStateFlow<List<CountryData>> =
@@ -126,12 +136,14 @@ class CountryListVm @Inject constructor(
                             is ApiResult.Success<List<CountryData>> -> {
 
                                 countryListState.emit(it.value)
+
                             }
                             is ApiResult.Failure -> {
-                                ApiResult.Failure(it.message, it.throwable)
+                                  it.message?.let { errorSate.value }
                             }
                             else -> {
                                 ApiResult.Failure("", Throwable(""))
+
                             }
                         }
                     }
@@ -191,7 +203,7 @@ class CountryListVm @Inject constructor(
                             searchCountryListState.emit(it.value)
                         }
                         is ApiResult.Failure -> {
-                            ApiResult.Failure(it.message, it.throwable)
+                            it.message?.let { errorSate.value }
                         }
                         else -> {
                             ApiResult.Failure("", Throwable(""))

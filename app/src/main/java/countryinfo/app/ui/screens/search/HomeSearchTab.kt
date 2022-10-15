@@ -12,10 +12,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
@@ -30,56 +27,55 @@ import countryinfo.app.uicomponents.CountryItemView
 import countryinfo.app.uicomponents.LoadingShimmerEffect
 import countryinfo.app.utils.EMPTY_STRING
 import countryinfo.app.utils.ScreenOptions
-import countryinfo.app.utils.networkconnection.ConnectionState
-import countryinfo.app.utils.networkconnection.connectivityState
 import countryinfo.app.vm.CountryListVm
 import countryinfo.app.R
+import countryinfo.app.utils.networkconnection.ConnectionState
+import countryinfo.app.utils.networkconnection.connectivityState
+import countryinfo.app.ui.screens.search.CountryListView as CountryListView1
 
-@SuppressLint("UnusedMaterialScaffoldPaddingParameter", "StateFlowValueCalledInComposition")
 @Composable
 fun HomeSearchTab(navController: NavController?, viewModel: CountryListVm) {
 
     val countryList = viewModel.observeCountryList().collectAsState()
     val searchList = viewModel.observeSearchCountryList().collectAsState()
+    val errorState = viewModel.observeErrorState().collectAsState()
 
     val connection by connectivityState()
     val isConnected = connection === ConnectionState.Available
 
-    /*if (searchList.value.isEmpty() && countryList.value.isEmpty()) {
-        viewModel.getCountryList()
-    }*/
-
-    LaunchedEffect(key1 = countryList){
+     LaunchedEffect(key1 = countryList){
         viewModel.getCountryList()
     }
 
     viewModel.title.value = "Search"
 
-    Surface(modifier = Modifier.fillMaxSize(), color = Color.White) {
-        Column(modifier = Modifier
-            .fillMaxSize()
-            .padding()) {
+        Surface(modifier = Modifier.fillMaxSize(), color = Color.White) {
+            Column(modifier = Modifier
+                .fillMaxSize()
+                .padding()) {
 
-            SearchTextField(viewModel)
+                SearchTextField(viewModel)
 
-            if (searchList.value.isEmpty()) {
-                countryList.value?.let {
-                    CountryListView(true, navController, it) {
+                if (searchList.value.isEmpty()) {
+                    countryList.value?.let {
+                        CountryListView1(true,isConnected,errorState, navController, it) {
+                            viewModel.setSavedScreen(ScreenOptions.DetailScreen)
+                            viewModel.updateCountryData(it)
+                            viewModel.isCountryFav(it.cca3)
+                        }
+                    }
+                } else {
+                    CountryListView1(true, isConnected,errorState,navController, searchList.value) {
                         viewModel.setSavedScreen(ScreenOptions.DetailScreen)
                         viewModel.updateCountryData(it)
                         viewModel.isCountryFav(it.cca3)
-                    }
-                }
-            } else {
-                CountryListView(true, navController, searchList.value) {
-                    viewModel.setSavedScreen(ScreenOptions.DetailScreen)
-                    viewModel.updateCountryData(it)
-                    viewModel.isCountryFav(it.cca3)
 
+                    }
                 }
             }
         }
-    }
+
+
 }
 
 @SuppressLint("CoroutineCreationDuringComposition", "FlowOperatorInvokedInComposition")
@@ -119,12 +115,14 @@ fun SearchTextField(viewModel: CountryListVm) {
 @Composable
 fun CountryListView(
     showShimmer: Boolean,
+    isConnectedInternet : Boolean = false,
+    errorState : State<String> ,
     navController: NavController?,
-    countryList: List<CountryData>,
+    countryList: List<CountryData> = emptyList(),
     changeState: (countryData: CountryData) -> Unit
 ) {
 
-    if (countryList.isEmpty() && showShimmer) {
+    if (countryList.isEmpty() && showShimmer && isConnectedInternet && errorState.value.isEmpty()) {
         LazyColumn() {
             repeat(7) {
                 item { LoadingShimmerEffect() }
