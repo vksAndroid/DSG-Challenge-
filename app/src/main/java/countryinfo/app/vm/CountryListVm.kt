@@ -30,11 +30,9 @@ import javax.inject.Inject
 @HiltViewModel
 class CountryListVm @Inject constructor(
     private val countryListRepo: CountryListRepo,
+     val mFusedLocationClient: FusedLocationProviderClient,
     @IoDispatcher private val dispatcher: CoroutineDispatcher
 ) : ViewModel() {
-
-    @Inject
-    lateinit var mFusedLocationClient: FusedLocationProviderClient
 
     var timer: Timer? = null
 
@@ -128,25 +126,20 @@ class CountryListVm @Inject constructor(
     fun getCountryList() {
         viewModelScope.launch {
             withContext(dispatcher) {
-                countryListRepo.getCountryList()
-                    .catch { exception ->
-                        ApiResult.Failure(exception.message, exception.cause)
-                    }.collect {
-                        when (it) {
-                            is ApiResult.Success<List<CountryData>> -> {
-
-                                countryListState.emit(it.value)
-
-                            }
-                            is ApiResult.Failure -> {
-                                it.message?.let { errorSate.value }
-                            }
-                            else -> {
-                                ApiResult.Failure("", Throwable(""))
-
-                            }
+                val result = countryListRepo.getCountryList()
+                result.catch { exception ->
+                    exception.message?.let { errorSate.value }
+                   // ApiResult.Failure(exception.message, exception.cause)
+                }
+                result.collect {
+                    when (it) {
+                        is ApiResult.Success<List<CountryData>> -> {
+                            countryListState.emit(it.value)
+                        }
+                        else -> {
                         }
                     }
+                }
             }
         }
     }
@@ -178,19 +171,14 @@ class CountryListVm @Inject constructor(
         apiJob = viewModelScope.launch {
             countryListRepo.getCountriesByName(query)
                 .catch {
-
+                    it.message?.let { errorSate.value }
                 }
                 .collect {
                     when (it) {
                         is ApiResult.Success<List<CountryData>> -> {
                             searchCountryListState.emit(it.value)
                         }
-                        is ApiResult.Failure -> {
-                            it.message?.let { errorSate.value }
-                        }
-                        else -> {
-                            ApiResult.Failure("", Throwable(""))
-                        }
+                        else -> {}
                     }
                 }
         }
@@ -242,7 +230,6 @@ class CountryListVm @Inject constructor(
     fun getALlFavourite() {
         viewModelScope.launch {
             withContext(dispatcher) {
-
                 savedCountryListState.value = countryListRepo.getALlFavourite()
             }
         }

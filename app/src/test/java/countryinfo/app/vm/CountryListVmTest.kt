@@ -1,42 +1,38 @@
 package countryinfo.app.vm
 
-import countryinfo.app.api.ApiInterface
+import com.google.android.gms.location.FusedLocationProviderClient
 import countryinfo.app.api.model.CountryData
 import countryinfo.app.repo.CountryListRepo
 import countryinfo.app.utils.ApiResult
+import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.mockk
-import io.mockk.slot
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.FlowCollector
-import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
-import org.mockito.kotlin.capture
-import java.lang.Exception
-import java.util.concurrent.Flow
+import org.junit.jupiter.api.Assertions
 
-internal class CountryListVmTest {
+@OptIn(ExperimentalCoroutinesApi::class)
+class CountryListVmTest {
 
-
-    val mockApiInterface = mockk<ApiInterface>()
+    private val dispatcher = StandardTestDispatcher()
 
     val repo: CountryListRepo = mockk(relaxed = true)
+    val mockedFusedLocation: FusedLocationProviderClient = mockk(relaxed = true)
     lateinit var vm: CountryListVm
 
     @OptIn(ExperimentalCoroutinesApi::class)
     @Before
     fun setUp() {
-        Dispatchers.setMain(StandardTestDispatcher())
-        vm = CountryListVm(repo, StandardTestDispatcher())
+        Dispatchers.setMain(dispatcher)
+        vm = CountryListVm(repo, mockedFusedLocation, dispatcher)
     }
 
     @After
@@ -44,25 +40,93 @@ internal class CountryListVmTest {
     }
 
     @Test
-    fun `get Country List emit error`() = runBlocking {
-        every { repo.getCountryList() } returns flow { throw Exception("") }
+    fun `get Country list emit error`() = runTest {
+        every { repo.getCountryList() } returns flow { throw Exception("sdfcs") }
         vm.getCountryList()
+        Assertions.assertNotNull(vm.observeErrorState().value)
     }
 
     @Test
-    fun getCountryList() = runBlocking {
-        every { repo.getCountryList() } returns flow{ emit(ApiResult.Success(listOf(CountryData(),
-            CountryData()
-        )))}
+    fun `get Country list emit data success`() = runTest {
+        val success = ApiResult.Success(
+            listOf(
+                CountryData(),
+                CountryData()
+            )
+        )
+        every { repo.getCountryList() } returns flow {
+            emit(success)
+        }
         vm.getCountryList()
+        delay(500)
+        Assertions.assertEquals(2, vm.observeCountryList().value.size)
+    }
+
+    @Test
+    fun `get Country list by name emit error`() = runTest {
+        every { repo.getCountriesByName("abcd") } returns flow { throw Exception("sdfcs") }
+        vm.getCountriesByName("abcd")
+        Assertions.assertNotNull(vm.observeSearchCountryList().value)
     }
 
 
     @Test
-    fun observeCountryList() {
+    fun `get Country list  by name emit data success`() = runTest {
+        val success = ApiResult.Success(
+            listOf(
+                CountryData(),
+                CountryData(),
+                CountryData()
+            )
+        )
+        every { repo.getCountriesByName("abcd") } returns flow {
+            emit(success)
+        }
+        vm.getCountriesByName("abcd")
+        delay(500)
+        Assertions.assertEquals(3, vm.observeSearchCountryList().value.size)
     }
 
     @Test
-    fun testGetCountryList() {
+    fun `test save Favourite`() = runTest {
+        val data = CountryData()
+        vm.addFavourite(data)
+        delay(500)
+        Assertions.assertTrue(vm.isFav.value)
+    }
+
+    @Test
+    fun `test delete Favourite`() = runTest {
+        val data = CountryData()
+        vm.removeFavourite(data)
+        delay(500)
+        Assertions.assertFalse(vm.isFav.value)
+    }
+
+
+    @Test
+    fun `test all Favourite`() = runTest {
+        val data = CountryData()
+        coEvery{ repo.getALlFavourite() }.answers{ listOf(data) }
+        vm.getALlFavourite()
+        delay(500)
+        Assertions.assertEquals(1,vm.observeSavedCountryList().value.size)
+    }
+
+    @Test
+    fun `test is added to Favourite return true`() = runTest {
+        val data = CountryData(cca3 = "abd")
+        coEvery{ repo.isCountryFav("abcde") }.answers{ data }
+        vm.isCountryFav("abcde")
+        delay(500)
+        Assertions.assertTrue(vm.isFav.value)
+    }
+
+    @Test
+    fun `test is added to Favourite return false`() = runTest {
+        coEvery{ repo.isCountryFav("abcde") }.answers{ null }
+        vm.isCountryFav("abcde")
+        delay(500)
+        Assertions.assertFalse(vm.isFav.value)
     }
 }
