@@ -10,6 +10,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.layoutId
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -22,7 +23,7 @@ fun CountryBasicDetail(countryData: CountryData) {
 
     Card(
         elevation = 1.5.dp,
-        modifier = Modifier
+        modifier = Modifier.testTag("country_basic_details_card")
             .layoutId("BasicDetail")
             .padding(horizontal = 12.dp),
         shape = RoundedCornerShape(10.dp)

@@ -18,6 +18,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
@@ -100,7 +101,7 @@ fun SearchTextField(viewModel: CountryListVm) {
             viewModel.updateSearchQuery(it)
         },
         placeholder = { Text(text = stringResource(id = R.string.search)) },
-        modifier = Modifier
+        modifier = Modifier.testTag("country_search_text_field")
             .padding(all = 8.dp)
             .fillMaxWidth()
             .border(width = 8.dp, color = Color.White, shape = RoundedCornerShape(20.dp)),
@@ -125,14 +126,14 @@ fun CountryListView(
 ) {
 
     if (countryList.isEmpty() && showShimmer) {
-        LazyColumn() {
+        LazyColumn(Modifier.testTag("shimmer_effect")) {
             repeat(7) {
                 item { LoadingShimmerEffect() }
             }
         }
     } else {
 
-        LazyColumn(modifier = Modifier.padding(top = 8.dp)) {
+        LazyColumn(modifier = Modifier.testTag("country_lazy_column").padding(top = 8.dp)) {
             items(items = countryList) { countryData ->
 
                 CountryItemView(

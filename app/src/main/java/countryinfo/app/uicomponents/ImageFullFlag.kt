@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.layoutId
@@ -18,7 +19,7 @@ fun ImageFullFlag(flagImageUrl: String) {
         placeholder = painterResource(id = R.drawable.default_loading),
         contentDescription = "Country Flag",
         contentScale = ContentScale.Crop,
-        modifier = Modifier
+        modifier = Modifier.testTag("image_full_flag")
             .fillMaxWidth()
             .height(220.dp)
             .layoutId("top_flag")

@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -45,7 +46,7 @@ fun MapViewComponent(location: LatLng, locationType: MapType) {
     }
 
     GoogleMap(
-        modifier = Modifier
+        modifier = Modifier.testTag("map_view")
             .fillMaxWidth()
             .height(400.dp)
             .padding(start = 12.dp, end = 12.dp),
