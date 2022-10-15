@@ -42,7 +42,6 @@ class CountryListRepo @Inject constructor(var client: ApiInterface, var dao: Cou
             response.body()?.let {
                 emit(ApiResult.Success(it))
             }
-
         } else {
             emit(ApiResult.Failure(response.message(), Throwable(response.errorBody().toString())))
         }
