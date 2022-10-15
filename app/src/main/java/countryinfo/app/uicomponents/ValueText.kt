@@ -11,12 +11,12 @@ import androidx.compose.ui.unit.sp
 
 
 @Composable
-fun ValueText( value: String) {
+fun ValueText(value: String) {
 
-            Text(
-                text = value, color = Color.Gray,
-                fontWeight = FontWeight.Medium, fontSize = 14.sp,
-                modifier = Modifier.padding(10.dp)
-            )
+    Text(
+        text = value, color = Color.Gray,
+        fontWeight = FontWeight.Medium, fontSize = 14.sp,
+        modifier = Modifier.padding(10.dp)
+    )
 
 }

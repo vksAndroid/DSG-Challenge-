@@ -6,11 +6,15 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.Priority
+import com.google.android.gms.tasks.CancellationToken
+import com.google.android.gms.tasks.CancellationTokenSource
+import com.google.android.gms.tasks.OnTokenCanceledListener
 import countryinfo.app.api.model.CountryData
-import countryinfo.app.api.model.CurrenciesName
 import countryinfo.app.di.hiltmodules.DefaultDispatcher
 import countryinfo.app.repo.CountryListRepo
 import countryinfo.app.utils.ApiResult
+import countryinfo.app.utils.ScreenOptions
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -20,7 +24,6 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.util.*
 import javax.inject.Inject
-import kotlin.collections.set
 
 @HiltViewModel
 class CountryListVm @Inject constructor(
@@ -30,13 +33,27 @@ class CountryListVm @Inject constructor(
 
     var timer: Timer? = null
 
-    var data = mutableStateOf("")
+
+    var _isFav = mutableStateOf(false)
+
 
     private val countryListState: MutableStateFlow<List<CountryData>> =
         MutableStateFlow(emptyList())
 
     fun observeCountryList(): StateFlow<List<CountryData>> {
         return countryListState
+    }
+
+    private val countryData: MutableStateFlow<CountryData> =
+        MutableStateFlow(CountryData())
+
+    fun observeCountryData(): StateFlow<CountryData> {
+        return countryData
+    }
+
+    fun updateCountryData(_countryData: CountryData) {
+
+        countryData.value = _countryData
     }
 
     private val searchCountryListState: MutableStateFlow<List<CountryData>> = MutableStateFlow(
@@ -46,6 +63,29 @@ class CountryListVm @Inject constructor(
     fun observeSearchCountryList(): StateFlow<List<CountryData>> {
         return searchCountryListState
     }
+
+    private val savedCountryListState: MutableStateFlow<List<CountryData>> = MutableStateFlow(
+        emptyList()
+    )
+
+    fun observeSavedCountryList(): StateFlow<List<CountryData>> {
+        return savedCountryListState
+    }
+
+
+    private val saveScreenOptions: MutableStateFlow<ScreenOptions> =
+        MutableStateFlow(ScreenOptions.SearchScreen)
+
+    fun getSavedScreen(): StateFlow<ScreenOptions> {
+        return saveScreenOptions
+    }
+
+    fun setSavedScreen(data: ScreenOptions) {
+        saveScreenOptions.value = data
+    }
+
+    var title = mutableStateOf("")
+
 
     fun clearSearch() {
         searchCountryListState.value = emptyList()
@@ -141,43 +181,61 @@ class CountryListVm @Inject constructor(
         }
     }
 
-    fun getFormattedData(countryItem: CountryData): LinkedHashMap<String, String> {
-        var currenciesFormatted = String()
-        for (currency in countryItem.currencies) {
-            currenciesFormatted = "$currenciesFormatted ${currency.key} (${currency.value.name}), "
-        }
-        currenciesFormatted = currenciesFormatted.removeSuffix(", ")
-        val formattedLanguages = countryItem.languages.values.toString().removeSurrounding("[", "]")
-
-        val formattedCountryDetail = linkedMapOf<String, String>()
-        formattedCountryDetail["Capital"] = countryItem.capital[0]
-        formattedCountryDetail["Region"] = countryItem?.region!!
-        formattedCountryDetail["Subregion"] = countryItem?.subregion!!
-        formattedCountryDetail["Languages"] = formattedLanguages
-        formattedCountryDetail["Currencies"] = currenciesFormatted
-        formattedCountryDetail["Population"] = countryItem.population.toString()
-        formattedCountryDetail["Car Driver Side"] = countryItem?.car?.side!!
-        return formattedCountryDetail
-    }
-
-    fun getFormattedLanguages(languages: Map<String, String>): String {
-        return languages.values.toString().removeSurrounding("[", "]")
-    }
-
-    fun getFormattedCurrencies(currencies: Map<String, CurrenciesName>): String {
-        var currenciesFormatted = String()
-        for (currency in currencies) {
-            currenciesFormatted = "$currenciesFormatted ${currency.key} (${currency.value.name}), "
-        }
-        return currenciesFormatted.removeSuffix(", ")
-    }
-
     @SuppressLint("MissingPermission")
     fun getCurrentLatLong(mFusedLocationClient: FusedLocationProviderClient) {
-        mFusedLocationClient.lastLocation
-            .addOnSuccessListener { location: Location? ->
-                if (location != null)
-                    currentLocationStateFlow.value = location
+
+        mFusedLocationClient.getCurrentLocation(
+            Priority.PRIORITY_HIGH_ACCURACY,
+            object : CancellationToken() {
+                override fun onCanceledRequested(p0: OnTokenCanceledListener) =
+                    CancellationTokenSource().token
+
+                override fun isCancellationRequested() = false
+            }).addOnSuccessListener { location ->
+            if (location != null) {
+                currentLocationStateFlow.value = location
             }
+        }
+    }
+
+
+    fun addFavourite(countryItem: CountryData) {
+        viewModelScope.launch {
+            withContext(dispatcher) {
+                countryListRepo.addtoFavourite(countryItem)
+                _isFav.value = true
+            }
+        }
+
+    }
+
+    fun removeFavourite(countryItem: CountryData) {
+        viewModelScope.launch {
+            withContext(dispatcher) {
+                countryItem.cca3?.let {
+                    countryListRepo.removeFromFavourite(it)
+                    _isFav.value = false
+                }
+            }
+        }
+
+    }
+
+    fun getALlFavourite() {
+        viewModelScope.launch {
+            withContext(dispatcher) {
+
+                savedCountryListState.value = countryListRepo.getALlFavourite()
+            }
+        }
+    }
+
+    fun isCountryFav(name: String) {
+        viewModelScope.launch {
+            withContext(dispatcher) {
+                val data = countryListRepo.isCountryFav(name)
+                _isFav.value = data != null
+            }
+        }
     }
 }

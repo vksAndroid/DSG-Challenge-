@@ -7,6 +7,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
@@ -26,35 +27,59 @@ import countryinfo.app.vm.CountryListVm
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter", "StateFlowValueCalledInComposition")
 @Composable
-fun DetailOverViewTab(cca3: String, viewModel: CountryListVm) {
+fun DetailOverViewTab(viewModel: CountryListVm) {
 
-    val countryList = viewModel.observeCountryList()
+    val countryDetail = viewModel.observeCountryData().collectAsState().value
 
-    val countryDetails =
-        countryList.value.first { countryDetailItem -> cca3 == countryDetailItem.cca3 }
+    countryDetail.name?.common?.let {
+        viewModel.title.value = it
+    }
 
     Scaffold(backgroundColor = Color.White,
-        content = {
-                itemPadding->
-            ConstraintLayout(setComponentsUsingConstraints(), modifier = Modifier
-                .fillMaxSize()
-                .padding(bottom = itemPadding.calculateBottomPadding() + 40.dp)
-                .verticalScroll(
-                    rememberScrollState()
-                )) {
+        content = { itemPadding ->
+            ConstraintLayout(
+                setComponentsUsingConstraints(), modifier = Modifier
+                    .fillMaxSize()
+                    .padding(bottom = itemPadding.calculateBottomPadding() + 40.dp)
+                    .verticalScroll(
+                        rememberScrollState()
+                    )
+            ) {
 
-                ImageFullFlag(flagImageUrl = countryDetails.flags?.png!!)
+                ImageFullFlag(flagImageUrl = countryDetail.flags?.png!!)
 
-                CountryNameCard(title = countryDetails.name?.common!!, value =countryDetails.name?.official!! )
+                CountryNameCard(
+                    title = countryDetail.name?.common!!,
+                    value = countryDetail.name?.official!!
+                )
 
-                CountryBasicDetail(countryDetails)
+                CountryBasicDetail(countryDetail)
 
-                CountryDetailComponent(title = labelLanguages, value = countryDetails.languages)
-                CountryDetailComponent(title = labelCurrencies, value = countryDetails.currencies)
-                CountryDetailComponent(title = labelPopulation, value = countryDetails.population.toString())
-                CountryDetailComponent(title = labelcarDriveSide, value = countryDetails.car?.side!!, isDriverItem = true)
-                CountryDetailComponent(title = "Timezone(s)", value = countryDetails.timezones)
-                CountryDetailComponent(isImage = true, imageUrl = countryDetails.coatOfArms?.png!!, title = "Coat of Arms", value = "")
+                countryDetail.languages?.let {
+                    CountryDetailComponent(title = labelLanguages, value = it)
+                }
+                countryDetail.currencies?.let {
+                    CountryDetailComponent(title = labelCurrencies, value = it)
+                }
+
+                countryDetail.car?.side?.let {
+                    CountryDetailComponent(title = labelcarDriveSide, value = it)
+                }
+
+                countryDetail.population?.let {
+                    CountryDetailComponent(title = labelPopulation, value = it)
+                }
+                countryDetail.timezones?.let {
+                    CountryDetailComponent(title = "Timezone(s)", value = it)
+                }
+                countryDetail.coatOfArms?.png?.let {
+                    CountryDetailComponent(
+                        isImage = true,
+                        imageUrl = it,
+                        title = "Coat of Arms",
+                        value = ""
+                    )
+                }
 
             }
         })

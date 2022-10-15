@@ -1,6 +1,7 @@
 package countryinfo.app.uicomponents
 
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
 import androidx.compose.material.Divider
 import androidx.compose.material.Text
@@ -17,30 +18,43 @@ import countryinfo.app.api.model.CountryData
 
 
 @Composable
-fun CountryBasicDetail( countryData  :CountryData?) {
+fun CountryBasicDetail(countryData: CountryData?) {
 
-    Card(elevation = 12.dp, modifier = Modifier.layoutId("BasicDetail").padding(12.dp)) {
-
+    Card(
+        elevation = 1.5.dp,
+        modifier = Modifier
+            .layoutId("BasicDetail")
+            .padding(horizontal = 12.dp),
+        shape = RoundedCornerShape(10.dp)
+    ) {
         Row(
             modifier = Modifier
-                .padding(bottom = 8.dp, top = 8.dp)
+                .padding(start = 12.dp, end = 12.dp)
                 .fillMaxWidth(),
 
             Arrangement.SpaceAround,
             verticalAlignment = Alignment.CenterVertically
         ) {
 
-            showItem("Region",countryData?.region!!)
+            showItem("Region", countryData?.region!!)
 
-            Divider(modifier = Modifier.width(1.dp).height(30.dp),
-                color = Color.LightGray)
+            Divider(
+                modifier = Modifier
+                    .width(1.dp)
+                    .height(30.dp),
+                color = Color.LightGray
+            )
 
-            showItem("SubRegion",countryData.subregion!!)
+            showItem("SubRegion", countryData.subregion ?: "")
 
-            Divider(modifier = Modifier.width(1.dp).height(30.dp),
-                color = Color.LightGray)
+            Divider(
+                modifier = Modifier
+                    .width(1.dp)
+                    .height(30.dp),
+                color = Color.LightGray
+            )
 
-            showItem("Capital",countryData.capital[0])
+            showItem("Capital", countryData.capital[0])
 
         }
 
@@ -49,7 +63,7 @@ fun CountryBasicDetail( countryData  :CountryData?) {
 
 
 @Composable
-fun showItem(title : String,value : String) {
+fun showItem(title: String, value: String) {
 
     Column(
         modifier = Modifier
@@ -64,7 +78,7 @@ fun showItem(title : String,value : String) {
             modifier = Modifier.padding(start = 0.dp, end = 10.dp)
         )
         Text(
-            text = value, color = Color.Gray,
+            text = value, color = Color.DarkGray,
             fontWeight = FontWeight.Medium, fontSize = 14.sp,
             modifier = Modifier.padding(end = 10.dp, top = 4.dp)
         )
