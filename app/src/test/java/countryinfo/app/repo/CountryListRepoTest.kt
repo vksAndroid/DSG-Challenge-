@@ -12,8 +12,7 @@ import okhttp3.ResponseBody
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
-import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Assertions.assertTrue
+import org.junit.jupiter.api.Assertions.*
 import retrofit2.Response
 
 class CountryListRepoTest {
@@ -157,4 +156,55 @@ class CountryListRepoTest {
             }
         }
     }
+
+    @Test
+    fun `test add to favourite success`() = runBlocking {
+        coEvery { dao.addToFavourite(CountryData()) }.returns(1)
+
+        val result = repository.addToFavourite(CountryData())
+        assertEquals(1, result)
+    }
+
+    @Test
+    fun `test add to favourite failure`() = runBlocking {
+        coEvery { dao.addToFavourite(CountryData()) }.returns(0)
+        val result = repository.addToFavourite(CountryData())
+        assertEquals(0, result)
+    }
+
+    @Test
+    fun `test remove from favourite failure`() = runBlocking {
+        coEvery { dao.removeFromFavourite("Spain") }.returns(0)
+        val result = repository.removeFromFavourite("Spain")
+        assertEquals(0, result)
+    }
+
+    @Test
+    fun `test get all favourite success`() = runBlocking {
+        coEvery { dao.getAllFavorite() }.returns(listOf(CountryData(), CountryData()))
+        val result = repository.getALlFavourite()
+        assertEquals(2, result.size)
+    }
+
+    @Test
+    fun `test get all favourite success return empty list`() = runBlocking {
+        coEvery { dao.getAllFavorite() }.returns(emptyList())
+        val result = repository.getALlFavourite()
+        assertEquals(0, result.size)
+    }
+
+    @Test
+    fun `test is Country Favourite true`() = runBlocking {
+        coEvery { dao.isFav("Spain") }.returns(CountryData())
+        val result = repository.isCountryFav("Spain")
+        assertNotNull(result)
+    }
+
+    @Test
+    fun `test is Country Favourite false`() = runBlocking {
+        coEvery { dao.isFav("Spain") }.returns(null)
+        val result = repository.isCountryFav("Spain")
+        assertNull(result)
+    }
+
 }

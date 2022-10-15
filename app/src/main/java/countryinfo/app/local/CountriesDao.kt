@@ -9,15 +9,14 @@ import countryinfo.app.api.model.CountryData
 interface CountriesDao {
 
     @Insert
-    suspend fun insertFavourite(countryData: CountryData)
-
+    suspend fun addToFavourite(countryData: CountryData) :Long
 
     @Query("Delete from countries where  cca3 = :name")
-    suspend fun deleteFavourite(name: String)
+    suspend fun removeFromFavourite(name: String) :Int
 
     @Query("Select * from countries")
     suspend fun getAllFavorite(): List<CountryData>
 
     @Query("Select * from countries where cca3 = :name")
-    suspend fun isFav(name: String): CountryData
+    suspend fun isFav(name: String): CountryData?
 }

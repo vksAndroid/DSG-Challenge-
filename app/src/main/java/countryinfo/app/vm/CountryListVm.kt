@@ -156,23 +156,6 @@ class CountryListVm @Inject constructor(
         }
     }
 
-    fun searchUsingCoroutine(name: String,
-    scope  :CoroutineScope) {
-        if (name.length > 2) {
-
-            val scope = scope.launch {
-
-                delay(1000L)
-                getCountriesByName(name)
-
-
-            }
-
-            scope.cancel()
-
-        }
-    }
-
     /**
      * Get countries by name
      *
@@ -205,14 +188,14 @@ class CountryListVm @Inject constructor(
     fun getCurrentLatLong() {
         viewModelScope.launch {
             withContext(dispatcher) {
-                mFusedLocationClient?.getCurrentLocation(
+                mFusedLocationClient.getCurrentLocation(
                     Priority.PRIORITY_HIGH_ACCURACY,
                     object : CancellationToken() {
                         override fun onCanceledRequested(p0: OnTokenCanceledListener) =
                             CancellationTokenSource().token
 
                         override fun isCancellationRequested() = false
-                    })?.addOnSuccessListener { location ->
+                    }).addOnSuccessListener { location ->
                     if (location != null) {
                         currentLocationStateFlow.value = location
                     }
@@ -225,7 +208,7 @@ class CountryListVm @Inject constructor(
     fun addFavourite(countryItem: CountryData) {
         viewModelScope.launch {
             withContext(dispatcher) {
-                countryListRepo.addtoFavourite(countryItem)
+                countryListRepo.addToFavourite(countryItem)
                 isFav.value = true
             }
         }
@@ -235,7 +218,7 @@ class CountryListVm @Inject constructor(
     fun removeFavourite(countryItem: CountryData) {
         viewModelScope.launch {
             withContext(dispatcher) {
-                countryItem.cca3?.let {
+                countryItem.cca3.let {
                     countryListRepo.removeFromFavourite(it)
                     isFav.value = false
                 }

@@ -47,13 +47,13 @@ class CountryListRepo @Inject constructor(var client: ApiInterface, var dao: Cou
         }
     }
 
-    suspend fun addtoFavourite(countryItem: CountryData) {
-        dao.insertFavourite(countryItem)
+    suspend fun addToFavourite(countryItem: CountryData): Long {
+        return dao.addToFavourite(countryItem)
     }
 
 
-    suspend fun removeFromFavourite(name: String) {
-        dao.deleteFavourite(name)
+    suspend fun removeFromFavourite(name: String) :Int {
+        return dao.removeFromFavourite(name)
     }
 
 
@@ -61,7 +61,7 @@ class CountryListRepo @Inject constructor(var client: ApiInterface, var dao: Cou
         return dao.getAllFavorite()
     }
 
-    suspend fun isCountryFav(name: String): CountryData {
+    suspend fun isCountryFav(name: String): CountryData? {
         return dao.isFav(name)
     }
 
