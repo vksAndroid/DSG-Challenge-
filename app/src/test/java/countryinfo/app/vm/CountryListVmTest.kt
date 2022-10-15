@@ -3,9 +3,11 @@ package countryinfo.app.vm
 import countryinfo.app.api.ApiInterface
 import countryinfo.app.repo.CountryListRepo
 import io.mockk.mockk
-import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.runTest
+import kotlinx.coroutines.test.setMain
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
@@ -16,11 +18,13 @@ internal class CountryListVmTest {
     val mockApiInterface = mockk<ApiInterface>()
 
     val repo: CountryListRepo = mockk(relaxed = true)
-    val vm: CountryListVm = CountryListVm(repo, StandardTestDispatcher())
+    lateinit var vm: CountryListVm
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     @Before
     fun setUp() {
-
+        Dispatchers.setMain(StandardTestDispatcher())
+        vm = CountryListVm(repo, StandardTestDispatcher())
     }
 
     @After
@@ -29,8 +33,7 @@ internal class CountryListVmTest {
 
     @Test
     fun getCountryList() = runTest {
-        vm.getCountryList()
-        vm.observeCountryList().collectLatest { }
+
 
     }
 
