@@ -21,6 +21,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.google.gson.Gson
 import countryinfo.app.Graph
 import countryinfo.app.R
 import countryinfo.app.ui.screens.detail.CountryMapScreen
@@ -44,6 +45,7 @@ fun HomeScreen() {
     val viewModel: CountryListVm = hiltViewModel()
 
     var isFav by rememberSaveable { mutableStateOf(viewModel.isFav) }
+    var clickedTab by rememberSaveable { mutableStateOf(viewModel.selectedTab) }
 
     var title = rememberSaveable {
         viewModel.title
@@ -55,28 +57,23 @@ fun HomeScreen() {
     val isConnected = connection === ConnectionState.Available
 
     Scaffold(topBar = {
-        getSaveScreen.value.let {
+        TopBarConditional(
+            title = title.value,
+            bar = getSaveScreen.value,
+            isSaved = isFav.value,
+            onSavePress = {
+                if (isFav.value) {
+                    viewModel.removeFavourite(viewModel.observeCountryData().value)
+                } else {
+                    viewModel.addFavourite(viewModel.observeCountryData().value)
+                }
 
-            TopBarConditional(
-                title = title.value,
-                bar = it,
-                isSaved = isFav.value,
-                onSavePress = {
-                    if (isFav.value) {
-                        viewModel.removeFavourite(viewModel.observeCountryData().value)
-                    } else {
-                        viewModel.addFavourite(viewModel.observeCountryData().value)
-                    }
-
-                }) {
-                viewModel.setSavedScreen(ScreenOptions.SearchScreen)
-                navHostController.navigateUp()
-            }
+            }) {
+            viewModel.setSavedScreen(ScreenOptions.SearchScreen)
+            navHostController.navigateUp()
         }
     }, bottomBar = {
-        getSaveScreen.value.let {
-            BottomBarConditional(navController = navHostController, bar = it)
-        }
+        BottomBarConditional(navController = navHostController, bar = getSaveScreen.value)
     },
 
         snackbarHost = {
@@ -103,8 +100,13 @@ fun HomeScreen() {
 
                 getSaveScreen.value.let {
 
-                    val route = if (it == ScreenOptions.SearchScreen)
-                        BottomTab.TabSearch.route
+                    val route = if (it == ScreenOptions.SearchScreen) {
+
+                        if(clickedTab.value == "search")
+                         BottomTab.TabSearch.route
+                        else
+                            BottomTab.TabSaved.route
+                    }
                     else
                         BottomTab.TabOverview.route
 
@@ -112,8 +114,6 @@ fun HomeScreen() {
                         navController = navHostController, viewModel = viewModel, route
                     )
                 }
-
-
             }
         }
 
@@ -143,13 +143,15 @@ fun SearchNavigationGraph(
                 navController = navController,
                 viewModel = viewModel
             )
-
+            viewModel.selectedTab.value = "search"
         }
         composable(BottomTab.TabSaved.route) {
             HomeSavedTab(
                 navController = navController,
                 viewModel = viewModel
             )
+            viewModel.selectedTab.value = "saved"
+
         }
 
         composable(

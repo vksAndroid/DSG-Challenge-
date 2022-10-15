@@ -27,7 +27,7 @@ fun HomeSavedTab(navController: NavController?, viewModel: CountryListVm) {
 
     Surface(modifier = Modifier.fillMaxSize(), color = Color.White) {
         Column(modifier = Modifier.fillMaxSize()) {
-            CountryListView(navController, countrySavedList.value) {
+            CountryListView(false, navController, countrySavedList.value) {
                 viewModel.setSavedScreen(ScreenOptions.DetailScreen)
                 viewModel.updateCountryData(it)
                 viewModel.isCountryFav(it.cca3)

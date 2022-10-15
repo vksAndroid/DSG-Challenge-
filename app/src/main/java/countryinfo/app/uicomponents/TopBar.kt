@@ -33,7 +33,7 @@ fun TopBar(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(end = 64.dp),
-                textAlign = TextAlign.Center
+                textAlign = if(isShowNavigation)TextAlign.Start else TextAlign.Center
             )
         },
 
