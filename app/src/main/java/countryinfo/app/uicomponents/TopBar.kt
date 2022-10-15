@@ -13,6 +13,7 @@ import androidx.compose.material.icons.outlined.BookmarkBorder
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 
@@ -30,7 +31,7 @@ fun TopBar(
         title = {
             Text(
                 text = title,
-                modifier = Modifier
+                modifier = Modifier.testTag("top_bar")
                     .fillMaxWidth()
                     .padding(end = 64.dp),
                 textAlign = if(isShowNavigation)TextAlign.Start else TextAlign.Center
@@ -42,7 +43,7 @@ fun TopBar(
                 Icon(
                     Icons.Default.ArrowBack,
                     contentDescription = "",
-                    modifier = Modifier
+                    modifier = Modifier.testTag("back_icon")
                         .padding(8.dp)
                         .clickable { clickAction.invoke() }
                 )
@@ -52,7 +53,7 @@ fun TopBar(
                 Icon(
                     if (isSaved) Icons.Outlined.Bookmark else Icons.Outlined.BookmarkBorder,
                     contentDescription = "",
-                    modifier = Modifier
+                    modifier = Modifier.testTag("save_icon")
                         .padding(8.dp)
                         .clickable { onFavClick.invoke() }
                 )

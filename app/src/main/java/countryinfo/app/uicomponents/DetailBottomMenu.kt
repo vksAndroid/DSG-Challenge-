@@ -6,7 +6,9 @@ import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.colorResource
 import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
@@ -32,7 +34,7 @@ fun BottomMenu(
             BottomTab.TabSaved
         )
 
-    BottomNavigation(contentColor = colorResource(id = R.color.white), backgroundColor = OffWhite)
+    BottomNavigation(modifier = Modifier.testTag("test_bottom_navigation"), contentColor = colorResource(id = R.color.white), backgroundColor = OffWhite)
     {
 
         val navBackStackEntry by navController.currentBackStackEntryAsState()
@@ -40,6 +42,7 @@ fun BottomMenu(
         menuItems.forEach {
 
             BottomNavigationItem(
+                modifier = Modifier.testTag("nav_item_${it.title}"),
                 label = { Text(text = it.title) },
                 alwaysShowLabel = true,
                 selectedContentColor = Color.Blue,

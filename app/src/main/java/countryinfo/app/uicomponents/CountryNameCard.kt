@@ -10,6 +10,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.layoutId
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.ExperimentalTextApi
 import androidx.compose.ui.text.PlatformTextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -28,7 +29,7 @@ fun CountryNameCard(title: String, value: String) {
         elevation = 1.5.dp,
         shape = RoundedCornerShape(10.dp),
         backgroundColor = OffWhite,
-        modifier = Modifier
+        modifier = Modifier.testTag("country_name_card")
             .layoutId("Country")
             .wrapContentHeight(Alignment.Bottom)
             .fillMaxWidth(0.6f)

@@ -10,6 +10,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.testTag
 import androidx.navigation.NavController
 import countryinfo.app.utils.ScreenOptions
 import countryinfo.app.utils.networkconnection.ConnectionState
@@ -30,7 +31,7 @@ fun HomeSavedTab(navController: NavController?, viewModel: CountryListVm) {
 
     viewModel.title.value = "Saved"
 
-    Surface(modifier = Modifier.fillMaxSize(), color = Color.White) {
+    Surface(modifier = Modifier.fillMaxSize().testTag("home_saved_screen"), color = Color.White) {
         Column(modifier = Modifier.fillMaxSize()) {
             CountryListView(false, true,errorState,navController, countrySavedList.value) {
                 viewModel.setSavedScreen(ScreenOptions.DetailScreen)

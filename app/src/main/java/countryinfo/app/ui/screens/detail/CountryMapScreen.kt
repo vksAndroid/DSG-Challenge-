@@ -13,6 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.layoutId
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -42,7 +43,7 @@ fun CountryMapScreen(
     val countryDetail = viewModel.observeCountryData().collectAsState().value
 
     ConstraintLayout(
-        setComponentsUsingConstraints1(), modifier = Modifier
+        setComponentsUsingConstraints1(), modifier = Modifier.testTag("country_map_screen")
             .fillMaxSize()
     ) {
         loadContent(
