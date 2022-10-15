@@ -118,23 +118,23 @@ class CountryListVm @Inject constructor(
     fun getCountryList() {
         viewModelScope.launch {
             withContext(dispatcher) {
-                countryListRepo.getCountryList()
-                    .catch { exception ->
-                        ApiResult.Failure(exception.message, exception.cause)
-                    }.collect {
-                        when (it) {
-                            is ApiResult.Success<List<CountryData>> -> {
-
-                                countryListState.emit(it.value)
-                            }
-                            is ApiResult.Failure -> {
-                                ApiResult.Failure(it.message, it.throwable)
-                            }
-                            else -> {
-                                ApiResult.Failure("", Throwable(""))
-                            }
+                val result = countryListRepo.getCountryList()
+                result.catch { exception ->
+                    ApiResult.Failure(exception.message, exception.cause)
+                }
+                result.collect {
+                    when (it) {
+                        is ApiResult.Success<List<CountryData>> -> {
+                            countryListState.emit(it.value)
+                        }
+                        is ApiResult.Failure -> {
+                            ApiResult.Failure(it.message, it.throwable)
+                        }
+                        else -> {
+                            ApiResult.Failure("", Throwable(""))
                         }
                     }
+                }
             }
         }
     }
