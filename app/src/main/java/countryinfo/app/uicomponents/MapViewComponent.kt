@@ -48,7 +48,7 @@ fun MapViewComponent(location: LatLng, locationType: MapType) {
         modifier = Modifier
             .fillMaxWidth()
             .height(400.dp)
-            .padding(start = 12.dp, end = 12.dp, bottom = 12.dp),
+            .padding(start = 12.dp, end = 12.dp),
         cameraPositionState = zoom
     ) {
         zoom.move(CameraUpdateFactory.newLatLng(location))

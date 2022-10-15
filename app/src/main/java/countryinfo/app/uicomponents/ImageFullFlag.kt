@@ -20,7 +20,7 @@ fun ImageFullFlag(flagImageUrl: String) {
         contentScale = ContentScale.Crop,
         modifier = Modifier
             .fillMaxWidth()
-            .height(180.dp)
+            .height(220.dp)
             .layoutId("top_flag")
 
     )

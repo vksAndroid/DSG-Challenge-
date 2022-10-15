@@ -2,27 +2,22 @@ package countryinfo.app.vm
 
 import android.annotation.SuppressLint
 import android.location.Location
-import android.util.Log
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.Priority
-import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.tasks.CancellationToken
 import com.google.android.gms.tasks.CancellationTokenSource
 import com.google.android.gms.tasks.OnTokenCanceledListener
-import com.google.gson.Gson
 import countryinfo.app.api.model.CountryData
-import countryinfo.app.di.hiltmodules.DefaultDispatcher
 import countryinfo.app.di.hiltmodules.IoDispatcher
 import countryinfo.app.repo.CountryListRepo
-import countryinfo.app.ui.screens.detail.MapType
 import countryinfo.app.utils.ApiResult
+import countryinfo.app.utils.EMPTY_STRING
 import countryinfo.app.utils.ScreenOptions
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.catch
@@ -42,9 +37,12 @@ class CountryListVm @Inject constructor(
 
     var timer: Timer? = null
 
+    private var apiJob: Job? = null
     var isFav = mutableStateOf(false)
 
-    var title = mutableStateOf("")
+    var title = mutableStateOf("Search")
+
+    var selectedTab = mutableStateOf("search")
 
 
     private val countryListState: MutableStateFlow<List<CountryData>> =
@@ -97,13 +95,13 @@ class CountryListVm @Inject constructor(
         timer?.cancel()
     }
 
-    private var _searchQuery = MutableStateFlow("")
+    private var _searchQuery = MutableStateFlow(EMPTY_STRING)
     fun searchQuery(): StateFlow<String> {
         return _searchQuery
     }
 
     private val currentLocationStateFlow: MutableStateFlow<Location> =
-        MutableStateFlow(Location(""))
+        MutableStateFlow(Location(EMPTY_STRING))
 
     fun observeCurrentLocation(): StateFlow<Location> {
         return currentLocationStateFlow
@@ -158,13 +156,31 @@ class CountryListVm @Inject constructor(
         }
     }
 
+    fun searchUsingCoroutine(name: String,
+    scope  :CoroutineScope) {
+        if (name.length > 2) {
+
+            val scope = scope.launch {
+
+                delay(1000L)
+                getCountriesByName(name)
+
+
+            }
+
+            scope.cancel()
+
+        }
+    }
+
     /**
      * Get countries by name
      *
      * @param query : It is a search query used to search countries by name
      */
     fun getCountriesByName(query: String) {
-        viewModelScope.launch {
+        apiJob?.cancel()
+        apiJob = viewModelScope.launch {
             countryListRepo.getCountriesByName(query)
                 .catch {
 

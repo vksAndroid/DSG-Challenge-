@@ -5,6 +5,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import countryinfo.app.ui.screens.HomeScreen
 import countryinfo.app.ui.theme.CountryInfoTheme
+import countryinfo.app.utils.LocationPermission
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -14,6 +15,8 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
 
+            // Ask location permission at the time of launch
+            LocationPermission()
 
             CountryInfoTheme {
                 HomeScreen()

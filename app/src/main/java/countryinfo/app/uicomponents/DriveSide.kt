@@ -19,7 +19,7 @@ import countryinfo.app.R
 @Composable
 fun DriveSide(driverSide: String, clickAction: () -> Unit) {
 
-    val isLeft = driverSide.toLowerCase().contains("left")
+    val isLeft = driverSide.lowercase().contains("left")
 
     Row(
         verticalAlignment = Alignment.CenterVertically, modifier = Modifier.padding(top = 12.dp)

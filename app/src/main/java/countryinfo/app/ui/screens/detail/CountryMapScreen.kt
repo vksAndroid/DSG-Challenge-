@@ -12,12 +12,14 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.layoutId
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.ConstraintSet
+import com.google.android.gms.location.LocationServices
 import androidx.constraintlayout.compose.Dimension
 import com.google.android.gms.maps.model.LatLng
 import com.google.gson.Gson
@@ -27,7 +29,8 @@ import countryinfo.app.uicomponents.CountryBasicDetail
 import countryinfo.app.uicomponents.CountryNameCard
 import countryinfo.app.uicomponents.ImageFullFlag
 import countryinfo.app.uicomponents.MapViewComponent
-import countryinfo.app.utils.isLocationPermissionGranted
+import countryinfo.app.utils.*
+import countryinfo.app.utils.CheckLocationPermission
 import countryinfo.app.vm.CountryListVm
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter", "StateFlowValueCalledInComposition")
@@ -45,7 +48,7 @@ fun CountryMapScreen(
         loadContent(
             countryDetail = countryDetail,
             viewModel = viewModel,
-            locationEnabled = isLocationPermissionGranted()
+            locationEnabled = CheckLocationPermission()
         )
     }
 }
@@ -65,7 +68,7 @@ fun loadContent(
     LazyColumn(
         modifier = Modifier
             .wrapContentHeight()
-            .fillMaxWidth(),
+            .fillMaxWidth().padding(bottom = 12.dp),
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
 
@@ -112,7 +115,7 @@ fun loadContent(
                             countryLocation = LatLng(0.0, 0.0)
                         } else {
                             countryLocation = LatLng(
-                                countryDetail?.latlng?.get(0) ?: 0.0, countryDetail?.latlng?.get(1)
+                                countryDetail.latlng.get(0) ?: 0.0, countryDetail?.latlng?.get(1)
                                     ?: 0.0
                             )
                         }
@@ -126,7 +129,7 @@ fun loadContent(
                     MapTextLabel(
                         textLabel = "${stringResource(id = R.string.capital)} - ",
                         textValue = if (countryDetail.capital.isNullOrEmpty()) {
-                            ""
+                            EMPTY_STRING
                         } else {
                             countryDetail.capital[0]
                         }
@@ -157,7 +160,7 @@ fun loadContent(
 
 @Composable
 fun MapTextLabel(textLabel: String, textValue: String) {
-    Row(modifier = Modifier.padding(start = 12.dp, end = 12.dp)) {
+    Row(modifier = Modifier.padding(start = 12.dp, end = 12.dp, top = 12.dp)) {
         Text(
             text = textLabel,
             style = MaterialTheme.typography.body1,
@@ -208,8 +211,6 @@ fun mapHeaderConstraints(): ConstraintSet {
         val idTopFlag = createRefFor("top_flag")
         val idBasicDetail = createRefFor("BasicDetail")
         val idCountry = createRefFor("Country")
-
-
 
         constrain(idTopFlag) {
             top.linkTo(parent.top, margin = 0.dp)

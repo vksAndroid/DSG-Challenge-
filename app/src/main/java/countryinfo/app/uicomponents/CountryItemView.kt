@@ -17,6 +17,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import countryinfo.app.R
+import countryinfo.app.utils.EMPTY_STRING
 
 
 @OptIn(ExperimentalMaterialApi::class)
@@ -59,12 +60,12 @@ fun CountryItemView(
                     .padding(4.dp)
             ) {
                 CountryItemTextView(
-                    name = commonName ?: "",
+                    name = commonName ?: EMPTY_STRING,
                     fontWeight = FontWeight.Bold,
                     color = Color.Black
                 )
                 CountryItemTextView(
-                    name = officialName ?: "",
+                    name = officialName ?: EMPTY_STRING,
                     fontWeight = FontWeight.Medium,
                     color = Color.DarkGray
                 )
@@ -95,5 +96,5 @@ fun CountryItemTextView(name: String, fontWeight: FontWeight, color: Color) {
 @Preview(showBackground = true)
 @Composable
 fun showCountryItemView() {
-    CountryItemView("", "", "", "", { })
+    CountryItemView(EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, { })
 }
