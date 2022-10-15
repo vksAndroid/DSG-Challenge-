@@ -57,12 +57,10 @@ fun HomeSearchTab(navController: NavController?, viewModel: CountryListVm) {
                 SearchTextField(viewModel)
 
                 if (searchList.value.isEmpty()) {
-                    countryList.value?.let {
-                        CountryListView1(true,isConnected,errorState, navController, it) {
-                            viewModel.setSavedScreen(ScreenOptions.DetailScreen)
-                            viewModel.updateCountryData(it)
-                            viewModel.isCountryFav(it.cca3)
-                        }
+                    CountryListView1(true,isConnected,errorState, navController, countryList.value) {
+                        viewModel.setSavedScreen(ScreenOptions.DetailScreen)
+                        viewModel.updateCountryData(it)
+                        viewModel.isCountryFav(it.cca3)
                     }
                 } else {
                     CountryListView1(true, isConnected,errorState,navController, searchList.value) {
@@ -84,15 +82,15 @@ fun SearchTextField(viewModel: CountryListVm) {
     val query = viewModel.searchQuery().collectAsState().value
 
     LaunchedEffect(key1 = query) {
-        viewModel.scheduleSearch(query)
+        viewModel.searchByDebounce(query)
+        if(query.isEmpty()){
+            viewModel.clearSearch()
+        }
     }
 
     TextField(
         value = query,
         onValueChange = {
-            if (it.isEmpty()) {
-                viewModel.clearSearch()
-            }
             viewModel.updateSearchQuery(it)
         },
         placeholder = { Text(text = stringResource(id = R.string.search)) },

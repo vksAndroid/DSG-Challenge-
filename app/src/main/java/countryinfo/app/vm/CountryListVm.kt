@@ -17,24 +17,20 @@ import countryinfo.app.utils.ApiResult
 import countryinfo.app.utils.EMPTY_STRING
 import countryinfo.app.utils.ScreenOptions
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Job
+import kotlinx.coroutines.*
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import java.util.*
 import javax.inject.Inject
 
 @HiltViewModel
 class CountryListVm @Inject constructor(
     private val countryListRepo: CountryListRepo,
-     val mFusedLocationClient: FusedLocationProviderClient,
+    val mFusedLocationClient: FusedLocationProviderClient,
     @IoDispatcher private val dispatcher: CoroutineDispatcher
 ) : ViewModel() {
-
-    var timer: Timer? = null
 
     private var apiJob: Job? = null
 
@@ -43,6 +39,8 @@ class CountryListVm @Inject constructor(
     var title = mutableStateOf("Search")
 
     var selectedTab = mutableStateOf("search")
+
+    private var textChangedJob: Job? = null
 
     private val errorSate: MutableStateFlow<String> = MutableStateFlow(
         EMPTY_STRING
@@ -100,7 +98,7 @@ class CountryListVm @Inject constructor(
 
     fun clearSearch() {
         searchCountryListState.value = emptyList()
-        timer?.cancel()
+        textChangedJob?.cancel()
     }
 
     private var _searchQuery = MutableStateFlow(EMPTY_STRING)
@@ -114,6 +112,25 @@ class CountryListVm @Inject constructor(
     fun observeCurrentLocation(): StateFlow<Location> {
         return currentLocationStateFlow
     }
+
+    fun searchByDebounce(query: String) {
+        var searchFor = ""
+        if (query.length > 1) {
+            val searchText = query.trim()
+            if (searchText != searchFor) {
+                searchFor = searchText
+
+                textChangedJob?.cancel()
+                textChangedJob = viewModelScope.launch(Dispatchers.Main) {
+                    delay(700L)
+                    if (searchText == searchFor) {
+                        getCountriesByName(searchText)
+                    }
+                }
+            }
+        }
+    }
+
 
     fun updateSearchQuery(query: String) {
         _searchQuery.value = query
@@ -129,7 +146,7 @@ class CountryListVm @Inject constructor(
                 val result = countryListRepo.getCountryList()
                 result.catch { exception ->
                     exception.message?.let { errorSate.value }
-                   // ApiResult.Failure(exception.message, exception.cause)
+                    // ApiResult.Failure(exception.message, exception.cause)
                 }
                 result.collect {
                     when (it) {
@@ -141,23 +158,6 @@ class CountryListVm @Inject constructor(
                     }
                 }
             }
-        }
-    }
-
-    /**
-     * Schedule search
-     *
-     * @param name
-     */
-    fun scheduleSearch(name: String) {
-        if (name.length > 1) {
-            timer?.cancel()
-            timer = Timer()
-            timer?.schedule(object : TimerTask() {
-                override fun run() {
-                    getCountriesByName(name)
-                }
-            }, 1000)
         }
     }
 
