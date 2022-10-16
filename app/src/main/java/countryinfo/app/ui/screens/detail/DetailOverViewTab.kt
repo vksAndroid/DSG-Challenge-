@@ -2,6 +2,7 @@ package countryinfo.app.ui.screens.detail
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
@@ -39,7 +40,7 @@ fun DetailOverViewTab(viewModel: CountryListVm) {
             .fillMaxSize()
             .verticalScroll(
                 rememberScrollState()
-            )
+            ).padding(bottom = 12.dp)
     ) {
         ImageFullFlag(flagImageUrl = countryDetail.flags?.png!!)
 

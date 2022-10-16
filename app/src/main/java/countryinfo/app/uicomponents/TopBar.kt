@@ -55,7 +55,8 @@ fun TopBar(
                     contentDescription = "",
                     modifier = Modifier.testTag("save_icon")
                         .padding(8.dp)
-                        .clickable { onFavClick.invoke() }
+                        .clickable { onFavClick.invoke() },
+                    tint = Color.Blue
                 )
         }
     )
