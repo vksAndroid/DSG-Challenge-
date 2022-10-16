@@ -1,6 +1,5 @@
 package countryinfo.app.ui.screens.search
 
-import android.annotation.SuppressLint
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -19,10 +18,8 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import countryinfo.app.Graph
 import countryinfo.app.api.model.CountryData
 import countryinfo.app.uicomponents.CountryItemView
 import countryinfo.app.uicomponents.LoadingShimmerEffect
@@ -30,8 +27,11 @@ import countryinfo.app.utils.EMPTY_STRING
 import countryinfo.app.utils.ScreenOptions
 import countryinfo.app.vm.CountryListVm
 import countryinfo.app.R
+import countryinfo.app.uicomponents.scaffold_comp.getDP
+import countryinfo.app.utils.RouteCountryDetail
 import countryinfo.app.utils.networkconnection.ConnectionState
 import countryinfo.app.utils.networkconnection.connectivityState
+import countryinfo.app.utils.titleSearch
 import countryinfo.app.ui.screens.search.CountryListView as CountryListView1
 
 @Composable
@@ -48,7 +48,7 @@ fun HomeSearchTab(navController: NavController?, viewModel: CountryListVm) {
         viewModel.getCountryList()
     }
 
-    viewModel.title.value = "Search"
+    viewModel.title.value = titleSearch
 
         Surface(modifier = Modifier.fillMaxSize(), color = Color.White) {
             Column(modifier = Modifier
@@ -77,7 +77,6 @@ fun HomeSearchTab(navController: NavController?, viewModel: CountryListVm) {
 
 }
 
-@SuppressLint("CoroutineCreationDuringComposition", "FlowOperatorInvokedInComposition")
 @Composable
 fun SearchTextField(viewModel: CountryListVm) {
     val query = viewModel.searchQuery().collectAsState().value
@@ -96,9 +95,9 @@ fun SearchTextField(viewModel: CountryListVm) {
         },
         placeholder = { Text(text = stringResource(id = R.string.search)) },
         modifier = Modifier.testTag("country_search_text_field")
-            .padding(all = 8.dp)
+            .padding(all = getDP(dimenKey = R.dimen.dp_8))
             .fillMaxWidth()
-            .border(width = 8.dp, color = Color.White, shape = RoundedCornerShape(20.dp)),
+            .border(width =getDP(dimenKey = R.dimen.dp_8), color = Color.White, shape = RoundedCornerShape(getDP(dimenKey = R.dimen.dp_20))),
         singleLine = true,
         textStyle = TextStyle(fontSize = 16.sp, color = Color.Black),
         leadingIcon = { Icon(Icons.Default.Search, contentDescription = EMPTY_STRING) },
@@ -107,13 +106,13 @@ fun SearchTextField(viewModel: CountryListVm) {
             unfocusedIndicatorColor = Color.Transparent,
             cursorColor = Color.Gray
         ),
-        shape = RoundedCornerShape(20.dp)
+        shape = RoundedCornerShape(getDP(dimenKey = R.dimen.dp_20))
     )
 }
 
 @Composable
 fun CountryListView(
-    showShimmer: Boolean,
+    showShimmer: Boolean = true,
     isConnectedInternet : Boolean = false,
     errorState : State<String> ,
     navController: NavController?,
@@ -129,7 +128,7 @@ fun CountryListView(
         }
     } else {
 
-        LazyColumn(modifier = Modifier.testTag("country_lazy_column").padding(top = 8.dp)) {
+        LazyColumn(modifier = Modifier.testTag("country_lazy_column").padding(top = getDP(dimenKey = R.dimen.dp_8))) {
             items(items = countryList) { countryData ->
 
                 CountryItemView(
@@ -144,7 +143,7 @@ fun CountryListView(
                     onItemClicked = {
                         changeState.invoke(countryData)
 
-                        navController?.navigate(Graph.CountryDetail)
+                        navController?.navigate(RouteCountryDetail)
                     }
                 )
             }

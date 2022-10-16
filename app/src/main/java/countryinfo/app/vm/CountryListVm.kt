@@ -16,6 +16,7 @@ import countryinfo.app.repo.CountryListRepo
 import countryinfo.app.utils.ApiResult
 import countryinfo.app.utils.EMPTY_STRING
 import countryinfo.app.utils.ScreenOptions
+import countryinfo.app.utils.titleSearch
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -34,9 +35,9 @@ class CountryListVm @Inject constructor(
 
     var isFav = mutableStateOf(false)
 
-    var title = mutableStateOf("Search")
+    var title = mutableStateOf(titleSearch)
 
-    var selectedTab = mutableStateOf("search")
+    var selectedTab = mutableStateOf(titleSearch)
 
     private var textChangedJob: Job? = null
 

@@ -9,30 +9,30 @@ import androidx.compose.material.Surface
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import countryinfo.app.Graph
-import countryinfo.app.R
 import countryinfo.app.ui.screens.detail.CountryMapScreen
 import countryinfo.app.ui.screens.detail.DetailOverViewTab
 import countryinfo.app.ui.screens.search.HomeSavedTab
 import countryinfo.app.ui.screens.search.HomeSearchTab
 import countryinfo.app.uicomponents.DefaultSnackBar
-import countryinfo.app.uicomponents.main.BottomBarConditional
-import countryinfo.app.uicomponents.main.TopBarConditional
+import countryinfo.app.uicomponents.scaffold_comp.BottomBarConditional
+import countryinfo.app.uicomponents.scaffold_comp.TopBarConditional
 import countryinfo.app.utils.ScreenOptions
 import countryinfo.app.utils.networkconnection.ConnectionState
 import countryinfo.app.utils.networkconnection.connectivityState
 import countryinfo.app.utils.tabs.BottomTab
 import countryinfo.app.vm.CountryListVm
+import countryinfo.app.R
+import countryinfo.app.utils.RouteCountryDetail
+import countryinfo.app.utils.titleSaved
+import countryinfo.app.utils.titleSearch
 
 
 @Composable
@@ -59,7 +59,7 @@ fun HomeScreen() {
 
     val errorState = viewModel.observeErrorState().collectAsState()
 
-    val noInterNetMessage = stringResource(id = R.string.there_is_no_internet)
+    val noInterNetMessage =stringResource(id = R.string.there_is_no_internet)
 
     LaunchedEffect(key1 = errorState.value, key2 = isConnected) {
 
@@ -74,7 +74,7 @@ fun HomeScreen() {
         topBar = {
             TopBarConditional(
                 title = title.value,
-                bar = getSaveScreen.value,
+                screenOptions = getSaveScreen.value,
                 isSaved = isFav.value,
                 onSavePress = {
                     if (isFav.value) {
@@ -89,9 +89,11 @@ fun HomeScreen() {
             }
         },
         bottomBar = {
-            BottomBarConditional(navController = navHostController, bar = getSaveScreen.value)
+            BottomBarConditional(navController = navHostController, screenOptions = getSaveScreen.value)
         },
         scaffoldState = scaffoldState,
+
+    ) {
     ) { padding ->
 
         Box(
@@ -102,14 +104,13 @@ fun HomeScreen() {
                 )
         ) {
 
-
             Surface(modifier = Modifier.fillMaxSize(), color = Color.White) {
 
-                getSaveScreen.value.let { screenOption ->
+                getSaveScreen.value.let { screenName ->
 
-                    val route = if (screenOption == ScreenOptions.SearchScreen) {
+                    val route = if (screenName == ScreenOptions.SearchScreen) {
 
-                        if (clickedTab.value == "search")
+                        if (clickedTab.value == titleSearch)
                             BottomTab.TabSearch.route
                         else
                             BottomTab.TabSaved.route
@@ -121,9 +122,8 @@ fun HomeScreen() {
                     )
 
                     DefaultSnackBar(
-                        snackbarHostState = scaffoldState.snackbarHostState,
-                        onDismiss = { scaffoldState.snackbarHostState.currentSnackbarData?.dismiss() },
-                        modifier = Modifier.align(Alignment.BottomCenter)
+                        snackBarHostState = scaffoldState.snackbarHostState,
+                        onDismiss = { scaffoldState.snackbarHostState.currentSnackbarData?.dismiss() }
                     )
                 }
             }
@@ -132,7 +132,7 @@ fun HomeScreen() {
         }
 
         BackHandler(enabled = true) {
-            viewModel.title.value = "Search"
+            viewModel.title.value = titleSearch
             viewModel.setSavedScreen(ScreenOptions.SearchScreen)
             navHostController.navigateUp()
         }
@@ -157,14 +157,14 @@ fun SearchNavigationGraph(
                 navController = navController,
                 viewModel = viewModel
             )
-            viewModel.selectedTab.value = "search"
+            viewModel.selectedTab.value = titleSearch
         }
         composable(BottomTab.TabSaved.route) {
             HomeSavedTab(
                 navController = navController,
                 viewModel = viewModel
             )
-            viewModel.selectedTab.value = "saved"
+            viewModel.selectedTab.value = titleSaved
 
         }
 
@@ -181,15 +181,8 @@ fun SearchNavigationGraph(
 
         }
 
-        composable(route = Graph.CountryDetail) {
+        composable(route = RouteCountryDetail) {
             CountryDetailsScreen(viewModel)
         }
     }
-}
-
-
-@Preview(showBackground = true)
-@Composable
-fun ShowCountrySearchScreenPreview() {
-    //HomeScreen( null)
 }

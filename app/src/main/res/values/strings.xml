@@ -3,9 +3,11 @@
 
     <!--Navigation Keys and parameters-->
     <string name="country_list">country_list</string>
+
     <string name="capital">Capital</string>
     <string name="region">Region</string>
-    <string name="subregion">Subregion</string>
+    <string name="subregion">SubRegion</string>
+
     <string name="languages">Languages</string>
     <string name="currencies">Currencies</string>
     <string name="population">Population</string>
@@ -19,4 +21,7 @@
     <string name="your_current_location">Your Current Location</string>
     <string name="search">Search</string>
     <string name="saved">Saved</string>
+    <string name="left">Left</string>
+    <string name="right">Right</string>
+
 </resources>

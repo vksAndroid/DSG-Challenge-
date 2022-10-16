@@ -5,22 +5,26 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.layoutId
 import coil.compose.AsyncImage
 import countryinfo.app.R
+import countryinfo.app.uicomponents.scaffold_comp.getDP
+ import countryinfo.app.utils.contentDescriptionCoatImage
 
+/**
+*@param imageUrl for show image
+ */
 @Composable
 fun ImageCoatOfArm(imageUrl: String) {
 
     AsyncImage(
         model = imageUrl,
-        placeholder = painterResource(id = R.drawable.default_loading),
-        contentDescription = "Country Flag",
+        placeholder = painterResource(id = R.drawable.default_placeholder),
+        contentDescription = contentDescriptionCoatImage,
         modifier = Modifier
             .layoutId("title")
-            .size(40.dp, 40.dp)
-            .padding(top = 4.dp)
+            .size(getDP(R.dimen.dp_40), getDP(R.dimen.dp_40))
+            .padding(top = getDP(R.dimen.sp_6))
     )
 
 }

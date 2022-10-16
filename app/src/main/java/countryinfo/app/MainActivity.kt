@@ -19,12 +19,9 @@ class MainActivity : ComponentActivity() {
             LocationPermission()
 
             CountryInfoTheme {
+                // Call HomeScreen/Countries List screen after Launch MainActivity
                 HomeScreen()
             }
         }
     }
-}
-
-object Graph {
-    const val CountryDetail = "country_details"
 }

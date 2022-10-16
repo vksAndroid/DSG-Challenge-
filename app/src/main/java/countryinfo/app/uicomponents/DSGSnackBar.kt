@@ -7,19 +7,19 @@ import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
+import countryinfo.app.R
+import countryinfo.app.uicomponents.scaffold_comp.getDP
 
 @Composable
 fun DefaultSnackBar(
-    snackbarHostState: SnackbarHostState,
-    modifier: Modifier = Modifier,
+    snackBarHostState: SnackbarHostState,
     onDismiss: () -> Unit = { }
 ) {
     SnackbarHost(
-        hostState = snackbarHostState,
+        hostState = snackBarHostState,
         snackbar = { data ->
             Snackbar(
-                modifier = modifier.padding(16.dp),
+                modifier = Modifier.padding(getDP(dimenKey = R.dimen.dp_16)),
                 content = {
                     Text(
                         text = data.message,

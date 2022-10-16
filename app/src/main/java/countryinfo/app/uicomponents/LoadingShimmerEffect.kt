@@ -13,7 +13,11 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Brush.Companion.linearGradient
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import countryinfo.app.R
+import countryinfo.app.uicomponents.scaffold_comp.getDP
+import countryinfo.app.utils.duration_1000
 
+// Shimmer Effect Custom class for List screen
 @Composable
 fun LoadingShimmerEffect() {
 
@@ -32,7 +36,7 @@ fun LoadingShimmerEffect() {
         targetValue = 1000f,
         animationSpec = infiniteRepeatable(
             animation = tween(
-                durationMillis = 1000, // duration for the animation
+                durationMillis =duration_1000, // duration for the animation
                 easing = FastOutLinearInEasing
             )
         )
@@ -53,12 +57,13 @@ fun ShimmerListItem(brush: Brush) {
     Row(
         modifier = Modifier
             .fillMaxSize()
-            .padding(all = 10.dp), verticalAlignment = Alignment.Top
+            .padding(all = getDP(dimenKey = R.dimen.dp_10)),
+        verticalAlignment = Alignment.Top
     ) {
 
         Spacer(
             modifier = Modifier
-                .size(80.dp)
+                .size(getDP(dimenKey = R.dimen.dp_80))
                 .clip(RoundedCornerShape(10.dp))
                 .background(brush)
         )
@@ -66,7 +71,7 @@ fun ShimmerListItem(brush: Brush) {
         Column(verticalArrangement = Arrangement.Center) {
             Spacer(
                 modifier = Modifier
-                    .height(20.dp)
+                    .height(getDP(dimenKey = R.dimen.dp_20))
                     .clip(RoundedCornerShape(10.dp))
                     .fillMaxWidth(fraction = 0.5f)
                     .background(brush)
@@ -75,7 +80,7 @@ fun ShimmerListItem(brush: Brush) {
             Spacer(modifier = Modifier.height(10.dp)) //creates an empty space between
             Spacer(
                 modifier = Modifier
-                    .height(20.dp)
+                    .height(getDP(dimenKey = R.dimen.dp_20))
                     .clip(RoundedCornerShape(10.dp))
                     .fillMaxWidth(fraction = 0.7f)
                     .background(brush)
@@ -84,7 +89,7 @@ fun ShimmerListItem(brush: Brush) {
             Spacer(modifier = Modifier.height(10.dp)) //creates an empty space between
             Spacer(
                 modifier = Modifier
-                    .height(20.dp)
+                    .height(getDP(dimenKey = R.dimen.dp_20))
                     .clip(RoundedCornerShape(10.dp))
                     .fillMaxWidth(fraction = 0.9f)
                     .background(brush)

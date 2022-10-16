@@ -1,20 +1,18 @@
 package countryinfo.app.ui.screens.search
 
-import android.annotation.SuppressLint
-import androidx.compose.foundation.layout.Column
+ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
-import androidx.compose.ui.Modifier
+ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.testTag
 import androidx.navigation.NavController
 import countryinfo.app.utils.ScreenOptions
 import countryinfo.app.vm.CountryListVm
 
-@SuppressLint("UnusedMaterialScaffoldPaddingParameter", "StateFlowValueCalledInComposition")
 @Composable
 fun HomeSavedTab(navController: NavController?, viewModel: CountryListVm) {
 
@@ -28,17 +26,9 @@ fun HomeSavedTab(navController: NavController?, viewModel: CountryListVm) {
 
     viewModel.title.value = "Saved"
 
-    Surface(modifier = Modifier
-        .fillMaxSize()
-        .testTag("home_saved_screen"), color = Color.White) {
+    Surface(modifier = Modifier.fillMaxSize().testTag("home_saved_screen"), color = Color.White) {
         Column(modifier = Modifier.fillMaxSize()) {
-            CountryListView(
-                showShimmer = false,
-                isConnectedInternet = true,
-                errorState = errorState,
-                navController = navController,
-                countryList = countrySavedList.value
-            ) {
+            CountryListView(showShimmer = false, true,errorState,navController, countrySavedList.value) {
                 viewModel.setSavedScreen(ScreenOptions.DetailScreen)
                 viewModel.updateCountryData(it)
                 viewModel.isCountryFav(it.cca3)

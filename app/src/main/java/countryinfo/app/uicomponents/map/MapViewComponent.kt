@@ -1,4 +1,4 @@
-package countryinfo.app.uicomponents
+package countryinfo.app.uicomponents.map
 
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -17,9 +17,15 @@ import com.google.maps.android.compose.MarkerState
 import com.google.maps.android.compose.rememberCameraPositionState
 import countryinfo.app.R
 import countryinfo.app.ui.screens.detail.MapType
+import countryinfo.app.uicomponents.scaffold_comp.getDP
 
+/**
+ * @param location Latlng of postion to show marker
+ * @param locationType Type of Location like Country,Capitala dn region
+ */
 @Composable
 fun MapViewComponent(location: LatLng, locationType: MapType) {
+
     val cameraCurrentLocation = rememberCameraPositionState {
         position = CameraPosition.fromLatLngZoom(location, 15f)
     }
@@ -46,10 +52,11 @@ fun MapViewComponent(location: LatLng, locationType: MapType) {
     }
 
     GoogleMap(
-        modifier = Modifier.testTag("map_view")
+        modifier = Modifier
+            .testTag("map_view")
             .fillMaxWidth()
-            .height(400.dp)
-            .padding(start = 12.dp, end = 12.dp),
+            .height(getDP(dimenKey = R.dimen.dp_400))
+            .padding(start = getDP(dimenKey = R.dimen.dp_12), end = getDP(dimenKey = R.dimen.dp_12)),
         cameraPositionState = zoom
     ) {
         zoom.move(CameraUpdateFactory.newLatLng(location))

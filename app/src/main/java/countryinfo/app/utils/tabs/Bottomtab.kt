@@ -6,31 +6,31 @@ import androidx.compose.material.icons.outlined.Search
 import androidx.compose.material.icons.outlined.Star
 import androidx.compose.material.icons.outlined.StarBorder
 import androidx.compose.ui.graphics.vector.ImageVector
+import countryinfo.app.utils.*
 
 sealed class BottomTab(
     var title: String,
     var route: String,
-    var imageVector: ImageVector
-) {
+    var imageVector: ImageVector) {
 
     object TabOverview : BottomTab(
-        "Overview", "overview",
+        titleOverview, RouteOverview,
         Icons.Outlined.Star
     )
 
     object TabMap : BottomTab(
-        "Map", "map",
+        titleMap, RouteMap,
         Icons.Outlined.Map
     )
 
     // Country List Bottom Tab
     object TabSearch : BottomTab(
-        "Search", "search",
+        titleSearch, RouteSearch,
         Icons.Outlined.Search
     )
 
     object TabSaved : BottomTab(
-        "Saved", "saved",
+        titleSaved, RouteSaved,
         Icons.Outlined.StarBorder
     )
 }

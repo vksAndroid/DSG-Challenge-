@@ -34,7 +34,8 @@ fun BottomMenu(
             BottomTab.TabSaved
         )
 
-    BottomNavigation(modifier = Modifier.testTag("test_bottom_navigation"), contentColor = colorResource(id = R.color.white), backgroundColor = OffWhite)
+    BottomNavigation(modifier = Modifier.testTag("test_bottom_navigation"),
+        contentColor = colorResource(id = R.color.white), backgroundColor = OffWhite)
     {
 
         val navBackStackEntry by navController.currentBackStackEntryAsState()
