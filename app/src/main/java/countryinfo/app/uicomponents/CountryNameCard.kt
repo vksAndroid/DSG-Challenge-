@@ -15,10 +15,12 @@ import androidx.compose.ui.text.ExperimentalTextApi
 import androidx.compose.ui.text.PlatformTextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import countryinfo.app.R
 import countryinfo.app.ui.theme.OffWhite
+import countryinfo.app.uicomponents.scaffold_comp.getDP
+import countryinfo.app.utils.idCountry
 
 
 @OptIn(ExperimentalTextApi::class)
@@ -27,10 +29,10 @@ fun CountryNameCard(title: String, value: String) {
 
     Card(
         elevation = 1.5.dp,
-        shape = RoundedCornerShape(10.dp),
+        shape = RoundedCornerShape(getDP(dimenKey = R.dimen.dp_10)),
         backgroundColor = OffWhite,
         modifier = Modifier.testTag("country_name_card")
-            .layoutId("Country")
+            .layoutId(idCountry)
             .wrapContentHeight(Alignment.Bottom)
             .fillMaxWidth(0.6f)
             .wrapContentWidth(Alignment.Start)
@@ -38,7 +40,10 @@ fun CountryNameCard(title: String, value: String) {
         Column(
             modifier = Modifier
                 .wrapContentHeight()
-                .padding(start = 16.dp, end = 16.dp, top = 4.dp, bottom = 8.dp),
+                .padding(getDP(dimenKey = R.dimen.dp_15)
+                    , end = getDP(dimenKey = R.dimen.dp_15),
+                    top = getDP(dimenKey = R.dimen.dp_4),
+                    bottom = getDP(dimenKey = R.dimen.dp_8)),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             Text(
@@ -57,7 +62,7 @@ fun CountryNameCard(title: String, value: String) {
                 overflow = TextOverflow.Ellipsis,
                 maxLines = 2,
                 fontWeight = FontWeight.Medium,
-                modifier = Modifier.padding(top = 0.dp),
+                modifier = Modifier.padding(),
                 style = MaterialTheme.typography.body1.copy(
                     platformStyle = PlatformTextStyle(
                         includeFontPadding = false
@@ -66,11 +71,4 @@ fun CountryNameCard(title: String, value: String) {
             )
         }
     }
-}
-
-
-@Preview(showBackground = true)
-@Composable
-fun getCountry() {
-    showItem("Capital", "Dublin")
 }

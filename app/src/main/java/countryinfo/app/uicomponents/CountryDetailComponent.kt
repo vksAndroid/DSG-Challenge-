@@ -13,14 +13,16 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.layoutId
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import countryinfo.app.R
+import countryinfo.app.uicomponents.scaffold_comp.getDP
+import countryinfo.app.utils.EMPTY_STRING
 
 @Composable
 fun CountryDetailComponent(
     isImage: Boolean = false,
-    imageUrl: String = "",
+    imageUrl: String = EMPTY_STRING,
     title: String, value: Any,
     isDriverItem: Boolean = false
 ) {
@@ -28,15 +30,17 @@ fun CountryDetailComponent(
     Card(
         elevation = 1.5.dp,
         modifier = Modifier
-            .padding(top = 12.dp, start = 12.dp, end = 12.dp)
+            .padding(top = getDP(dimenKey = R.dimen.dp_12),
+                start = getDP(dimenKey = R.dimen.dp_12),
+                end = getDP(dimenKey = R.dimen.dp_12))
             .layoutId(title)
             .fillMaxWidth(0.46f),
-        shape = RoundedCornerShape(12.dp)
+        shape = RoundedCornerShape(getDP(dimenKey = R.dimen.dp_12))
     ) {
 
         Column(
             modifier = Modifier
-                .padding(bottom = 8.dp, top = 8.dp),
+                .padding(bottom = getDP(dimenKey = R.dimen.dp_8), top = getDP(dimenKey = R.dimen.dp_8)),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Top,
         ) {
@@ -44,23 +48,16 @@ fun CountryDetailComponent(
                 text = title, fontWeight = FontWeight.Bold,
                 color = Color.DarkGray,
                 fontSize = 16.sp,
-                modifier = Modifier.padding(start = 0.dp, end = 10.dp)
+                modifier = Modifier.padding( end = getDP(dimenKey = R.dimen.dp_10))
             )
             if (isImage)
                 ImageCoatOfArm(imageUrl)
             else if (isDriverItem)
-                DriveSide(value as String) {}
+                DriveSide(value as String)
             else
                 ValueComponent(value = value)
 
         }
     }
 
-}
-
-
-@Preview(showBackground = true)
-@Composable
-fun showCountryDetailComponent() {
-    CountryDetailComponent(false, "", "Capital", "Dublin")
 }

@@ -1,17 +1,13 @@
 package countryinfo.app.ui.screens.detail
 
-import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.ConstraintSet
@@ -24,16 +20,12 @@ import countryinfo.app.uicomponents.ImageFullFlag
 import countryinfo.app.utils.*
 import countryinfo.app.vm.CountryListVm
 
-@SuppressLint("UnusedMaterialScaffoldPaddingParameter", "StateFlowValueCalledInComposition")
 @Composable
 fun DetailOverViewTab(viewModel: CountryListVm) {
 
     val countryDetail = viewModel.observeCountryData().collectAsState().value
 
-//    countryDetail.name?.common?.let {
-//        viewModel.title.value = it
-//    }
-    viewModel.title.value = "Countries"
+    viewModel.title.value = titleCountries
 
     ConstraintLayout(
         setComponentsUsingConstraints(), modifier = Modifier.testTag("detail_overview_screen")
@@ -51,23 +43,20 @@ fun DetailOverViewTab(viewModel: CountryListVm) {
 
         CountryBasicDetail(countryDetail)
 
-                countryDetail.languages?.let {
-                    CountryDetailComponent(title = stringResource(id = R.string.languages), value = it)
-                }
-                countryDetail.currencies?.let {
-                    CountryDetailComponent(title = stringResource(id = R.string.currencies), value = it)
-                }
+                 CountryDetailComponent(title = stringResource(id = R.string.languages), value = countryDetail.languages)
+
+                CountryDetailComponent(title = stringResource(id = R.string.currencies), value = countryDetail.currencies)
 
                 countryDetail.car?.side?.let {
-                    CountryDetailComponent(title = stringResource(id = R.string.car_driver_side), value = it)
+                    CountryDetailComponent(title = stringResource(id = R.string.car_driver_side), value = it, isDriverItem = true)
                 }
 
                 countryDetail.population?.let {
                     CountryDetailComponent(title = stringResource(id = R.string.population), value = it)
                 }
-                countryDetail.timezones?.let {
-                    CountryDetailComponent(title = stringResource(id = R.string.timezones), value = it)
-                }
+
+                 CountryDetailComponent(title = stringResource(id = R.string.timezones), value = countryDetail.timezones)
+
                 countryDetail.coatOfArms?.png?.let {
                     CountryDetailComponent(
                         isImage = true,
@@ -85,16 +74,16 @@ fun setComponentsUsingConstraints(): ConstraintSet {
 
     return ConstraintSet {
 
-        val idTopFlag = createRefFor("top_flag")
-        val idBasicDetail = createRefFor("BasicDetail")
-        val idCountry = createRefFor("Country")
+        val idTopFlag = createRefFor(idTopFlag)
+        val idBasicDetail = createRefFor(idBasicDetail)
+        val idCountry = createRefFor(idCountry)
 
-        val idLanguages = createRefFor("Languages")
-        val idTimeZone = createRefFor("Timezone(s)")
-        val idCurrencies = createRefFor("Currencies")
-        val idPopulation = createRefFor("Population")
-        val idDriverSide = createRefFor("Car Driver Side")
-        val idCoatOfArm = createRefFor("Coat of Arms")
+        val idLanguages = createRefFor(idLanguage)
+        val idTimeZone = createRefFor(idTimezone)
+        val idCurrencies = createRefFor(idCurrencies)
+        val idPopulation = createRefFor(idPopulation)
+        val idDriverSide = createRefFor(idCarDriverSide)
+        val idCoatOfArm = createRefFor(idCoatOfArm)
 
         constrain(idTopFlag) {
             top.linkTo(parent.top, margin = 0.dp)
@@ -140,11 +129,4 @@ fun setComponentsUsingConstraints(): ConstraintSet {
             top.linkTo(idLanguages.bottom)
         }
     }
-}
-
-
-@Preview(showBackground = true)
-@Composable
-fun DefaultPreview() {
-    //DetailOverViewTab("HKG",null)
 }

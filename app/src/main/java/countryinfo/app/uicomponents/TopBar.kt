@@ -16,6 +16,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import countryinfo.app.R
+import countryinfo.app.uicomponents.scaffold_comp.getDP
+import countryinfo.app.utils.contentDescriptionSaveCountry
 
 
 @Composable
@@ -44,7 +47,7 @@ fun TopBar(
                     Icons.Default.ArrowBack,
                     contentDescription = "",
                     modifier = Modifier.testTag("back_icon")
-                        .padding(8.dp)
+                        .padding(getDP(dimenKey = R.dimen.dp_8))
                         .clickable { clickAction.invoke() }
                 )
         },
@@ -52,9 +55,9 @@ fun TopBar(
             if (isShowSaveIcon)
                 Icon(
                     if (isSaved) Icons.Outlined.Bookmark else Icons.Outlined.BookmarkBorder,
-                    contentDescription = "",
+                    contentDescription = contentDescriptionSaveCountry,
                     modifier = Modifier.testTag("save_icon")
-                        .padding(8.dp)
+                        .padding(getDP(dimenKey = R.dimen.dp_8))
                         .clickable { onFavClick.invoke() }
                 )
         }

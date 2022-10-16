@@ -1,7 +1,5 @@
 package countryinfo.app.ui.screens.detail
 
-import android.annotation.SuppressLint
-import android.util.Log
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -11,8 +9,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.layoutId
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -20,10 +16,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.ConstraintSet
-import com.google.android.gms.location.LocationServices
-import androidx.constraintlayout.compose.Dimension
 import com.google.android.gms.maps.model.LatLng
-import com.google.gson.Gson
 import countryinfo.app.R
 import countryinfo.app.api.model.CountryData
 import countryinfo.app.uicomponents.CountryBasicDetail
@@ -34,7 +27,6 @@ import countryinfo.app.utils.*
 import countryinfo.app.utils.CheckLocationPermission
 import countryinfo.app.vm.CountryListVm
 
-@SuppressLint("UnusedMaterialScaffoldPaddingParameter", "StateFlowValueCalledInComposition")
 @Composable
 fun CountryMapScreen(
     viewModel: CountryListVm
@@ -46,7 +38,7 @@ fun CountryMapScreen(
         setComponentsUsingConstraints1(), modifier = Modifier.testTag("country_map_screen")
             .fillMaxSize()
     ) {
-        loadContent(
+        LoadContent(
             countryDetail = countryDetail,
             viewModel = viewModel,
             locationEnabled = CheckLocationPermission()
@@ -55,7 +47,7 @@ fun CountryMapScreen(
 }
 
 @Composable
-fun loadContent(
+fun LoadContent(
     countryDetail: CountryData,
     viewModel: CountryListVm,
     locationEnabled: Boolean
@@ -65,7 +57,7 @@ fun loadContent(
     } else {
         listOf(MapType.Header, MapType.Country, MapType.Capital)
     }
-    Log.d("Country Data:", Gson().toJson(countryDetail))
+
     LazyColumn(
         modifier = Modifier
             .wrapContentHeight()
@@ -82,8 +74,8 @@ fun loadContent(
                         countryDetail.flags?.png?.let {
                             ImageFullFlag(flagImageUrl = it)
                         }
-                        val official = countryDetail.name?.official ?: ""
-                        val name = countryDetail.name?.common ?: ""
+                        val official = countryDetail.name?.official ?: EMPTY_STRING
+                        val name = countryDetail.name?.common ?: EMPTY_STRING
 
                         CountryNameCard(title = name, value = official)
                         CountryBasicDetail(countryDetail)
@@ -98,7 +90,7 @@ fun loadContent(
                             LatLng(currentLocation.latitude, currentLocation.longitude)
                         MapTextLabel(
                             textLabel = stringResource(id = R.string.your_current_location),
-                            textValue = ""
+                            textValue = EMPTY_STRING
                         )
                         MapViewComponent(currentLatLng, MapType.CurrentLocation)
                     }
@@ -107,16 +99,16 @@ fun loadContent(
                 is MapType.Country -> {
                     MapTextLabel(
                         textLabel = "${stringResource(id = R.string.country)} - ",
-                        textValue = countryDetail.name?.common ?: ""
+                        textValue = countryDetail.name?.common ?: EMPTY_STRING
                     )
                     var countryLocation: LatLng
                     try {
 
-                        if (countryDetail.latlng.isNullOrEmpty()) {
+                        if (countryDetail.latlng.isEmpty()) {
                             countryLocation = LatLng(0.0, 0.0)
                         } else {
                             countryLocation = LatLng(
-                                countryDetail.latlng.get(0) ?: 0.0, countryDetail?.latlng?.get(1)
+                                countryDetail.latlng[0] ?: 0.0, countryDetail.latlng[1]
                                     ?: 0.0
                             )
                         }
@@ -129,7 +121,7 @@ fun loadContent(
                 is MapType.Capital -> {
                     MapTextLabel(
                         textLabel = "${stringResource(id = R.string.capital)} - ",
-                        textValue = if (countryDetail.capital.isNullOrEmpty()) {
+                        textValue = if (countryDetail.capital.isEmpty()) {
                             EMPTY_STRING
                         } else {
                             countryDetail.capital[0]
@@ -180,10 +172,10 @@ fun setComponentsUsingConstraints1(): ConstraintSet {
 
     return ConstraintSet {
 
-        val idTopFlag = createRefFor("top_flag")
-        val idBasicDetail = createRefFor("BasicDetail")
-        val idCountry = createRefFor("Country")
-        val idMapColumn = createRefFor("mapColumn")
+        val idTopFlag = createRefFor(idTopFlag)
+        val idBasicDetail = createRefFor(idBasicDetail)
+        val idCountry = createRefFor(idCountry)
+        val idMapColumn = createRefFor(idMapColumn)
 
         constrain(idTopFlag) {
             top.linkTo(parent.top, margin = 0.dp)
@@ -209,12 +201,12 @@ fun mapHeaderConstraints(): ConstraintSet {
 
     return ConstraintSet {
 
-        val idTopFlag = createRefFor("top_flag")
-        val idBasicDetail = createRefFor("BasicDetail")
-        val idCountry = createRefFor("Country")
+        val idTopFlag = createRefFor(idTopFlag)
+        val idBasicDetail = createRefFor(idBasicDetail)
+        val idCountry = createRefFor(idCountry)
 
         constrain(idTopFlag) {
-            top.linkTo(parent.top, margin = 0.dp)
+            top.linkTo(parent.top)
         }
         constrain(idBasicDetail) {
             top.linkTo(idCountry.bottom, margin = 10.dp)

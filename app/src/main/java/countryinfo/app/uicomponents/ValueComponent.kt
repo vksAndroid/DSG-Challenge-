@@ -11,11 +11,16 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextIndent
 import androidx.compose.ui.text.withStyle
-import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import countryinfo.app.R
 import countryinfo.app.api.model.CurrenciesName
+import countryinfo.app.uicomponents.scaffold_comp.getDP
 
-
+/**
+ * This function return Any type of Composable view depends upon sending value
+ *
+ * @param value Any type of value
+ */
 @Composable
 fun ValueComponent(value: Any) {
 
@@ -30,7 +35,7 @@ fun ValueComponent(value: Any) {
             else
                 Column {
                     value.forEach { data ->
-                        bulletItem(data.toString())
+                        BulletItem(data.toString())
                     }
                 }
         }
@@ -50,7 +55,7 @@ fun ValueComponent(value: Any) {
                 Column {
 
                     value.forEach { data ->
-                        bulletItem(value[data.key.toString()].toString())
+                        BulletItem(value[data.key.toString()].toString())
 
                     }
                 }
@@ -61,7 +66,7 @@ fun ValueComponent(value: Any) {
 }
 
 @Composable
-fun bulletItem(data: String) {
+fun BulletItem(data: String) {
 
     val bullet = "\u2022"
 
@@ -76,7 +81,7 @@ fun bulletItem(data: String) {
         },
         color = Color.Gray,
         fontWeight = FontWeight.Medium, fontSize = 14.sp,
-        modifier = Modifier.padding(2.dp)
+        modifier = Modifier.padding(getDP(dimenKey = R.dimen.dp_2))
     )
 
 }

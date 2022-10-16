@@ -11,51 +11,57 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.layoutId
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import countryinfo.app.R
 import countryinfo.app.api.model.CountryData
+import countryinfo.app.uicomponents.scaffold_comp.getDP
+import countryinfo.app.utils.idBasicDetail
 
-
+/**
+ * @param countryData for rendering country related basic detail Region,Sub Region,capital
+ */
 @Composable
 fun CountryBasicDetail(countryData: CountryData) {
 
     Card(
-        elevation = 1.5.dp,
-        modifier = Modifier.testTag("country_basic_details_card")
-            .layoutId("BasicDetail")
-            .padding(horizontal = 12.dp),
-        shape = RoundedCornerShape(10.dp)
+        elevation =getDP(dimenKey = R.dimen.dp_2),
+        modifier = Modifier
+            .testTag("country_basic_details_card")
+            .layoutId(idBasicDetail)
+            .padding(horizontal = getDP(dimenKey = R.dimen.dp_12)),
+        shape = RoundedCornerShape(getDP(dimenKey = R.dimen.dp_10))
     ) {
         Row(
             modifier = Modifier
-                .padding(start = 12.dp, end = 12.dp)
+                .padding(start = getDP(dimenKey = R.dimen.dp_12), end = getDP(dimenKey = R.dimen.dp_12))
                 .fillMaxWidth(),
 
             Arrangement.SpaceAround,
             verticalAlignment = Alignment.CenterVertically
         ) {
 
-            showItem("Region", countryData?.region!!)
+            ShowItem(stringResource(id = R.string.region), countryData.region!!)
 
             Divider(
                 modifier = Modifier
-                    .width(1.dp)
-                    .height(30.dp),
+                    .width(getDP(dimenKey = R.dimen.dp_1))
+                    .height(getDP(dimenKey = R.dimen.dp_30)),
                 color = Color.LightGray
             )
 
-            showItem("SubRegion", countryData.subregion ?: "")
+            ShowItem(stringResource(id = R.string.subregion), countryData.subregion ?: "")
 
             Divider(
                 modifier = Modifier
-                    .width(1.dp)
-                    .height(30.dp),
+                    .width(getDP(dimenKey = R.dimen.dp_1))
+                    .height(getDP(dimenKey = R.dimen.dp_30)),
                 color = Color.LightGray
             )
 
-            showItem("Capital", countryData.capital[0])
+            ShowItem(stringResource(id = R.string.capital), countryData.capital[0])
 
         }
 
@@ -64,11 +70,11 @@ fun CountryBasicDetail(countryData: CountryData) {
 
 
 @Composable
-fun showItem(title: String, value: String) {
+fun ShowItem(title: String, value: String) {
 
     Column(
         modifier = Modifier
-            .padding(bottom = 8.dp, top = 8.dp),
+            .padding(bottom = getDP(dimenKey = R.dimen.dp_8), top =getDP(dimenKey = R.dimen.dp_8)),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
 
@@ -76,18 +82,18 @@ fun showItem(title: String, value: String) {
             text = title, fontWeight = FontWeight.Bold,
             color = Color.DarkGray,
             fontSize = 16.sp,
-            modifier = Modifier.padding(start = 0.dp, end = 10.dp)
+            modifier = Modifier.padding( end = getDP(R.dimen.dp_10))
         )
         Text(
             text = value, color = Color.DarkGray,
             fontWeight = FontWeight.Medium, fontSize = 14.sp,
-            modifier = Modifier.padding(end = 10.dp, top = 4.dp)
+            modifier = Modifier.padding(end = getDP(R.dimen.dp_10), top = getDP(R.dimen.dp_5))
         )
     }
 }
 
 @Preview(showBackground = true)
 @Composable
-fun getCountryBasicDetail() {
+fun GetCountryBasicDetail() {
     CountryBasicDetail(CountryData())
 }

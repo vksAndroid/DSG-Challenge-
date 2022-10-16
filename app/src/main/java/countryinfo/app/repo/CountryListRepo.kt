@@ -47,20 +47,41 @@ class CountryListRepo @Inject constructor(var client: ApiInterface, var dao: Cou
         }
     }
 
+    /**
+     * Add to Favourite in Database
+     *
+     * @param countryItem
+     * @return Long id operation
+     */
     suspend fun addToFavourite(countryItem: CountryData): Long {
         return dao.addToFavourite(countryItem)
     }
 
-
+    /**
+     * Remove favourite from database
+     *
+     * @param name
+     * @return Int value for operation
+     */
     suspend fun removeFromFavourite(name: String) :Int {
         return dao.removeFromFavourite(name)
     }
 
-
+    /**
+     * get all saved countries from database
+     *
+     * @return List of country which are saved
+     */
     suspend fun getALlFavourite(): List<CountryData> {
         return dao.getAllFavorite()
     }
 
+    /**
+     * Check country added or not in favourite database
+     *
+     * @param name
+     * @return null or CountryData fro operation
+     */
     suspend fun isCountryFav(name: String): CountryData? {
         return dao.isFav(name)
     }

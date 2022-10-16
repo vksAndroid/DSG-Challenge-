@@ -14,10 +14,9 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import countryinfo.app.R
+import countryinfo.app.uicomponents.scaffold_comp.getDP
 import countryinfo.app.utils.EMPTY_STRING
 
 
@@ -35,30 +34,31 @@ fun CountryItemView(
     Card(
         modifier = Modifier.testTag("country_item_view")
             .fillMaxWidth()
-            .padding(12.dp),
+            .padding(getDP(dimenKey = R.dimen.dp_12)),
         onClick = { onItemClicked.invoke() },
-        elevation = 1.dp,
-        shape = RoundedCornerShape(12.dp)
+        elevation = getDP(dimenKey = R.dimen.dp_1),
+        shape = RoundedCornerShape(getDP(dimenKey = R.dimen.dp_12))
 
     ) {
         Row(
             horizontalArrangement = Arrangement.Start,
             verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.padding(4.dp)
+            modifier = Modifier.padding(getDP(dimenKey = R.dimen.dp_4))
 
         ) {
 
             AsyncImage(
                 model = countryFlag, contentDescription = stringResource(R.string.country_flag),
-                placeholder = painterResource(id = R.drawable.default_loading),
+                placeholder = painterResource(id = R.drawable.default_placeholder),
                 modifier = Modifier
-                    .size(100.dp, 65.dp)
-                    .padding(8.dp)
+                    .size(width = getDP(dimenKey = R.dimen.dp_100),
+                        height = getDP(dimenKey = R.dimen.dp_65))
+                    .padding(getDP(dimenKey = R.dimen.dp_8))
             )
             Column(
                 modifier = Modifier
                     .align(alignment = Alignment.CenterVertically)
-                    .padding(4.dp)
+                    .padding(getDP(dimenKey = R.dimen.dp_4))
             ) {
                 CountryItemTextView(
                     name = commonName ?: EMPTY_STRING,
@@ -93,9 +93,3 @@ fun CountryItemTextView(name: String, fontWeight: FontWeight, color: Color) {
     )
 }
 
-
-@Preview(showBackground = true)
-@Composable
-fun showCountryItemView() {
-    CountryItemView(EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, { })
-}

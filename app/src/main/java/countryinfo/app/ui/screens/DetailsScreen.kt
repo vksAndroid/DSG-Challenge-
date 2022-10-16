@@ -10,13 +10,7 @@ import countryinfo.app.vm.CountryListVm
 @Composable
 fun CountryDetailsScreen(viewModel: CountryListVm) {
 
-
     DetailOverViewTab(viewModel = viewModel)
 }
 
-@Preview(showBackground = true)
-@Composable
-fun DefaultPreview() {
-    //CountryDetailsScreen("HKG", null)
-}
 
