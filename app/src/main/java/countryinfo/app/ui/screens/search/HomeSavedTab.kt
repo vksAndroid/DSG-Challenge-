@@ -11,7 +11,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.testTag
 import androidx.navigation.NavController
 import countryinfo.app.utils.ScreenOptions
-import countryinfo.app.vm.CountryListVm
+ import countryinfo.app.utils.titleSaved
+ import countryinfo.app.vm.CountryListVm
 
 @Composable
 fun HomeSavedTab(navController: NavController?, viewModel: CountryListVm) {
@@ -24,7 +25,7 @@ fun HomeSavedTab(navController: NavController?, viewModel: CountryListVm) {
         viewModel.getALlFavourite()
     }
 
-    viewModel.title.value = "Saved"
+    viewModel.title.value = titleSaved
 
     Surface(modifier = Modifier.fillMaxSize().testTag("home_saved_screen"), color = Color.White) {
         Column(modifier = Modifier.fillMaxSize()) {

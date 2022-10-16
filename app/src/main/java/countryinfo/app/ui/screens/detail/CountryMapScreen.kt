@@ -21,7 +21,6 @@ import countryinfo.app.uicomponents.ImageFullFlag
  import countryinfo.app.uicomponents.map.MapLabel
 import countryinfo.app.uicomponents.map.MapViewComponent
 import countryinfo.app.utils.*
-import countryinfo.app.utils.CheckLocationPermission
 import countryinfo.app.vm.CountryListVm
 
 @Composable
@@ -38,7 +37,7 @@ fun CountryMapScreen(
         LoadContent(
             countryDetail = countryDetail,
             viewModel = viewModel,
-            locationEnabled = CheckLocationPermission()
+            locationEnabled = checkLocationPermission()
         )
     }
 }

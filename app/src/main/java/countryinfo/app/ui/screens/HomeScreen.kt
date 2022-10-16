@@ -93,7 +93,6 @@ fun HomeScreen() {
         },
         scaffoldState = scaffoldState,
 
-    ) {
     ) { padding ->
 
         Box(
