@@ -37,7 +37,7 @@ fun CountryBasicDetail(countryData: CountryData) {
             verticalAlignment = Alignment.CenterVertically
         ) {
 
-            showItem("Region", countryData?.region!!)
+            countryData.region?.let { ShowItem("Region", it) }
 
             Divider(
                 modifier = Modifier
@@ -46,7 +46,7 @@ fun CountryBasicDetail(countryData: CountryData) {
                 color = Color.LightGray
             )
 
-            showItem("SubRegion", countryData.subregion ?: "")
+            ShowItem("SubRegion", countryData.subregion ?: "")
 
             Divider(
                 modifier = Modifier
@@ -55,7 +55,7 @@ fun CountryBasicDetail(countryData: CountryData) {
                 color = Color.LightGray
             )
 
-            showItem("Capital", countryData.capital[0])
+            ShowItem("Capital", countryData.capital[0])
 
         }
 
@@ -64,7 +64,7 @@ fun CountryBasicDetail(countryData: CountryData) {
 
 
 @Composable
-fun showItem(title: String, value: String) {
+fun ShowItem(title: String, value: String) {
 
     Column(
         modifier = Modifier
@@ -88,6 +88,6 @@ fun showItem(title: String, value: String) {
 
 @Preview(showBackground = true)
 @Composable
-fun getCountryBasicDetail() {
+fun GetCountryBasicDetail() {
     CountryBasicDetail(CountryData())
 }

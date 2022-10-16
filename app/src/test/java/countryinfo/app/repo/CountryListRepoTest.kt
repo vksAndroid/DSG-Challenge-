@@ -83,9 +83,9 @@ class CountryListRepoTest {
         val responseMock = mockk<Response<List<CountryData>>>()
         every { responseMock.isSuccessful }.returns(true)
 
-        coEvery { apiService.getCountryByName("SDASD") }.returns(Response.success(listOf(CountryData())))
+        coEvery { apiService.getCountryByName("data") }.returns(Response.success(listOf(CountryData())))
 
-        repository.getCountriesByName("SDASD").collect {
+        repository.getCountriesByName("data").collect {
             when (it) {
                 is ApiResult.Success -> {
                     assertEquals(1, it.value.size)

@@ -7,7 +7,6 @@ sealed class ApiResult<out R> {
         val throwable: Throwable?
     ) : ApiResult<Nothing>()
 
-    object Empty : ApiResult<Nothing>()
     object Loading : ApiResult<Nothing>()
 
 

@@ -1,6 +1,5 @@
 package countryinfo.app.ui.screens
 
-import android.annotation.SuppressLint
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -21,6 +20,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import countryinfo.app.Graph
+import countryinfo.app.R
 import countryinfo.app.ui.screens.detail.CountryMapScreen
 import countryinfo.app.ui.screens.detail.DetailOverViewTab
 import countryinfo.app.ui.screens.search.HomeSavedTab
@@ -33,7 +33,6 @@ import countryinfo.app.utils.networkconnection.ConnectionState
 import countryinfo.app.utils.networkconnection.connectivityState
 import countryinfo.app.utils.tabs.BottomTab
 import countryinfo.app.vm.CountryListVm
-import countryinfo.app.R
 
 
 @Composable
@@ -43,11 +42,11 @@ fun HomeScreen() {
 
     val viewModel: CountryListVm = hiltViewModel()
 
-    var isFav by rememberSaveable { mutableStateOf(viewModel.isFav) }
+    val isFav by rememberSaveable { mutableStateOf(viewModel.isFav) }
 
-    var clickedTab by rememberSaveable { mutableStateOf(viewModel.selectedTab) }
+    val clickedTab by rememberSaveable { mutableStateOf(viewModel.selectedTab) }
 
-    var title = rememberSaveable {
+    val title = rememberSaveable {
         viewModel.title
     }
 
@@ -60,7 +59,7 @@ fun HomeScreen() {
 
     val errorState = viewModel.observeErrorState().collectAsState()
 
-    val noInterNetMessage =stringResource(id = R.string.there_is_no_internet)
+    val noInterNetMessage = stringResource(id = R.string.there_is_no_internet)
 
     LaunchedEffect(key1 = errorState.value, key2 = isConnected) {
 
@@ -93,35 +92,22 @@ fun HomeScreen() {
             BottomBarConditional(navController = navHostController, bar = getSaveScreen.value)
         },
         scaffoldState = scaffoldState,
-
-
-        //   DefaultSnackBar(snackbarHostState = scaffoldState.snackbarHostState, {})
-//            if (isConnected.not()) {
-//                Snackbar(
-//                    action = {},
-//                    modifier = Modifier
-//                        .padding(8.dp)
-//                ) {
-//                    Text(text = stringResource(R.string.there_is_no_internet))
-//                }
-//            }
-    ) {
+    ) { padding ->
 
         Box(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(
-                    bottom = it.calculateBottomPadding()
+                    bottom = padding.calculateBottomPadding()
                 )
         ) {
 
 
-
             Surface(modifier = Modifier.fillMaxSize(), color = Color.White) {
 
-                getSaveScreen.value.let {
+                getSaveScreen.value.let { screenOption ->
 
-                    val route = if (it == ScreenOptions.SearchScreen) {
+                    val route = if (screenOption == ScreenOptions.SearchScreen) {
 
                         if (clickedTab.value == "search")
                             BottomTab.TabSearch.route

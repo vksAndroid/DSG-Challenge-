@@ -18,17 +18,15 @@ import countryinfo.app.utils.EMPTY_STRING
 import countryinfo.app.utils.ScreenOptions
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.*
-import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.catch
-import java.util.*
 import javax.inject.Inject
 
 @HiltViewModel
 class CountryListVm @Inject constructor(
     private val countryListRepo: CountryListRepo,
-    val mFusedLocationClient: FusedLocationProviderClient,
+    private val mFusedLocationClient: FusedLocationProviderClient,
     @IoDispatcher private val dispatcher: CoroutineDispatcher
 ) : ViewModel() {
 

@@ -96,6 +96,6 @@ fun CountryItemTextView(name: String, fontWeight: FontWeight, color: Color) {
 
 @Preview(showBackground = true)
 @Composable
-fun showCountryItemView() {
-    CountryItemView(EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, { })
+fun ShowCountryItemView() {
+    CountryItemView(EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING) { }
 }
