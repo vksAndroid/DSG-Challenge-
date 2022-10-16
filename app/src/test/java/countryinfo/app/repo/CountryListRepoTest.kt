@@ -9,38 +9,16 @@ import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.runBlocking
 import okhttp3.ResponseBody
-import org.junit.After
-import org.junit.Before
 import org.junit.Test
 import org.junit.jupiter.api.Assertions.*
 import retrofit2.Response
 
 class CountryListRepoTest {
 
-    /*var mockWebServer = MockWebServer()
-    lateinit var apiService: ApiInterface
+    private val apiService = mockk<ApiInterface>()
+    private val dao = mockk<CountriesDao>()
+    private val repository = CountryListRepo(apiService, dao)
 
-    */
-    val apiService = mockk<ApiInterface>()
-    val dao = mockk<CountriesDao>()
-    val repository = CountryListRepo(apiService, dao)
-
-    @Before
-    fun setUp() {
-        //  mockWebServer.start()
-//        var retrofit = Retrofit.Builder()
-//            .baseUrl(mockWebServer.url("/"))
-//            .client(OkHttpClient().newBuilder().build())
-//            .addConverterFactory(GsonConverterFactory.create())
-//            .build()
-//        apiService = retrofit.create(ApiInterface::class.java)
-    }
-
-    @After
-    fun tearDown() {
-        // mockWebServer.shutdown()
-
-    }
 
     @Test
     fun `get CountryList emit Success`() = runBlocking {
