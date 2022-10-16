@@ -5,7 +5,6 @@ import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.integerResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.Dp
-import countryinfo.app.R
 
 
 @Composable

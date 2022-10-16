@@ -50,14 +50,17 @@ fun BottomMenu(
                 unselectedContentColor = Color.Gray,
                 selected = currentRoute == it.route,
                 onClick = {
-                    navController.navigate(it.route) {
-                        navController.graph.startDestinationRoute?.let { route ->
-                            popUpTo(route) {
-                                saveState = true
+
+                    if(currentRoute != it.route){
+                        navController.navigate(it.route) {
+                            navController.graph.startDestinationRoute?.let { route ->
+                                popUpTo(route) {
+                                    saveState = true
+                                }
                             }
+                            launchSingleTop = true
+                            restoreState = true
                         }
-                        launchSingleTop = true
-                        restoreState = true
                     }
                 },
                 icon = {

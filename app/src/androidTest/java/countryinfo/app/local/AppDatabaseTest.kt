@@ -11,8 +11,11 @@ import countryinfo.app.api.model.translations.Name
 import countryinfo.app.api.model.translations.NativeName
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
-import org.junit.*
+import org.junit.After
 import org.junit.Assert.*
+import org.junit.Before
+import org.junit.Rule
+import org.junit.Test
 import org.junit.runner.RunWith
 import java.io.IOException
 

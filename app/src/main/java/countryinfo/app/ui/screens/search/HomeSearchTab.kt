@@ -20,18 +20,18 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import countryinfo.app.R
 import countryinfo.app.api.model.CountryData
 import countryinfo.app.uicomponents.CountryItemView
 import countryinfo.app.uicomponents.LoadingShimmerEffect
-import countryinfo.app.utils.EMPTY_STRING
-import countryinfo.app.utils.ScreenOptions
-import countryinfo.app.vm.CountryListVm
-import countryinfo.app.R
 import countryinfo.app.uicomponents.scaffold_comp.getDP
+import countryinfo.app.utils.EMPTY_STRING
 import countryinfo.app.utils.RouteCountryDetail
+import countryinfo.app.utils.ScreenOptions
 import countryinfo.app.utils.networkconnection.ConnectionState
 import countryinfo.app.utils.networkconnection.connectivityState
 import countryinfo.app.utils.titleSearch
+import countryinfo.app.vm.CountryListVm
 import countryinfo.app.ui.screens.search.CountryListView as CountryListView1
 
 @Composable
