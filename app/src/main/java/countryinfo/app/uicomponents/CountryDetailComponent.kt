@@ -49,7 +49,7 @@ fun CountryDetailComponent(
             if (isImage)
                 ImageCoatOfArm(imageUrl)
             else if (isDriverItem)
-                DriveSide(value as String) {}
+                DriveSide(value as String)
             else
                 ValueComponent(value = value)
 
@@ -61,6 +61,6 @@ fun CountryDetailComponent(
 
 @Preview(showBackground = true)
 @Composable
-fun showCountryDetailComponent() {
+fun ShowCountryDetailComponent() {
     CountryDetailComponent(false, "", "Capital", "Dublin")
 }

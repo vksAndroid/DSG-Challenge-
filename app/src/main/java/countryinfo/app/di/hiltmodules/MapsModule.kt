@@ -1,7 +1,6 @@
 package countryinfo.app.di.hiltmodules
 
 import android.content.Context
-import androidx.compose.ui.platform.LocalContext
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import dagger.Module

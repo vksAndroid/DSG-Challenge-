@@ -10,7 +10,7 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class CountryListRepo @Inject constructor(var client: ApiInterface, var dao: CountriesDao) {
+class CountryListRepo @Inject constructor(private var client: ApiInterface, private var dao: CountriesDao) {
     /**
      * Get country list
      *

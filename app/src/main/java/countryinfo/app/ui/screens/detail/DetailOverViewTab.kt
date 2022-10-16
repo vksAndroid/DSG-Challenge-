@@ -2,13 +2,11 @@ package countryinfo.app.ui.screens.detail
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -21,7 +19,7 @@ import countryinfo.app.uicomponents.CountryBasicDetail
 import countryinfo.app.uicomponents.CountryDetailComponent
 import countryinfo.app.uicomponents.CountryNameCard
 import countryinfo.app.uicomponents.ImageFullFlag
-import countryinfo.app.utils.*
+import countryinfo.app.utils.EMPTY_STRING
 import countryinfo.app.vm.CountryListVm
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter", "StateFlowValueCalledInComposition")
@@ -36,7 +34,8 @@ fun DetailOverViewTab(viewModel: CountryListVm) {
     viewModel.title.value = "Countries"
 
     ConstraintLayout(
-        setComponentsUsingConstraints(), modifier = Modifier.testTag("detail_overview_screen")
+        setComponentsUsingConstraints(), modifier = Modifier
+            .testTag("detail_overview_screen")
             .fillMaxSize()
             .verticalScroll(
                 rememberScrollState()
@@ -51,31 +50,28 @@ fun DetailOverViewTab(viewModel: CountryListVm) {
 
         CountryBasicDetail(countryDetail)
 
-                countryDetail.languages?.let {
-                    CountryDetailComponent(title = stringResource(id = R.string.languages), value = it)
-                }
-                countryDetail.currencies?.let {
-                    CountryDetailComponent(title = stringResource(id = R.string.currencies), value = it)
-                }
+        CountryDetailComponent(title = stringResource(id = R.string.languages), value = countryDetail.languages)
+        CountryDetailComponent(title = stringResource(id = R.string.currencies), value = countryDetail.currencies)
 
-                countryDetail.car?.side?.let {
-                    CountryDetailComponent(title = stringResource(id = R.string.car_driver_side), value = it)
-                }
+        countryDetail.car?.side?.let {
+            CountryDetailComponent(
+                title = stringResource(id = R.string.car_driver_side),
+                value = it
+            )
+        }
 
-                countryDetail.population?.let {
-                    CountryDetailComponent(title = stringResource(id = R.string.population), value = it)
-                }
-                countryDetail.timezones?.let {
-                    CountryDetailComponent(title = stringResource(id = R.string.timezones), value = it)
-                }
-                countryDetail.coatOfArms?.png?.let {
-                    CountryDetailComponent(
-                        isImage = true,
-                        imageUrl = it,
-                        title = stringResource(id = R.string.coat_of_arms),
-                        value = EMPTY_STRING
-                    )
-                }
+        countryDetail.population?.let {
+            CountryDetailComponent(title = stringResource(id = R.string.population), value = it)
+        }
+        CountryDetailComponent(title = stringResource(id = R.string.timezones), value = countryDetail.timezones)
+        countryDetail.coatOfArms?.png?.let {
+            CountryDetailComponent(
+                isImage = true,
+                imageUrl = it,
+                title = stringResource(id = R.string.coat_of_arms),
+                value = EMPTY_STRING
+            )
+        }
 
     }
 

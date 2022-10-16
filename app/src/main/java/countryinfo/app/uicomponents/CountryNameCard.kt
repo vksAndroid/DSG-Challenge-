@@ -71,6 +71,6 @@ fun CountryNameCard(title: String, value: String) {
 
 @Preview(showBackground = true)
 @Composable
-fun getCountry() {
-    showItem("Capital", "Dublin")
+fun GetCountry() {
+    ShowItem("Capital", "Dublin")
 }

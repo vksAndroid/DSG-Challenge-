@@ -8,7 +8,7 @@ import com.google.accompanist.permissions.rememberPermissionState
 
 @OptIn(ExperimentalPermissionsApi::class)
 @Composable
-fun CheckLocationPermission(): Boolean {
+fun checkLocationPermission(): Boolean {
 
     val permissionState = rememberPermissionState(permission = Manifest.permission.ACCESS_FINE_LOCATION)
 

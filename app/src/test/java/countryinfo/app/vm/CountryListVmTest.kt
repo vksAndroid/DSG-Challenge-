@@ -24,9 +24,9 @@ class CountryListVmTest {
 
     private val dispatcher = StandardTestDispatcher()
 
-    val repo: CountryListRepo = mockk(relaxed = true)
-    val mockedFusedLocation: FusedLocationProviderClient = mockk(relaxed = true)
-    lateinit var vm: CountryListVm
+    private val repo: CountryListRepo = mockk(relaxed = true)
+    private val mockedFusedLocation: FusedLocationProviderClient = mockk(relaxed = true)
+    private lateinit var vm: CountryListVm
 
     @OptIn(ExperimentalCoroutinesApi::class)
     @Before
@@ -41,7 +41,7 @@ class CountryListVmTest {
 
     @Test
     fun `get Country list emit error`() = runTest {
-        every { repo.getCountryList() } returns flow { throw Exception("sdfcs") }
+        every { repo.getCountryList() } returns flow { throw Exception("exp") }
         vm.getCountryList()
         Assertions.assertNotNull(vm.observeErrorState().value)
     }

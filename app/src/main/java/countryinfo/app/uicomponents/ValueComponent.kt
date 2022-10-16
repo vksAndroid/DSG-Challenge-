@@ -30,7 +30,7 @@ fun ValueComponent(value: Any) {
             else
                 Column {
                     value.forEach { data ->
-                        bulletItem(data.toString())
+                        BulletItem(data.toString())
                     }
                 }
         }
@@ -50,7 +50,7 @@ fun ValueComponent(value: Any) {
                 Column {
 
                     value.forEach { data ->
-                        bulletItem(value[data.key.toString()].toString())
+                        BulletItem(value[data.key.toString()].toString())
 
                     }
                 }
@@ -61,7 +61,7 @@ fun ValueComponent(value: Any) {
 }
 
 @Composable
-fun bulletItem(data: String) {
+fun BulletItem(data: String) {
 
     val bullet = "\u2022"
 

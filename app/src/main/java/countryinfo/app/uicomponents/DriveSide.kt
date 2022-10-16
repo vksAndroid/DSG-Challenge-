@@ -17,7 +17,7 @@ import countryinfo.app.R
 
 
 @Composable
-fun DriveSide(driverSide: String, clickAction: () -> Unit) {
+fun DriveSide(driverSide: String) {
 
     val isLeft = driverSide.lowercase().contains("left")
 
