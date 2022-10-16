@@ -57,8 +57,9 @@ fun TopBar(
                     if (isSaved) Icons.Outlined.Bookmark else Icons.Outlined.BookmarkBorder,
                     contentDescription = contentDescriptionSaveCountry,
                     modifier = Modifier.testTag("save_icon")
-                        .padding(getDP(dimenKey = R.dimen.dp_8))
-                        .clickable { onFavClick.invoke() }
+                        .padding(8.dp)
+                        .clickable { onFavClick.invoke() },
+                    tint = Color.Blue
                 )
         }
     )
