@@ -1,4 +1,4 @@
-package countryinfo.app.uicomponents
+package countryinfo.app.uicomponents.map
 
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -52,9 +52,10 @@ fun MapViewComponent(location: LatLng, locationType: MapType) {
     }
 
     GoogleMap(
-        modifier = Modifier.testTag("map_view")
+        modifier = Modifier
+            .testTag("map_view")
             .fillMaxWidth()
-            .height(400.dp)
+            .height(getDP(dimenKey = R.dimen.dp_400))
             .padding(start = getDP(dimenKey = R.dimen.dp_12), end = getDP(dimenKey = R.dimen.dp_12)),
         cameraPositionState = zoom
     ) {

@@ -3,15 +3,11 @@ package countryinfo.app.ui.screens.detail
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
@@ -22,7 +18,8 @@ import countryinfo.app.api.model.CountryData
 import countryinfo.app.uicomponents.CountryBasicDetail
 import countryinfo.app.uicomponents.CountryNameCard
 import countryinfo.app.uicomponents.ImageFullFlag
-import countryinfo.app.uicomponents.MapViewComponent
+ import countryinfo.app.uicomponents.map.MapLabel
+import countryinfo.app.uicomponents.map.MapViewComponent
 import countryinfo.app.utils.*
 import countryinfo.app.utils.CheckLocationPermission
 import countryinfo.app.vm.CountryListVm
@@ -88,7 +85,7 @@ fun LoadContent(
                             viewModel.observeCurrentLocation().collectAsState().value
                         val currentLatLng =
                             LatLng(currentLocation.latitude, currentLocation.longitude)
-                        MapTextLabel(
+                        MapLabel(
                             textLabel = stringResource(id = R.string.your_current_location),
                             textValue = EMPTY_STRING
                         )
@@ -97,7 +94,7 @@ fun LoadContent(
                 }
 
                 is MapType.Country -> {
-                    MapTextLabel(
+                    MapLabel(
                         textLabel = "${stringResource(id = R.string.country)} - ",
                         textValue = countryDetail.name?.common ?: EMPTY_STRING
                     )
@@ -119,7 +116,7 @@ fun LoadContent(
 
                 }
                 is MapType.Capital -> {
-                    MapTextLabel(
+                    MapLabel(
                         textLabel = "${stringResource(id = R.string.capital)} - ",
                         textValue = if (countryDetail.capital.isEmpty()) {
                             EMPTY_STRING
@@ -147,24 +144,6 @@ fun LoadContent(
                 }
             }
         }
-    }
-}
-
-
-@Composable
-fun MapTextLabel(textLabel: String, textValue: String) {
-    Row(modifier = Modifier.padding(start = 12.dp, end = 12.dp, top = 12.dp)) {
-        Text(
-            text = textLabel,
-            style = MaterialTheme.typography.body1,
-            fontWeight = FontWeight.Medium,
-            color = Color.DarkGray
-        )
-        Text(
-            text = textValue,
-            style = MaterialTheme.typography.body1,
-            color = Color.DarkGray
-        )
     }
 }
 
