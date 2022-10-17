@@ -22,18 +22,16 @@ import androidx.navigation.compose.rememberNavController
 import countryinfo.app.R
 import countryinfo.app.ui.screens.detail.CountryMapScreen
 import countryinfo.app.ui.screens.detail.DetailOverViewTab
+import countryinfo.app.ui.screens.search.HomeDsgTab
 import countryinfo.app.ui.screens.search.HomeSavedTab
 import countryinfo.app.ui.screens.search.HomeSearchTab
 import countryinfo.app.uicomponents.DefaultSnackBar
 import countryinfo.app.uicomponents.scaffold_comp.BottomBarConditional
 import countryinfo.app.uicomponents.scaffold_comp.TopBarConditional
-import countryinfo.app.utils.RouteCountryDetail
-import countryinfo.app.utils.ScreenOptions
+import countryinfo.app.utils.*
 import countryinfo.app.utils.networkconnection.ConnectionState
 import countryinfo.app.utils.networkconnection.connectivityState
 import countryinfo.app.utils.tabs.BottomTab
-import countryinfo.app.utils.titleSaved
-import countryinfo.app.utils.titleSearch
 import countryinfo.app.vm.CountryListVm
 
 
@@ -168,11 +166,13 @@ fun SearchNavigationGraph(
             viewModel.selectedTab.value = titleSearch
         }
         composable(BottomTab.TabSaved.route) {
-            HomeSavedTab(
-                navController = navController,
-                viewModel = viewModel
-            )
-            viewModel.selectedTab.value = titleSaved
+//            HomeSavedTab(
+//                navController = navController,
+//                viewModel = viewModel
+//            )
+//            viewModel.selectedTab.value = titleSaved
+            HomeDsgTab(viewModel = viewModel)
+            viewModel.selectedTab.value = titleDsgSearch
 
         }
 

@@ -8,12 +8,18 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusDirection
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
@@ -79,6 +85,7 @@ fun HomeSearchTab(navController: NavController?, viewModel: CountryListVm) {
 
 @Composable
 fun SearchTextField(viewModel: CountryListVm) {
+
     val query = viewModel.searchQuery().collectAsState().value
 
     LaunchedEffect(key1 = query) {
@@ -97,7 +104,7 @@ fun SearchTextField(viewModel: CountryListVm) {
         modifier = Modifier.testTag("country_search_text_field")
             .padding(all = getDP(dimenKey = R.dimen.dp_8))
             .fillMaxWidth()
-            .border(width =getDP(dimenKey = R.dimen.dp_8), color = Color.White, shape = RoundedCornerShape(getDP(dimenKey = R.dimen.dp_20))),
+             .border(width =getDP(dimenKey = R.dimen.dp_8), color = Color.White, shape = RoundedCornerShape(getDP(dimenKey = R.dimen.dp_20))),
         singleLine = true,
         textStyle = TextStyle(fontSize = 16.sp, color = Color.Black),
         leadingIcon = { Icon(Icons.Default.Search, contentDescription = EMPTY_STRING) },

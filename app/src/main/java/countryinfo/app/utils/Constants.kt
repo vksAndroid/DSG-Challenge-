@@ -15,6 +15,7 @@ const val titleMap = "Map"
 const val titleSearch = "Search"
 const val titleSaved = "Saved"
 const val titleCountries = "Countries"
+const val titleDsgSearch = "Dsg Search"
 
 // Content Description
 const val contentDescriptionCoatImage = "Coat Image of Country"
