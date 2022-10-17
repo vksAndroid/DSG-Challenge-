@@ -1,11 +1,16 @@
 package countryinfo.app.vm
 
+import android.location.Address
+import android.location.Geocoder
+import android.location.Location
+import android.os.Build
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import countryinfo.app.di.hiltmodules.IoDispatcher
 import countryinfo.app.repo.DsgSearchRepo
 import countryinfo.app.utils.ApiResult
+import countryinfo.app.utils.CONSTANT_STRING_USA
 import countryinfo.app.utils.EMPTY_STRING
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.*
@@ -17,6 +22,7 @@ import javax.inject.Inject
 @HiltViewModel
 class DsgSearchVm @Inject constructor(
     private val dsgSearchRepo: DsgSearchRepo,
+    private val geocoder: Geocoder,
     @IoDispatcher private val dispatcher: CoroutineDispatcher
 ) : ViewModel() {
 
@@ -40,6 +46,15 @@ class DsgSearchVm @Inject constructor(
     private var _searchQuery = MutableStateFlow(EMPTY_STRING)
     fun searchQuery(): StateFlow<String> {
         return _searchQuery
+    }
+
+    private val isAmericaStateFlow: MutableStateFlow<Boolean> = MutableStateFlow(false)
+    fun observeIsAmerica(): StateFlow<Boolean> {
+        return isAmericaStateFlow
+    }
+
+    fun updateSearchQuery(query: String) {
+        _searchQuery.value = query
     }
 
     fun clearSearch() {
@@ -89,4 +104,29 @@ class DsgSearchVm @Inject constructor(
             }
         }
     }
+
+    fun getCountryByLocation(location: Location) {
+        if (Build.VERSION.SDK_INT >= 33) {
+            geocoder.getFromLocation(
+                location.latitude,
+                location.longitude,
+                1,
+                (Geocoder.GeocodeListener { addresses: MutableList<Address> ->
+                    var country = addresses[0].countryName
+                    isAmericaStateFlow.value = country.equals(CONSTANT_STRING_USA)
+                })
+            )
+        } else {
+            val addressList = geocoder.getFromLocation(
+                location.latitude,
+                location.longitude,
+                1
+            )
+            if ((addressList != null && addressList.size > 0)) {
+                var country = addressList?.get(0)?.countryName
+                isAmericaStateFlow.value = country.equals(CONSTANT_STRING_USA)
+            }
+        }
+    }
+
 }

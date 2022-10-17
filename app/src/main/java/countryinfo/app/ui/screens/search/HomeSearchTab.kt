@@ -33,7 +33,7 @@ fun HomeSearchTab(navController: NavController?, viewModel: CountryListVm) {
     val countryList = viewModel.observeCountryList().collectAsState()
     val searchList = viewModel.observeSearchCountryList().collectAsState()
     val errorState = viewModel.observeErrorState().collectAsState()
-
+    val query = viewModel.searchQuery().collectAsState().value
     val connection by connectivityState()
     val isConnected = connection === ConnectionState.Available
 
@@ -48,9 +48,9 @@ fun HomeSearchTab(navController: NavController?, viewModel: CountryListVm) {
                 .fillMaxSize()
                 .padding()) {
 
-                SearchTextField(viewModel)
+                SearchTextField(viewModel, query)
 
-                if (searchList.value.isEmpty()) {
+                if (searchList.value.isEmpty() && query.length < 2) {
                     CountryListView(true,isConnected,errorState, navController, countryList.value) {
                         viewModel.setSavedScreen(ScreenOptions.DetailScreen)
                         viewModel.updateCountryData(it)
@@ -71,9 +71,7 @@ fun HomeSearchTab(navController: NavController?, viewModel: CountryListVm) {
 }
 
 @Composable
-fun SearchTextField(viewModel: CountryListVm) {
-
-    val query = viewModel.searchQuery().collectAsState().value
+fun SearchTextField(viewModel: CountryListVm, query: String) {
 
     LaunchedEffect(key1 = query) {
         viewModel.searchByDebounce(query)

@@ -35,6 +35,8 @@ class CountryListVm @Inject constructor(
 
     private var apiJob: Job? = null
 
+    private var changeErrorMsg = false
+
     var isFav = mutableStateOf(false)
 
     var title = mutableStateOf(titleSearch)
@@ -42,8 +44,6 @@ class CountryListVm @Inject constructor(
     var selectedTab = mutableStateOf(titleSearch)
 
     private var textChangedJob: Job? = null
-
-    private val UPDATE_INTERVAL = (30 * 1000).toLong()
 
     private val errorSate: MutableStateFlow<String> = MutableStateFlow(
         EMPTY_STRING
@@ -177,6 +177,7 @@ class CountryListVm @Inject constructor(
      */
     fun getCountriesByName(query: String) {
         apiJob?.cancel()
+        searchCountryListState.value = emptyList()
         apiJob = viewModelScope.launch {
             countryListRepo.getCountriesByName(query)
                 .catch {
@@ -213,67 +214,67 @@ class CountryListVm @Inject constructor(
         }
     }
 
-        fun getCountryByLocation(location: Location) {
-            if (Build.VERSION.SDK_INT >= 33) {
-                geocoder.getFromLocation(
-                    location.latitude,
-                    location.longitude,
-                    1,
-                    (Geocoder.GeocodeListener { addresses: MutableList<Address> ->
-                        var country = addresses[0].countryName
-                        isAmericaStateFlow.value = country.equals(CONSTANT_STRING_USA)
-                    })
-                )
-            } else {
-                val addressList = geocoder.getFromLocation(
-                    location.latitude,
-                    location.longitude,
-                    1
-                )
-                if ((addressList != null && addressList.size > 0)) {
-                    var country = addressList?.get(0)?.countryName
+    fun getCountryByLocation(location: Location) {
+        if (Build.VERSION.SDK_INT >= 33) {
+            geocoder.getFromLocation(
+                location.latitude,
+                location.longitude,
+                1,
+                (Geocoder.GeocodeListener { addresses: MutableList<Address> ->
+                    var country = addresses[0].countryName
                     isAmericaStateFlow.value = country.equals(CONSTANT_STRING_USA)
-                }
-            }
-        }
-
-
-        fun addFavourite(countryItem: CountryData) {
-            viewModelScope.launch {
-                withContext(dispatcher) {
-                    countryListRepo.addToFavourite(countryItem)
-                    isFav.value = true
-                }
-            }
-
-        }
-
-        fun removeFavourite(countryItem: CountryData) {
-            viewModelScope.launch {
-                withContext(dispatcher) {
-                    countryItem.cca3.let {
-                        countryListRepo.removeFromFavourite(it)
-                        isFav.value = false
-                    }
-                }
-            }
-
-        }
-
-        fun getALlFavourite() {
-            viewModelScope.launch {
-                withContext(dispatcher) {
-                    savedCountryListState.value = countryListRepo.getALlFavourite()
-                }
-            }
-        }
-
-        fun isCountryFav(name: String) {
-            viewModelScope.launch {
-                withContext(dispatcher) {
-                    val data = countryListRepo.isCountryFav(name)
-                    isFav.value = data != null
-                }
+                })
+            )
+        } else {
+            val addressList = geocoder.getFromLocation(
+                location.latitude,
+                location.longitude,
+                1
+            )
+            if ((addressList != null && addressList.size > 0)) {
+                var country = addressList?.get(0)?.countryName
+                isAmericaStateFlow.value = country.equals(CONSTANT_STRING_USA)
             }
         }
     }
+
+
+    fun addFavourite(countryItem: CountryData) {
+        viewModelScope.launch {
+            withContext(dispatcher) {
+                countryListRepo.addToFavourite(countryItem)
+                isFav.value = true
+            }
+        }
+
+    }
+
+    fun removeFavourite(countryItem: CountryData) {
+        viewModelScope.launch {
+            withContext(dispatcher) {
+                countryItem.cca3.let {
+                    countryListRepo.removeFromFavourite(it)
+                    isFav.value = false
+                }
+            }
+        }
+
+    }
+
+    fun getALlFavourite() {
+        viewModelScope.launch {
+            withContext(dispatcher) {
+                savedCountryListState.value = countryListRepo.getALlFavourite()
+            }
+        }
+    }
+
+    fun isCountryFav(name: String) {
+        viewModelScope.launch {
+            withContext(dispatcher) {
+                val data = countryListRepo.isCountryFav(name)
+                isFav.value = data != null
+            }
+        }
+    }
+}
