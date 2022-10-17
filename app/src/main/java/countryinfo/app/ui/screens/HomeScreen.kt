@@ -142,7 +142,7 @@ fun HomeScreen() {
         BackHandler(enabled = true) {
             viewModel.title.value = titleSearch
             viewModel.setSavedScreen(ScreenOptions.SearchScreen)
-            navHostController.navigateUp()
+            navHostController.popBackStack()
 
         }
     }
