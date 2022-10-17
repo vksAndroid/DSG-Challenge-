@@ -8,12 +8,10 @@ import countryinfo.app.repo.DsgSearchRepo
 import countryinfo.app.utils.ApiResult
 import countryinfo.app.utils.EMPTY_STRING
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
@@ -22,6 +20,7 @@ class DsgSearchVm @Inject constructor(
     @IoDispatcher private val dispatcher: CoroutineDispatcher
 ) : ViewModel() {
 
+    private var textChangedJob: Job? = null
 
     private val errorSate: MutableStateFlow<String> = MutableStateFlow(
         EMPTY_STRING
@@ -38,6 +37,15 @@ class DsgSearchVm @Inject constructor(
         return dsgListState
     }
 
+    private var _searchQuery = MutableStateFlow(EMPTY_STRING)
+    fun searchQuery(): StateFlow<String> {
+        return _searchQuery
+    }
+
+    fun clearSearch() {
+        dsgListState.value = EMPTY_STRING
+        textChangedJob?.cancel()
+    }
 
     fun search(searchQuery: String) {
         viewModelScope.launch {
@@ -60,6 +68,24 @@ class DsgSearchVm @Inject constructor(
                         }
 
                     }
+            }
+        }
+    }
+
+    fun searchByDebounce(query: String) {
+        var searchFor = ""
+        if (query.length > 1) {
+            val searchText = query.trim()
+            if (searchText != searchFor) {
+                searchFor = searchText
+
+                textChangedJob?.cancel()
+                textChangedJob = viewModelScope.launch(Dispatchers.Main) {
+                    delay(700L)
+                    if (searchText == searchFor) {
+                        search(searchText)
+                    }
+                }
             }
         }
     }

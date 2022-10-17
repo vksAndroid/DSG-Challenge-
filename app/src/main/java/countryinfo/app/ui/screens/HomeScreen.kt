@@ -1,6 +1,5 @@
 package countryinfo.app.ui.screens
 
-import android.app.Activity
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -12,7 +11,6 @@ import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
@@ -22,17 +20,18 @@ import androidx.navigation.compose.rememberNavController
 import countryinfo.app.R
 import countryinfo.app.ui.screens.detail.CountryMapScreen
 import countryinfo.app.ui.screens.detail.DetailOverViewTab
-import countryinfo.app.ui.screens.search.DsgSearchTab
+import countryinfo.app.ui.screens.search.HomeDsgTab
 import countryinfo.app.ui.screens.search.HomeSavedTab
 import countryinfo.app.ui.screens.search.HomeSearchTab
 import countryinfo.app.uicomponents.DefaultSnackBar
 import countryinfo.app.uicomponents.scaffold_comp.BottomBarConditional
 import countryinfo.app.uicomponents.scaffold_comp.TopBarConditional
-import countryinfo.app.utils.RouteCountryDetail
-import countryinfo.app.utils.ScreenOptions
+ import countryinfo.app.utils.ScreenOptions
 import countryinfo.app.utils.networkconnection.ConnectionState
 import countryinfo.app.utils.networkconnection.connectivityState
 import countryinfo.app.utils.tabs.BottomTab
+import countryinfo.app.utils.titleSaved
+import countryinfo.app.utils.titleSearch
 import countryinfo.app.vm.CountryListVm
 import countryinfo.app.vm.DsgSearchVm
 
@@ -197,12 +196,8 @@ fun SearchNavigationGraph(
         }
 
 
-        composable(route = BottomTab.TabDetails.route) {
-            CountryDetailsScreen(viewModel)
-        }
-
         composable(route = BottomTab.TabDsgSearch.route) {
-            DsgSearchTab(dsgViewModel)
+            HomeDsgTab(dsgViewModel)
         }
     }
 }

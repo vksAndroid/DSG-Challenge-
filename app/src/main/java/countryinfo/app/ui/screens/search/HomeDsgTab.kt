@@ -23,15 +23,16 @@ import androidx.compose.ui.Modifier
  import countryinfo.app.R
  import countryinfo.app.uicomponents.scaffold_comp.getDP
  import countryinfo.app.utils.*
-import countryinfo.app.vm.CountryListVm
+ import countryinfo.app.vm.DsgSearchVm
 
 @Composable
-fun HomeDsgTab(viewModel: CountryListVm) {
+fun HomeDsgTab(viewModel: DsgSearchVm) {
+
+    val getDsgData = viewModel.observeDsgList().collectAsState()
 
     val focusRequester = remember { FocusRequester() }
 
-
-    viewModel.title.value = titleDsgSearch
+        //viewModel.title.value = titleDsgSearch
 
         Surface(modifier = Modifier.fillMaxSize(), color = Color.White) {
             Column(modifier = Modifier
@@ -40,77 +41,16 @@ fun HomeDsgTab(viewModel: CountryListVm) {
 
                 SearchTextField1(viewModel,focusRequester)
 
-                Text(text = "sdauaudhasd\nadskjhakdhasdauaudhasd\n" +
-                        "adskjhakdhasdauaudhasd\n" +
-                        "adskjhakdhasdauaudhasd\n" +
-                        "adskjhakdhasdauaudhasd\n" +
-                        "adskjhakdhasdauaudhasd\n" +
-                        "adskjhakdhasdauaudhasd\n" +
-                        "adskjhakdhasdauaudhasd\n" +
-                        "adskjhakdhasdauaudhasd\n" +
-                        "adskjhakdhasdauaudhasd\n" +
-                        "adskjhakdhasdauaudhasd\n" +
-                        "adskjhakdhasdauaudhasd\n" +
-                        "adskjhakdhasdauaudhasd\n" +
-                        "adskjhakdhasdauaudhasd\n" +
-                        "adskjhakdhasdauaudhasd\n" +
-                        "adskjhakdhasdauaudhasd\n" +
-                        "adskjhakdhasdauaudhasd\n" +
-                        "adskjhakdhasdauaudhasd\n" +
-                        "adskjhakdhasdauaudhasd\n" +
-                        "adskjhakdhasdauaudhasd\n" +
-                        "adskjhakdhasdauaudhasd\n" +
-                        "adskjhakdhasdauaudhasd\n" +
-                        "adskjhakdhasdauaudhasd\n" +
-                        "adskjhakdhasdauaudhasd\n" +
-                        "adskjhakdhasdauaudhasd\n" +
-                        "adskjhakdhasdauaudhasd\n" +
-                        "adskjhakdhasdauaudhasd\n" +
-                        "adskjhakdhasdauaudhasd\n" +
-                        "adskjhakdhasdauaudhasd\n" +
-                        "adskjhakdhasdauaudhasd\n" +
-                        "adskjhakdhasdauaudhasd\n" +
-                        "adskjhakdhasdauaudhasd\n" +
-                        "adskjhakdhasdauaudhasd\n" +
-                        "adskjhakdhasdauaudhasd\n" +
-                        "adskjhakdhasdauaudhasd\n" +
-                        "adskjhakdhasdauaudhasd\n" +
-                        "adskjhakdhasdauaudhasd\n" +
-                        "adskjhakdhasdauaudhasd\n" +
-                        "adskjhakdhasdauaudhasd\n" +
-                        "adskjhakdhasdauaudhasd\n" +
-                        "adskjhakdhasdauaudhasd\n" +
-                        "adskjhakdhasdauaudhasd\n" +
-                        "adskjhakdhasdauaudhasd\n" +
-                        "adskjhakdhasdauaudhasd\n" +
-                        "adskjhakdhasdauaudhasd\n" +
-                        "adskjhakdhasdauaudhasd\n" +
-                        "adskjhakdhasdauaudhasd\n" +
-                        "adskjhakdhasdauaudhasd\n" +
-                        "adskjhakdhasdauaudhasd\n" +
-                        "adskjhakdhasdauaudhasd\n" +
-                        "adskjhakdhasdauaudhasd\n" +
-                        "adskjhakdhasdauaudhasd\n" +
-                        "adskjhakdhasdauaudhasd\n" +
-                        "adskjhakdhasdauaudhasd\n" +
-                        "adskjhakdhasdauaudhasd\n" +
-                        "adskjhakdhasdauaudhasd\n" +
-                        "adskjhakdhasdauaudhasd\n" +
-                        "adskjhakdhasdauaudhasd\n" +
-                        "adskjhakdhasdauaudhasd\n" +
-                        "adskjhakdha", color = Color.Black,
+                Text(text = getDsgData.value, color = Color.Black,
                 modifier = Modifier.verticalScroll(rememberScrollState()))
-
 
             }
         }
-
-
 }
 
 
 @Composable
-fun SearchTextField1(viewModel: CountryListVm,focus : FocusRequester) {
+fun SearchTextField1(viewModel: DsgSearchVm,focus : FocusRequester) {
 
     val query = viewModel.searchQuery().collectAsState().value
 
@@ -124,7 +64,7 @@ fun SearchTextField1(viewModel: CountryListVm,focus : FocusRequester) {
     TextField(
         value = query,
         onValueChange = {
-            viewModel.updateSearchQuery(it)
+            viewModel.search(it)
         },
         placeholder = { Text(text = stringResource(id = R.string.search)) },
         modifier = Modifier
