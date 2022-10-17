@@ -67,7 +67,7 @@ class DsgSearchVm @Inject constructor(
 
                             }
                             else -> {
-                                errorSate.value = "sdjhvckacn"
+                                errorSate.value = it.toString()
                             }
                         }
 
