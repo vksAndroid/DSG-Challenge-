@@ -47,6 +47,10 @@ class DsgSearchVm @Inject constructor(
         textChangedJob?.cancel()
     }
 
+    fun updateSearchQuery(query: String) {
+        _searchQuery.value = query
+    }
+
     fun search(searchQuery: String) {
         viewModelScope.launch {
             withContext(dispatcher) {
