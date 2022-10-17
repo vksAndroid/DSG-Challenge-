@@ -1,11 +1,9 @@
 package countryinfo.app.ui.screens
 
-import android.app.Activity
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Surface
 import androidx.compose.material.rememberScaffoldState
@@ -25,6 +23,7 @@ import androidx.navigation.compose.rememberNavController
 import countryinfo.app.R
 import countryinfo.app.ui.screens.detail.CountryMapScreen
 import countryinfo.app.ui.screens.detail.DetailOverViewTab
+import countryinfo.app.ui.screens.search.HomeDsgTab
 import countryinfo.app.ui.screens.search.HomeSavedTab
 import countryinfo.app.ui.screens.search.HomeSearchTab
 import countryinfo.app.uicomponents.DefaultSnackBar
@@ -32,21 +31,25 @@ import androidx.compose.foundation.Image
 import androidx.compose.ui.res.painterResource
 import countryinfo.app.uicomponents.scaffold_comp.BottomBarConditional
 import countryinfo.app.uicomponents.scaffold_comp.TopBarConditional
+ import countryinfo.app.utils.ScreenOptions
 import countryinfo.app.utils.*
 import countryinfo.app.utils.networkconnection.ConnectionState
 import countryinfo.app.utils.networkconnection.connectivityState
 import countryinfo.app.utils.tabs.BottomTab
+import countryinfo.app.utils.titleSaved
+import countryinfo.app.utils.titleSearch
 import countryinfo.app.vm.CountryListVm
+import countryinfo.app.vm.DsgSearchVm
 
 
 @Composable
 fun HomeScreen() {
 
-    val activity = (LocalContext.current as? Activity)
-
     val navHostController = rememberNavController()
 
     val viewModel: CountryListVm = hiltViewModel()
+
+    val searchVm: DsgSearchVm = hiltViewModel()
 
     val isFav by rememberSaveable { mutableStateOf(viewModel.isFav) }
 
@@ -65,6 +68,8 @@ fun HomeScreen() {
 
     val errorState = viewModel.observeErrorState().collectAsState()
 
+    val dsgErrorState = searchVm.observeErrorState().collectAsState()
+
     val noInterNetMessage = stringResource(id = R.string.there_is_no_internet)
 
     val isAmerica = viewModel.observeIsAmerica().collectAsState().value
@@ -75,12 +80,15 @@ fun HomeScreen() {
         viewModel.getCountryByLocation(currentLocation)
     }
 
-    LaunchedEffect(key1 = errorState.value, key2 = isConnected) {
+    LaunchedEffect(key1 = errorState.value, key2 = isConnected, key3 = dsgErrorState.value) {
 
         if (!isConnected) {
             scaffoldState.snackbarHostState.showSnackbar(noInterNetMessage)
         } else if (errorState.value.isNotEmpty()) {
             scaffoldState.snackbarHostState.showSnackbar(errorState.value)
+        }
+        else if (dsgErrorState.value.isNotEmpty()) {
+            scaffoldState.snackbarHostState.showSnackbar(dsgErrorState.value)
         }
     }
 
@@ -109,15 +117,7 @@ fun HomeScreen() {
             )
         },
         scaffoldState = scaffoldState,
-        floatingActionButton = { if (isAmerica) {
-            FloatingActionButton(onClick = { /*TODO*/ }) {
-                Image (
-                    painter = painterResource(id = R.drawable.wheel),
-                    contentDescription = "fab",
-                    contentScale = ContentScale.FillBounds
-                )
-            }
-        } else { null } }
+
         ) { padding ->
 
         Box(
@@ -142,7 +142,7 @@ fun HomeScreen() {
                         BottomTab.TabOverview.route
 
                     SearchNavigationGraph(
-                        navController = navHostController, viewModel = viewModel, route
+                        navController = navHostController, viewModel = viewModel, dsgViewModel = searchVm, route
                     )
 
                     DefaultSnackBar(
@@ -156,11 +156,8 @@ fun HomeScreen() {
         BackHandler(enabled = true) {
             viewModel.title.value = titleSearch
             viewModel.setSavedScreen(ScreenOptions.SearchScreen)
-            navHostController.navigateUp()
-            if (!navHostController.navigateUp()) {
-                // Call finish() on your Activity
-                activity?.finish()
-            }
+            navHostController.popBackStack()
+
         }
     }
 }
@@ -170,9 +167,9 @@ fun HomeScreen() {
 fun SearchNavigationGraph(
     navController: NavHostController,
     viewModel: CountryListVm,
+    dsgViewModel: DsgSearchVm,
     route: String
 ) {
-
     NavHost(
         navController = navController,
         startDestination = route
@@ -207,8 +204,13 @@ fun SearchNavigationGraph(
 
         }
 
-        composable(route = RouteCountryDetail) {
+        composable(route = BottomTab.TabDetails.route) {
             CountryDetailsScreen(viewModel)
+        }
+
+
+        composable(route = BottomTab.TabDsgSearch.route) {
+            HomeDsgTab(dsgViewModel)
         }
     }
 }

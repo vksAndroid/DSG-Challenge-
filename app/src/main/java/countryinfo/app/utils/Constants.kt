@@ -8,6 +8,7 @@ const val RouteOverview = "overview"
 const val RouteMap = "map"
 const val RouteSearch = "search"
 const val RouteSaved = "saved"
+const val RouteDsgSearch = "dsg"
 
 //Title Names for App Bar
 const val titleOverview = "Overview"
@@ -15,6 +16,7 @@ const val titleMap = "Map"
 const val titleSearch = "Search"
 const val titleSaved = "Saved"
 const val titleCountries = "Countries"
+const val titleDsgSearch = "Shop @DICK's"
 
 // Content Description
 const val contentDescriptionCoatImage = "Coat Image of Country"
@@ -38,6 +40,7 @@ const val idPopulation = "Population"
 const val idTimezone = "Timezone(s)"
 const val idCoatOfArm = "Coat of Arms"
 const val idCarDriverSide = "Car Driver Side"
+const val dsgUrl = "https://prod-catalog-product-api.dickssportinggoods.com/v2/search?searchVO="
 
 
 

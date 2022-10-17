@@ -5,8 +5,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
@@ -17,22 +15,17 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import countryinfo.app.R
-import countryinfo.app.api.model.CountryData
-import countryinfo.app.uicomponents.CountryItemView
-import countryinfo.app.uicomponents.LoadingShimmerEffect
+import countryinfo.app.uicomponents.CountryListView
 import countryinfo.app.uicomponents.scaffold_comp.getDP
 import countryinfo.app.utils.EMPTY_STRING
-import countryinfo.app.utils.RouteCountryDetail
 import countryinfo.app.utils.ScreenOptions
 import countryinfo.app.utils.networkconnection.ConnectionState
 import countryinfo.app.utils.networkconnection.connectivityState
 import countryinfo.app.utils.titleSearch
 import countryinfo.app.vm.CountryListVm
-import countryinfo.app.ui.screens.search.CountryListView as CountryListView1
 
 @Composable
 fun HomeSearchTab(navController: NavController?, viewModel: CountryListVm) {
@@ -58,13 +51,13 @@ fun HomeSearchTab(navController: NavController?, viewModel: CountryListVm) {
                 SearchTextField(viewModel)
 
                 if (searchList.value.isEmpty()) {
-                    CountryListView1(true,isConnected,errorState, navController, countryList.value) {
+                    CountryListView(true,isConnected,errorState, navController, countryList.value) {
                         viewModel.setSavedScreen(ScreenOptions.DetailScreen)
                         viewModel.updateCountryData(it)
                         viewModel.isCountryFav(it.cca3)
                     }
                 } else {
-                    CountryListView1(true, isConnected,errorState,navController, searchList.value) {
+                    CountryListView(true, isConnected,errorState,navController, searchList.value) {
                         viewModel.setSavedScreen(ScreenOptions.DetailScreen)
                         viewModel.updateCountryData(it)
                         viewModel.isCountryFav(it.cca3)
@@ -79,6 +72,7 @@ fun HomeSearchTab(navController: NavController?, viewModel: CountryListVm) {
 
 @Composable
 fun SearchTextField(viewModel: CountryListVm) {
+
     val query = viewModel.searchQuery().collectAsState().value
 
     LaunchedEffect(key1 = query) {
@@ -97,7 +91,7 @@ fun SearchTextField(viewModel: CountryListVm) {
         modifier = Modifier.testTag("country_search_text_field")
             .padding(all = getDP(dimenKey = R.dimen.dp_8))
             .fillMaxWidth()
-            .border(width =getDP(dimenKey = R.dimen.dp_8), color = Color.White, shape = RoundedCornerShape(getDP(dimenKey = R.dimen.dp_20))),
+             .border(width =getDP(dimenKey = R.dimen.dp_8), color = Color.White, shape = RoundedCornerShape(getDP(dimenKey = R.dimen.dp_20))),
         singleLine = true,
         textStyle = TextStyle(fontSize = 16.sp, color = Color.Black),
         leadingIcon = { Icon(Icons.Default.Search, contentDescription = EMPTY_STRING) },
@@ -110,50 +104,3 @@ fun SearchTextField(viewModel: CountryListVm) {
     )
 }
 
-@Composable
-fun CountryListView(
-    showShimmer: Boolean = true,
-    isConnectedInternet : Boolean = false,
-    errorState : State<String> ,
-    navController: NavController?,
-    countryList: List<CountryData> = emptyList(),
-    changeState: (countryData: CountryData) -> Unit
-) {
-
-    if (countryList.isEmpty() && showShimmer && isConnectedInternet && errorState.value.isEmpty()) {
-        LazyColumn(Modifier.testTag("shimmer_effect")) {
-            repeat(7) {
-                item { LoadingShimmerEffect() }
-            }
-        }
-    } else {
-
-        LazyColumn(modifier = Modifier.testTag("country_lazy_column").padding(top = getDP(dimenKey = R.dimen.dp_8))) {
-            items(items = countryList) { countryData ->
-
-                CountryItemView(
-                    commonName = countryData.name?.common,
-                    officialName = countryData.name?.official,
-                    capitalName = if (countryData.capital.isNotEmpty()) {
-                        countryData.capital[0]
-                    } else {
-                        EMPTY_STRING
-                    },
-                    countryFlag = countryData.flags?.png,
-                    onItemClicked = {
-                        changeState.invoke(countryData)
-
-                        navController?.navigate(RouteCountryDetail)
-                    }
-                )
-            }
-        }
-    }
-}
-
-
-@Preview(showBackground = true)
-@Composable
-fun ShowCountrySearchScreenPreview() {
-    //HomeSearchTab(null, null)
-}
