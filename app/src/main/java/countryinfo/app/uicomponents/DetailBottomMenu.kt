@@ -31,11 +31,14 @@ fun BottomMenu(
     else
         listOf(
             BottomTab.TabSearch,
-            BottomTab.TabSaved
+            BottomTab.TabSaved,
+            BottomTab.TabDsgSearch
         )
 
-    BottomNavigation(modifier = Modifier.testTag("test_bottom_navigation"),
-        contentColor = colorResource(id = R.color.white), backgroundColor = OffWhite)
+    BottomNavigation(
+        modifier = Modifier.testTag("test_bottom_navigation"),
+        contentColor = colorResource(id = R.color.white), backgroundColor = OffWhite
+    )
     {
 
         val navBackStackEntry by navController.currentBackStackEntryAsState()
@@ -51,7 +54,7 @@ fun BottomMenu(
                 selected = currentRoute == it.route,
                 onClick = {
 
-                    if(currentRoute != it.route){
+                    if (currentRoute != it.route) {
                         navController.navigate(it.route) {
                             navController.graph.startDestinationRoute?.let { route ->
                                 popUpTo(route) {
@@ -68,10 +71,7 @@ fun BottomMenu(
                         imageVector = it.imageVector,
                         contentDescription = it.title
                     )
-                },
-
-                )
-
+                })
         }
     }
 }

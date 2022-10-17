@@ -10,6 +10,7 @@ import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Converter
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import retrofit2.converter.scalars.ScalarsConverterFactory
 import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
 
@@ -57,8 +58,17 @@ object NetworkModule {
      */
     @Singleton
     @Provides
-    fun provideConverterFactory(): Converter.Factory {
+    fun provideConverterFactory(): GsonConverterFactory {
         return GsonConverterFactory.create()
+    }
+
+    /**
+     * Provides converter factory for retrofit
+     */
+    @Singleton
+    @Provides
+    fun provideScalerConverterFactory(): ScalarsConverterFactory {
+        return ScalarsConverterFactory.create()
     }
 
     /**
@@ -69,11 +79,13 @@ object NetworkModule {
     fun provideRetrofitClient(
         baseUrl: String,
         okHttpClient: OkHttpClient,
-        converterFactory: Converter.Factory
+        converterFactory: GsonConverterFactory,
+        scalarConverterFactory: ScalarsConverterFactory
     ): Retrofit {
         return Retrofit.Builder()
             .baseUrl(baseUrl)
             .client(okHttpClient)
+            .addConverterFactory(scalarConverterFactory)
             .addConverterFactory(converterFactory)
             .build()
     }
