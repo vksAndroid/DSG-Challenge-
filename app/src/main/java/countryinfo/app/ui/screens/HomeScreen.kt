@@ -156,7 +156,6 @@ fun SearchNavigationGraph(
     dsgViewModel: DsgSearchVm,
     route: String
 ) {
-
     NavHost(
         navController = navController,
         startDestination = route
