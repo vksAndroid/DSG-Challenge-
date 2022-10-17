@@ -21,6 +21,8 @@ const val contentDescriptionCoatImage = "Coat Image of Country"
 const val contentDescriptionSaveCountry = "Save Country"
 const val contentDescriptionDriverSide = "Driver Side"
 
+const val CONSTANT_STRING_USA = "United States"
+
 // Time Duration Values
 const val duration_1000 = 1000
 
