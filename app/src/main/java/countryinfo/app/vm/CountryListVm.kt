@@ -100,6 +100,7 @@ class CountryListVm @Inject constructor(
     }
 
     fun clearSearch() {
+        apiJob?.cancel()
         searchCountryListState.value = emptyList()
         textChangedJob?.cancel()
     }
