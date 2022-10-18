@@ -16,7 +16,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
 import countryinfo.app.R
-import countryinfo.app.api.model.CountryData
+import countryinfo.app.data.model.CountryData
 import countryinfo.app.uicomponents.scaffold_comp.getDP
 import countryinfo.app.utils.idBasicDetail
 

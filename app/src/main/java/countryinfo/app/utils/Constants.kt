@@ -3,7 +3,6 @@ package countryinfo.app.utils
 const val EMPTY_STRING = ""
 
 // Navigation Routes
-const val RouteCountryDetail = "country_detail"
 const val RouteOverview = "overview"
 const val RouteMap = "map"
 const val RouteSearch = "search"
