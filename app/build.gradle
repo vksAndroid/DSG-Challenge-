@@ -113,7 +113,7 @@ dependencies {
 
     // compose navigation
     implementation "androidx.hilt:hilt-navigation-compose:1.0.0"
-// status bar customization
+    // status bar customization
     implementation "com.google.accompanist:accompanist-systemuicontroller:0.23.1"
 
     //Google Map

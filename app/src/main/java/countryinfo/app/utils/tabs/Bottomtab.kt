@@ -1,10 +1,7 @@
 package countryinfo.app.utils.tabs
 
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Map
-import androidx.compose.material.icons.outlined.Search
-import androidx.compose.material.icons.outlined.Star
-import androidx.compose.material.icons.outlined.StarBorder
+import androidx.compose.material.icons.outlined.*
 import androidx.compose.ui.graphics.vector.ImageVector
 import countryinfo.app.utils.*
 
@@ -41,6 +38,6 @@ sealed class BottomTab(
 
     object TabDsgSearch : BottomTab(
         titleDsgSearch, RouteDsgSearch,
-        Icons.Outlined.StarBorder
+        Icons.Outlined.MapsUgc
     )
 }
