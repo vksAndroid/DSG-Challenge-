@@ -20,7 +20,8 @@ import countryinfo.app.utils.tabs.BottomTab
 @Composable
 fun BottomMenu(
     navController: NavController,
-    isDetailScreen: Boolean = true
+    isDetailScreen: Boolean = true,
+    isCurrentLocationAmerica: Boolean = false
 ) {
 
     val menuItems = if (isDetailScreen)
@@ -28,12 +29,18 @@ fun BottomMenu(
             BottomTab.TabOverview,
             BottomTab.TabMap
         )
-    else
+    else if (isCurrentLocationAmerica) {
         listOf(
             BottomTab.TabSearch,
             BottomTab.TabSaved,
             BottomTab.TabDsgSearch
         )
+    } else {
+        listOf(
+            BottomTab.TabSearch,
+            BottomTab.TabSaved
+        )
+    }
 
     BottomNavigation(
         modifier = Modifier.testTag("test_bottom_navigation"),

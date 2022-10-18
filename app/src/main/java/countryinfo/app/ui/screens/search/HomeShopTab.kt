@@ -42,11 +42,11 @@ fun HomeDsgTab(viewModel: DsgSearchVm) {
                 .padding(bottom = getDP(dimenKey = R.dimen.dp_20))
         ) {
 
-            SearchTextField1(viewModel, focusRequester)
+            SearchTextField(viewModel, focusRequester)
 
             Text(
                 text = getDsgData.value, color = Color.Black,
-                modifier = Modifier.verticalScroll(rememberScrollState())
+                modifier = Modifier.padding(getDP(dimenKey = R.dimen.dp_12)).verticalScroll(rememberScrollState())
             )
 
         }
@@ -55,7 +55,7 @@ fun HomeDsgTab(viewModel: DsgSearchVm) {
 
 
 @Composable
-fun SearchTextField1(viewModel: DsgSearchVm, focus: FocusRequester) {
+fun SearchTextField(viewModel: DsgSearchVm, focus: FocusRequester) {
 
     val query = viewModel.searchQuery().collectAsState().value
 

@@ -1,5 +1,6 @@
 package countryinfo.app.ui.screens
 
+import android.app.Activity
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -11,6 +12,7 @@ import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
@@ -26,7 +28,8 @@ import countryinfo.app.ui.screens.search.HomeSearchTab
 import countryinfo.app.uicomponents.DefaultSnackBar
 import countryinfo.app.uicomponents.scaffold_comp.BottomBarConditional
 import countryinfo.app.uicomponents.scaffold_comp.TopBarConditional
- import countryinfo.app.utils.ScreenOptions
+import countryinfo.app.utils.ScreenOptions
+import countryinfo.app.utils.checkLocationPermission
 import countryinfo.app.utils.networkconnection.ConnectionState
 import countryinfo.app.utils.networkconnection.connectivityState
 import countryinfo.app.utils.tabs.BottomTab
@@ -38,6 +41,8 @@ import countryinfo.app.vm.DsgSearchVm
 
 @Composable
 fun HomeScreen() {
+
+    val activity = (LocalContext.current as? Activity)
 
     val navHostController = rememberNavController()
 
@@ -65,6 +70,14 @@ fun HomeScreen() {
     val dsgErrorState = searchVm.observeErrorState().collectAsState()
 
     val noInterNetMessage = stringResource(id = R.string.there_is_no_internet)
+
+    val isAmerica = searchVm.observeIsAmerica().collectAsState().value
+    if (checkLocationPermission()) {
+        viewModel.getCurrentLatLong()
+        val currentLocation =
+            viewModel.observeCurrentLocation().collectAsState().value
+        searchVm.getCountryByLocation(currentLocation)
+    }
 
     LaunchedEffect(key1 = errorState.value, key2 = isConnected, key3 = dsgErrorState.value) {
 
@@ -99,7 +112,8 @@ fun HomeScreen() {
         bottomBar = {
             BottomBarConditional(
                 navController = navHostController,
-                screenOptions = getSaveScreen.value
+                screenOptions = getSaveScreen.value,
+                isCurrentLocationAmerica = isAmerica
             )
         },
         scaffoldState = scaffoldState,
@@ -142,8 +156,11 @@ fun HomeScreen() {
         BackHandler(enabled = true) {
             viewModel.title.value = titleSearch
             viewModel.setSavedScreen(ScreenOptions.SearchScreen)
-            navHostController.popBackStack()
-
+            navHostController.navigateUp()
+            if (!navHostController.navigateUp()) {
+                // Call finish() on your Activity
+                activity?.finish()
+            }
         }
     }
 }
