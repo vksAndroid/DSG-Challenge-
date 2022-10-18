@@ -4,9 +4,7 @@ import androidx.room.TypeConverter
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import countryinfo.app.api.model.*
-import countryinfo.app.api.model.translations.Idd
 import countryinfo.app.api.model.translations.Name
-import countryinfo.app.api.model.translations.NativeName
 import java.lang.reflect.Type
 
 class Converters {
@@ -56,17 +54,6 @@ class Converters {
         return Gson().toJson(name)
     }
 
-
-    @TypeConverter
-    fun toIdd(name: String): Idd {
-        return Gson().fromJson(name, Idd::class.java)
-    }
-
-
-    @TypeConverter
-    fun fromIdd(name: Idd): String {
-        return Gson().toJson(name)
-    }
 
     @TypeConverter
     fun toLanguages(name: String): Map<String, String> {
@@ -129,18 +116,6 @@ class Converters {
 
     @TypeConverter
     fun fromCapitalInfo(name: CapitalInfo): String {
-        return Gson().toJson(name)
-    }
-
-
-    @TypeConverter
-    fun toNativeName(name: String): NativeName {
-        return Gson().fromJson(name, NativeName::class.java)
-    }
-
-
-    @TypeConverter
-    fun fromNativeName(name: String): String {
         return Gson().toJson(name)
     }
 
