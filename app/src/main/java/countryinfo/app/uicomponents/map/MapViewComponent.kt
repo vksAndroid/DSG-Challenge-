@@ -56,11 +56,12 @@ fun MapViewComponent(location: LatLng, locationType: MapType) {
             .fillMaxWidth()
             .height(getDP(dimenKey = R.dimen.dp_400))
             .padding(start = getDP(dimenKey = R.dimen.dp_12), end = getDP(dimenKey = R.dimen.dp_12)),
-        cameraPositionState = zoom
+        cameraPositionState = zoom,
+        onMapLoaded = {
+            zoom.move(CameraUpdateFactory.newLatLng(location))
+        }
     ) {
-        zoom.move(CameraUpdateFactory.newLatLng(location))
         if (locationType == MapType.CurrentLocation) {
-
             Marker(
                 state = MarkerState(location),
                 title = stringResource(id = R.string.your_current_location),
