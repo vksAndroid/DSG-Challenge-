@@ -128,5 +128,4 @@ class DsgSearchVm @Inject constructor(
             }
         }
     }
-
 }
