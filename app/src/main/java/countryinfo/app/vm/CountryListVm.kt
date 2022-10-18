@@ -99,6 +99,10 @@ class CountryListVm @Inject constructor(
         searchCountryListState.value = emptyList()
         textChangedJob?.cancel()
     }
+    // Clear Error state after receiving error in Launched Effect
+     fun clearErrorState() {
+        errorSate.value = countryinfo.app.utils.EMPTY_STRING
+     }
 
     private var _searchQuery = MutableStateFlow(EMPTY_STRING)
     fun searchQuery(): StateFlow<String> {
@@ -152,6 +156,11 @@ class CountryListVm @Inject constructor(
                         is ApiResult.Success<List<CountryData>> -> {
                             countryListState.emit(it.value)
                         }
+                        is ApiResult.Failure-> {
+                            it.message?.let {error->
+                                errorSate.value = error
+                            }
+                        }
                         else -> {
                         }
                     }
@@ -166,6 +175,8 @@ class CountryListVm @Inject constructor(
      * @param query : It is a search query used to search countries by name
      */
     fun getCountriesByName(query: String) {
+        searchCountryListState.value = emptyList()
+
         apiJob?.cancel()
         apiJob = viewModelScope.launch {
             countryListRepo.getCountriesByName(query)
@@ -177,6 +188,12 @@ class CountryListVm @Inject constructor(
                         is ApiResult.Success<List<CountryData>> -> {
                             searchCountryListState.emit(it.value)
                         }
+                        is ApiResult.Failure-> {
+                            searchCountryListState.emit(emptyList())
+                            it.message?.let {error->
+                                errorSate.value = error
+                            }
+                         }
                         else -> {}
                     }
                 }

@@ -32,7 +32,7 @@ import countryinfo.app.utils.networkconnection.ConnectionState
 import countryinfo.app.utils.networkconnection.connectivityState
 import countryinfo.app.utils.titleSearch
 import countryinfo.app.vm.CountryListVm
-import countryinfo.app.ui.screens.search.CountryListView as CountryListView1
+import countryinfo.app.ui.screens.search.CountryListView
 
 @Composable
 fun HomeSearchTab(navController: NavController?, viewModel: CountryListVm) {
@@ -40,6 +40,8 @@ fun HomeSearchTab(navController: NavController?, viewModel: CountryListVm) {
     val countryList = viewModel.observeCountryList().collectAsState()
     val searchList = viewModel.observeSearchCountryList().collectAsState()
     val errorState = viewModel.observeErrorState().collectAsState()
+
+    val query = viewModel.searchQuery().collectAsState().value
 
     val connection by connectivityState()
     val isConnected = connection === ConnectionState.Available
@@ -57,14 +59,14 @@ fun HomeSearchTab(navController: NavController?, viewModel: CountryListVm) {
 
                 SearchTextField(viewModel)
 
-                if (searchList.value.isEmpty()) {
-                    CountryListView1(true,isConnected,errorState, navController, countryList.value) {
+                if (searchList.value.isEmpty() && query.length < 2) {
+                    CountryListView(true,isConnected,errorState, navController, countryList.value) {
                         viewModel.setSavedScreen(ScreenOptions.DetailScreen)
                         viewModel.updateCountryData(it)
                         viewModel.isCountryFav(it.cca3)
                     }
                 } else {
-                    CountryListView1(true, isConnected,errorState,navController, searchList.value) {
+                    CountryListView(true, isConnected,errorState,navController, searchList.value) {
                         viewModel.setSavedScreen(ScreenOptions.DetailScreen)
                         viewModel.updateCountryData(it)
                         viewModel.isCountryFav(it.cca3)
