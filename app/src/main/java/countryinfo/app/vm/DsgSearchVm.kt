@@ -53,10 +53,6 @@ class DsgSearchVm @Inject constructor(
         return isAmericaStateFlow
     }
 
-    fun updateSearchQuery(query: String) {
-        _searchQuery.value = query
-    }
-
     fun clearSearch() {
         dsgListState.value = EMPTY_STRING
         textChangedJob?.cancel()
@@ -116,7 +112,7 @@ class DsgSearchVm @Inject constructor(
                 location.longitude,
                 1,
                 (Geocoder.GeocodeListener { addresses: MutableList<Address> ->
-                    var country = addresses[0].countryName
+                    val country = addresses[0].countryName
                     isAmericaStateFlow.value = country.equals(CONSTANT_STRING_USA)
                 })
             )
@@ -127,7 +123,7 @@ class DsgSearchVm @Inject constructor(
                 1
             )
             if ((addressList != null && addressList.size > 0)) {
-                var country = addressList?.get(0)?.countryName
+                val country = addressList[0]?.countryName
                 isAmericaStateFlow.value = country.equals(CONSTANT_STRING_USA)
             }
         }
