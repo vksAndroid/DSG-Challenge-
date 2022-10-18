@@ -14,12 +14,12 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.ConstraintSet
 import androidx.constraintlayout.compose.Dimension
 import countryinfo.app.R
+import countryinfo.app.presentation.vm.CountryListVm
 import countryinfo.app.uicomponents.CountryBasicDetail
 import countryinfo.app.uicomponents.CountryDetailComponent
 import countryinfo.app.uicomponents.CountryNameCard
 import countryinfo.app.uicomponents.ImageFullFlag
 import countryinfo.app.utils.*
-import countryinfo.app.presentation.vm.CountryListVm
 
 @Composable
 fun DetailOverViewTab(viewModel: CountryListVm) {

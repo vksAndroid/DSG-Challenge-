@@ -18,18 +18,14 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import countryinfo.app.R
+import countryinfo.app.presentation.vm.CountryListVm
 import countryinfo.app.uicomponents.CountryListView
-import countryinfo.app.data.model.CountryData
-import countryinfo.app.uicomponents.CountryItemView
-import countryinfo.app.uicomponents.LoadingShimmerEffect
 import countryinfo.app.uicomponents.scaffold_comp.getDP
 import countryinfo.app.utils.EMPTY_STRING
-import countryinfo.app.utils.RouteOverview
 import countryinfo.app.utils.ScreenOptions
 import countryinfo.app.utils.networkconnection.ConnectionState
 import countryinfo.app.utils.networkconnection.connectivityState
 import countryinfo.app.utils.titleSearch
-import countryinfo.app.presentation.vm.CountryListVm
 
 @Composable
 fun HomeSearchTab(navController: NavController?, viewModel: CountryListVm) {
@@ -52,7 +48,7 @@ fun HomeSearchTab(navController: NavController?, viewModel: CountryListVm) {
                 .fillMaxSize()
                 .padding()) {
 
-                SearchTextField(viewModel, query)
+                SearchTextField(viewModel)
 
                 if (searchList.value.isEmpty() && query.length < 2) {
                     CountryListView(true,isConnected,errorState, navController, countryList.value) {

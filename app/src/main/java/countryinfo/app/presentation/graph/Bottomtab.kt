@@ -31,11 +31,6 @@ sealed class BottomTab(
         Icons.Outlined.StarBorder
     )
 
-    object TabDetails : BottomTab(
-        titleCountries, RouteCountryDetail,
-        Icons.Outlined.StarBorder
-    )
-
     object TabDsgSearch : BottomTab(
         titleDsgSearch, RouteDsgSearch,
         Icons.Outlined.MapsUgc

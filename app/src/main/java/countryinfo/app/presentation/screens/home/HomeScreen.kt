@@ -17,16 +17,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.rememberNavController
 import countryinfo.app.R
-import countryinfo.app.ui.screens.detail.CountryMapScreen
-import countryinfo.app.ui.screens.detail.DetailOverViewTab
-import countryinfo.app.ui.screens.search.HomeDsgTab
-import countryinfo.app.ui.screens.search.HomeSavedTab
-import countryinfo.app.ui.screens.search.HomeSearchTab
-import countryinfo.app.uicomponents.DefaultSnackBar
-import countryinfo.app.uicomponents.scaffold_comp.BottomBarConditional
-import countryinfo.app.uicomponents.scaffold_comp.TopBarConditional
 import countryinfo.app.presentation.graph.BottomTab
 import countryinfo.app.presentation.graph.DsgNavigationGraph
+import countryinfo.app.presentation.vm.CountryListVm
+import countryinfo.app.presentation.vm.DsgShopVm
 import countryinfo.app.uicomponents.scaffold_comp.DsgBottomBar
 import countryinfo.app.uicomponents.scaffold_comp.DsgSnackBar
 import countryinfo.app.uicomponents.scaffold_comp.DsgTopBar
@@ -35,9 +29,6 @@ import countryinfo.app.utils.checkLocationPermission
 import countryinfo.app.utils.networkconnection.ConnectionState
 import countryinfo.app.utils.networkconnection.connectivityState
 import countryinfo.app.utils.titleSearch
-import countryinfo.app.presentation.vm.CountryListVm
-import countryinfo.app.vm.CountryListVm
-import countryinfo.app.vm.DsgSearchVm
 
 
 @Composable
@@ -49,7 +40,7 @@ fun HomeScreen() {
 
     val viewModel: CountryListVm = hiltViewModel()
 
-    val searchVm: DsgSearchVm = hiltViewModel()
+    val searchVm: DsgShopVm = hiltViewModel()
 
     val isFav by rememberSaveable { mutableStateOf(viewModel.isFav) }
 
@@ -143,7 +134,7 @@ fun HomeScreen() {
                         BottomTab.TabOverview.route
 
                     DsgNavigationGraph(
-                        navController = navHostController, viewModel = viewModel, route
+                        navController = navHostController, viewModel = viewModel,searchVm, route
                     )
 
                     DsgSnackBar(

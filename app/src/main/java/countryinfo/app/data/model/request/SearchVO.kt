@@ -1,4 +1,4 @@
-package countryinfo.app.api.model.request
+package countryinfo.app.data.model.request
 
 data class SearchVO(
     var searchTerm: String,

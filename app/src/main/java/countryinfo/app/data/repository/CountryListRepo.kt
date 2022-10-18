@@ -1,8 +1,8 @@
 package countryinfo.app.data.repository
 
 import countryinfo.app.data.ApiInterface
-import countryinfo.app.data.model.CountryData
 import countryinfo.app.data.local.CountriesDao
+import countryinfo.app.data.model.CountryData
 import countryinfo.app.utils.ApiResult
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow

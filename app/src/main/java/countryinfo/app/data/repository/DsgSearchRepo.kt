@@ -1,8 +1,8 @@
-package countryinfo.app.repo
+package countryinfo.app.data.repository
 
 import com.google.gson.Gson
-import countryinfo.app.api.ApiInterface
-import countryinfo.app.api.model.request.SearchVO
+import countryinfo.app.data.ApiInterface
+import countryinfo.app.data.model.request.SearchVO
 import countryinfo.app.utils.ApiResult
 import countryinfo.app.utils.dsgUrl
 import kotlinx.coroutines.flow.flow

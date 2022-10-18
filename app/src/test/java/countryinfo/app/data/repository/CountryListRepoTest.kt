@@ -1,8 +1,8 @@
 package countryinfo.app.data.repository
 
 import countryinfo.app.data.ApiInterface
-import countryinfo.app.data.model.CountryData
 import countryinfo.app.data.local.CountriesDao
+import countryinfo.app.data.model.CountryData
 import countryinfo.app.utils.ApiResult
 import io.mockk.coEvery
 import io.mockk.every

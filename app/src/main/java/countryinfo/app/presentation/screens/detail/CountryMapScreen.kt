@@ -15,13 +15,13 @@ import androidx.constraintlayout.compose.ConstraintSet
 import com.google.android.gms.maps.model.LatLng
 import countryinfo.app.R
 import countryinfo.app.data.model.CountryData
+import countryinfo.app.presentation.vm.CountryListVm
 import countryinfo.app.uicomponents.CountryBasicDetail
 import countryinfo.app.uicomponents.CountryNameCard
 import countryinfo.app.uicomponents.ImageFullFlag
- import countryinfo.app.uicomponents.map.MapLabel
+import countryinfo.app.uicomponents.map.MapLabel
 import countryinfo.app.uicomponents.map.MapViewComponent
 import countryinfo.app.utils.*
-import countryinfo.app.presentation.vm.CountryListVm
 
 @Composable
 fun CountryMapScreen(
@@ -97,7 +97,7 @@ fun LoadContent(
                         textLabel = "${stringResource(id = R.string.country)} - ",
                         textValue = countryDetail.name?.common ?: EMPTY_STRING
                     )
-                    var countryLocation: LatLng = try {
+                    val countryLocation: LatLng = try {
 
                         if (countryDetail.latlng.isEmpty()) {
                             LatLng(0.0, 0.0)
@@ -123,7 +123,7 @@ fun LoadContent(
                         }
                     )
 
-                    var capitalLocation: LatLng = try {
+                    val capitalLocation: LatLng = try {
 
                         if (countryDetail.capitalInfo?.latlng.isNullOrEmpty()) {
                             LatLng(0.0, 0.0)

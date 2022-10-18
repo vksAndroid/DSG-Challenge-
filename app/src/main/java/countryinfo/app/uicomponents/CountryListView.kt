@@ -9,10 +9,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.navigation.NavController
 import countryinfo.app.R
-import countryinfo.app.api.model.CountryData
+import countryinfo.app.data.model.CountryData
+import countryinfo.app.presentation.graph.BottomTab
 import countryinfo.app.uicomponents.scaffold_comp.getDP
 import countryinfo.app.utils.EMPTY_STRING
-import countryinfo.app.utils.RouteCountryDetail
 
 
 @Composable
@@ -48,7 +48,7 @@ fun CountryListView(
                     onItemClicked = {
                         changeState.invoke(countryData)
 
-                        navController?.navigate(RouteCountryDetail)
+                        navController?.navigate(BottomTab.TabOverview.route)
                     }
                 )
             }

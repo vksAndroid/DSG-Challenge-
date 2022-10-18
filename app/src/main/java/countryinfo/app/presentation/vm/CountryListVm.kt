@@ -1,10 +1,7 @@
 package countryinfo.app.presentation.vm
 
 import android.annotation.SuppressLint
-import android.location.Address
-import android.location.Geocoder
 import android.location.Location
-import android.os.Build
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -14,9 +11,12 @@ import com.google.android.gms.tasks.CancellationToken
 import com.google.android.gms.tasks.CancellationTokenSource
 import com.google.android.gms.tasks.OnTokenCanceledListener
 import countryinfo.app.data.model.CountryData
-import countryinfo.app.di.IoDispatcher
 import countryinfo.app.data.repository.CountryListRepo
-import countryinfo.app.utils.*
+import countryinfo.app.di.IoDispatcher
+import countryinfo.app.utils.ApiResult
+import countryinfo.app.utils.EMPTY_STRING
+import countryinfo.app.utils.ScreenOptions
+import countryinfo.app.utils.titleSearch
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -118,11 +118,6 @@ class CountryListVm @Inject constructor(
 
     fun observeCurrentLocation(): StateFlow<Location> {
         return currentLocationStateFlow
-    }
-
-    private val isAmericaStateFlow: MutableStateFlow<Boolean> = MutableStateFlow(false)
-    fun observeIsAmerica(): StateFlow<Boolean> {
-        return isAmericaStateFlow
     }
 
     fun searchByDebounce(query: String) {
@@ -229,31 +224,6 @@ class CountryListVm @Inject constructor(
             }
         }
     }
-
-    fun getCountryByLocation(location: Location) {
-        if (Build.VERSION.SDK_INT >= 33) {
-            geocoder.getFromLocation(
-                location.latitude,
-                location.longitude,
-                1,
-                (Geocoder.GeocodeListener { addresses: MutableList<Address> ->
-                    var country = addresses[0].countryName
-                    isAmericaStateFlow.value = country.equals(CONSTANT_STRING_USA)
-                })
-            )
-        } else {
-            val addressList = geocoder.getFromLocation(
-                location.latitude,
-                location.longitude,
-                1
-            )
-            if ((addressList != null && addressList.size > 0)) {
-                var country = addressList?.get(0)?.countryName
-                isAmericaStateFlow.value = country.equals(CONSTANT_STRING_USA)
-            }
-        }
-    }
-
 
     fun addFavourite(countryItem: CountryData) {
         viewModelScope.launch {
