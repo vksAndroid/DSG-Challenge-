@@ -15,7 +15,7 @@ import com.google.maps.android.compose.Marker
 import com.google.maps.android.compose.MarkerState
 import com.google.maps.android.compose.rememberCameraPositionState
 import countryinfo.app.R
-import countryinfo.app.ui.screens.detail.MapType
+import countryinfo.app.presentation.screens.detail.MapType
 import countryinfo.app.uicomponents.scaffold_comp.getDP
 
 /**

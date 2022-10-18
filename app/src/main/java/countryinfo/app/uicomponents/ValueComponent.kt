@@ -13,7 +13,7 @@ import androidx.compose.ui.text.style.TextIndent
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.sp
 import countryinfo.app.R
-import countryinfo.app.api.model.CurrenciesName
+import countryinfo.app.data.model.CurrenciesName
 import countryinfo.app.uicomponents.scaffold_comp.getDP
 
 /**

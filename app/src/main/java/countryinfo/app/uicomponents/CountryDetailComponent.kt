@@ -53,7 +53,7 @@ fun CountryDetailComponent(
             if (isImage)
                 ImageCoatOfArm(imageUrl)
             else if (isDriverItem)
-                DriveSide(value as String)
+                DriveSideComponent(value as String)
             else
                 ValueComponent(value = value)
 
