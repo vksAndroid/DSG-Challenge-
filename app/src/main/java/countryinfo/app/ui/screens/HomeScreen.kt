@@ -71,10 +71,10 @@ fun HomeScreen() {
             scaffoldState.snackbarHostState.showSnackbar(noInterNetMessage)
         } else if (errorState.value.isNotEmpty()) {
             scaffoldState.snackbarHostState.showSnackbar(errorState.value)
-            viewModel.clearErrorState()
+            //viewModel.clearErrorState()
         }
     }
-0
+
     Scaffold(
         topBar = {
             TopBarConditional(
