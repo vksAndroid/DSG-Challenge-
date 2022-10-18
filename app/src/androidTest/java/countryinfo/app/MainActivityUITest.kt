@@ -6,8 +6,8 @@ import androidx.compose.ui.test.*
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.rule.GrantPermissionRule
-import countryinfo.app.ui.screens.HomeScreen
-import countryinfo.app.ui.theme.CountryInfoTheme
+import countryinfo.app.presentation.screens.home.HomeScreen
+import countryinfo.app.theme.CountryInfoTheme
 import countryinfo.app.utils.LocationPermission
 import org.junit.Before
 import org.junit.Rule

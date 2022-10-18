@@ -18,7 +18,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import countryinfo.app.R
-import countryinfo.app.ui.theme.OffWhite
+import countryinfo.app.theme.OffWhite
 import countryinfo.app.uicomponents.scaffold_comp.getDP
 import countryinfo.app.utils.idCountry
 

@@ -15,7 +15,7 @@ import com.google.maps.android.compose.Marker
 import com.google.maps.android.compose.MarkerState
 import com.google.maps.android.compose.rememberCameraPositionState
 import countryinfo.app.R
-import countryinfo.app.ui.screens.detail.MapType
+import countryinfo.app.presentation.screens.detail.MapType
 import countryinfo.app.uicomponents.scaffold_comp.getDP
 
 /**
@@ -56,11 +56,12 @@ fun MapViewComponent(location: LatLng, locationType: MapType) {
             .fillMaxWidth()
             .height(getDP(dimenKey = R.dimen.dp_400))
             .padding(start = getDP(dimenKey = R.dimen.dp_12), end = getDP(dimenKey = R.dimen.dp_12)),
-        cameraPositionState = zoom
+        cameraPositionState = zoom,
+        onMapLoaded = {
+            zoom.move(CameraUpdateFactory.newLatLng(location))
+        }
     ) {
-        zoom.move(CameraUpdateFactory.newLatLng(location))
         if (locationType == MapType.CurrentLocation) {
-
             Marker(
                 state = MarkerState(location),
                 title = stringResource(id = R.string.your_current_location),
