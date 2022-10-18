@@ -6,9 +6,7 @@ import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import countryinfo.app.api.model.CountryData
-import countryinfo.app.api.model.translations.Isl
 import countryinfo.app.api.model.translations.Name
-import countryinfo.app.api.model.translations.NativeName
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
 import org.junit.After
@@ -47,7 +45,7 @@ class AppDatabaseTest {
     fun testAddData() = runBlocking {
         val data = CountryData(
             cca3 = "Ind",
-            name = Name("India", "Republic of India", NativeName(Isl("Bharat", "Republic Bharat")))
+            name = Name("India", "Republic of India")
         )
         countriesDao.addToFavourite(data)
         val dbData = countriesDao.isFav("Ind")
@@ -58,7 +56,7 @@ class AppDatabaseTest {
     fun testRemoveData() = runBlocking {
         val data = CountryData(
             cca3 = "Ind",
-            name = Name("India", "Republic of India", NativeName(Isl("Bharat", "Republic Bharat")))
+            name = Name("India", "Republic of India")
         )
         countriesDao.addToFavourite(data)
         val result = countriesDao.isFav("Ind")
@@ -73,12 +71,12 @@ class AppDatabaseTest {
     fun testGetAllFavourite() = runBlocking {
         val data = CountryData(
             cca3 = "Ind",
-            name = Name("India", "Republic of India", NativeName(Isl("Bharat", "Republic Bharat")))
+            name = Name("India", "Republic of India")
         )
 
         val data1 = CountryData(
             cca3 = "Spa",
-            name = Name("Spain", "Spain", NativeName(Isl("Spain", "Republic Spain")))
+            name = Name("Spain", "Spain")
         )
         countriesDao.addToFavourite(data)
         countriesDao.addToFavourite(data1)
@@ -90,12 +88,12 @@ class AppDatabaseTest {
     fun testisFavourite() = runBlocking {
         val data = CountryData(
             cca3 = "Ind",
-            name = Name("India", "Republic of India", NativeName(Isl("Bharat", "Republic Bharat")))
+            name = Name("India", "Republic of India")
         )
 
         val data1 = CountryData(
             cca3 = "Spa",
-            name = Name("Spain", "Spain", NativeName(Isl("Spain", "Republic Spain")))
+            name = Name("Spain", "Spain")
         )
         countriesDao.addToFavourite(data)
         countriesDao.addToFavourite(data1)

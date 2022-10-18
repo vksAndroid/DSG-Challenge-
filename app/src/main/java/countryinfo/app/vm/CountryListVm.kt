@@ -127,6 +127,7 @@ class CountryListVm @Inject constructor(
                 textChangedJob = viewModelScope.launch(Dispatchers.Main) {
                     delay(700L)
                     if (searchText == searchFor) {
+                        clearErrorState()
                         getCountriesByName(searchText)
                     }
                 }
