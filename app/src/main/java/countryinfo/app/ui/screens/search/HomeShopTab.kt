@@ -35,8 +35,6 @@ fun HomeDsgTab(viewModel: DsgSearchVm) {
 
     val focusRequester = remember { FocusRequester() }
 
-    //viewModel.title.value = titleDsgSearch
-
     Surface(modifier = Modifier.fillMaxSize(), color = Color.White) {
         Column(
             modifier = Modifier
@@ -72,7 +70,6 @@ fun SearchTextField1(viewModel: DsgSearchVm, focus: FocusRequester) {
         value = query,
         onValueChange = {
                         viewModel.updateSearchQuery(it)
-            //viewModel.search(it)
         },
         placeholder = { Text(text = stringResource(id = R.string.search)) },
         modifier = Modifier
