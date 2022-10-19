@@ -6,6 +6,7 @@ import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.testTag
@@ -16,6 +17,8 @@ import countryinfo.app.R
 import countryinfo.app.presentation.graph.BottomTab
 import countryinfo.app.theme.OffWhite
 import countryinfo.app.theme.ThemeBlue
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 
 @Composable
@@ -49,6 +52,7 @@ fun DsgBottomMenu(
     )
     {
 
+        val scope = rememberCoroutineScope()
         val navBackStackEntry by navController.currentBackStackEntryAsState()
         val currentRoute = navBackStackEntry?.destination?.route
         menuItems.forEach {
@@ -61,18 +65,21 @@ fun DsgBottomMenu(
                 unselectedContentColor = Color.Gray,
                 selected = currentRoute == it.route,
                 onClick = {
-
-                    if (currentRoute != it.route) {
-                        navController.navigate(it.route) {
-                            navController.graph.startDestinationRoute?.let { route ->
-                                popUpTo(route) {
-                                    saveState = true
+                    scope.launch(Dispatchers.Unconfined) {
+                        if (currentRoute != it.route) {
+                            navController.navigate(it.route) {
+                                navController.graph.startDestinationRoute?.let { route ->
+                                    popUpTo(route) {
+                                        saveState = true
+                                    }
                                 }
+                                launchSingleTop = true
+                                restoreState = true
                             }
-                            launchSingleTop = true
-                            restoreState = true
                         }
+
                     }
+
                 },
                 icon = {
                     Icon(

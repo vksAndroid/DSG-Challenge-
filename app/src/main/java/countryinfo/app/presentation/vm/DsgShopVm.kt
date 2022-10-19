@@ -4,7 +4,6 @@ import android.location.Address
 import android.location.Geocoder
 import android.location.Location
 import android.os.Build
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import countryinfo.app.data.repository.DsgSearchRepo
@@ -69,18 +68,19 @@ class DsgShopVm @Inject constructor(
             withContext(dispatcher) {
                 dsgSearchRepo.getSearchData(searchQuery)
                     .catch {
-                        errorSate.value
+                        errorSate.value = it.message.toString()
                     }
                     .collect {
                         when (it) {
                             is ApiResult.Success<String> -> {
-                                // countryListState.emit(it.value)
-                                Log.d("Collect", it.toString())
                                 dsgListState.value = it.value
-
+                            }
+                            is ApiResult.Failure -> {
+                                it.message?.let { error ->
+                                    errorSate.value = error
+                                }
                             }
                             else -> {
-                                errorSate.value = it.toString()
                             }
                         }
 
@@ -97,7 +97,7 @@ class DsgShopVm @Inject constructor(
                 searchFor = searchText
 
                 textChangedJob?.cancel()
-                textChangedJob = viewModelScope.launch(Dispatchers.Main) {
+                textChangedJob = viewModelScope.launch(dispatcher) {
                     delay(700L)
                     if (searchText == searchFor) {
                         search(searchText)
@@ -108,35 +108,43 @@ class DsgShopVm @Inject constructor(
     }
 
     fun getCountryByLocation(location: Location) {
-        if (Build.VERSION.SDK_INT >= 33) {
-            geocoder.getFromLocation(
-                location.latitude,
-                location.longitude,
-                1,
-                (Geocoder.GeocodeListener { addresses: MutableList<Address> ->
-                    val country = addresses[0].countryName
-                    isAmericaStateFlow.value = country.equals(CONSTANT_STRING_USA)
-                })
-            )
-        } else {
-            val addressList = geocoder.getFromLocation(
-                location.latitude,
-                location.longitude,
-                1
-            )
-            if ((addressList != null && addressList.size > 0)) {
-                val country = addressList[0]?.countryName
-                isAmericaStateFlow.value = country.equals(CONSTANT_STRING_USA)
+
+        viewModelScope.launch {
+            withContext(dispatcher) {
+                if (Build.VERSION.SDK_INT >= 33) {
+                    geocoder.getFromLocation(
+                        location.latitude,
+                        location.longitude,
+                        1
+                    ) { addresses ->
+                        val country = addresses[0].countryName
+                        isAmericaStateFlow.value = country.equals(CONSTANT_STRING_USA)
+                    }
+                } else {
+                    val addressList = geocoder.getFromLocation(
+                        location.latitude,
+                        location.longitude,
+                        1
+                    )
+                    if ((addressList != null && addressList.size > 0)) {
+                        val country = addressList[0]?.countryName
+                        isAmericaStateFlow.value = country.equals(CONSTANT_STRING_USA)
+                    }
+                }
             }
         }
+
     }
 
     fun convertSpeechToText() {
-        speechToTextHelper.speechToTextConverter(
-            {
-                updateSearchQuery(it)
-            }) {
-            speechToTextHelper.speechRecognizer.stopListening()
+        viewModelScope.launch {
+            speechToTextHelper.speechToTextConverter(
+                {
+                    updateSearchQuery(it)
+                }) {
+                speechToTextHelper.speechRecognizer.stopListening()
+            }
         }
+
     }
 }

@@ -14,7 +14,7 @@ import javax.inject.Singleton
 class DsgSearchRepo @Inject constructor(private var client: ApiInterface) {
 
 
-    suspend fun getSearchData(searchQuery: String) = flow {
+    fun getSearchData(searchQuery: String) = flow {
 
         val query: String = encode(
             Gson().toJson(
