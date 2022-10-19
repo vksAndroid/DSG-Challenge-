@@ -7,6 +7,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavController
 import countryinfo.app.R
 import countryinfo.app.data.model.CountryData
@@ -33,7 +34,9 @@ fun CountryListView(
         }
     } else {
 
-        LazyColumn(modifier = Modifier.testTag("country_lazy_column").padding(top = getDP(dimenKey = R.dimen.dp_8))) {
+        LazyColumn(state = DsgLazyListState(key = "Home") ,  modifier = Modifier
+            .testTag("country_lazy_column")
+            .padding(top = getDP(dimenKey = R.dimen.dp_8))) {
             items(items = countryList) { countryData ->
 
                 CountryItemView(

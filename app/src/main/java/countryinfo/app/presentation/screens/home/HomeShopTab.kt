@@ -24,17 +24,20 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import countryinfo.app.R
+import countryinfo.app.presentation.graph.BottomTab
+import countryinfo.app.presentation.vm.CountryListVm
 import countryinfo.app.presentation.vm.DsgShopVm
 import countryinfo.app.uicomponents.scaffold_comp.getDP
 import countryinfo.app.utils.EMPTY_STRING
 import countryinfo.app.utils.checkRecordAudioPermission
 
 @Composable
-fun HomeShopTab(viewModel: DsgShopVm) {
+fun HomeShopTab(viewModel: DsgShopVm, title: (String) -> Unit) {
 
     val getDsgData = viewModel.observeDsgList().collectAsState()
-
+    title(BottomTab.TabDsgSearch.title)
     val focusRequester = remember { FocusRequester() }
 
     Surface(modifier = Modifier.fillMaxSize(), color = Color.White) {

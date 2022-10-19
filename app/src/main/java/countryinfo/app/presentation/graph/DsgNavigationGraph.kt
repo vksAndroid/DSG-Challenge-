@@ -59,7 +59,7 @@ fun DsgNavigationGraph(
         composable(BottomTab.TabDsgSearch.route) {
             HomeShopTab(
                 viewModel = shopViewModel
-            )
+            ) {viewModel.title.value = it}
 
         }
 

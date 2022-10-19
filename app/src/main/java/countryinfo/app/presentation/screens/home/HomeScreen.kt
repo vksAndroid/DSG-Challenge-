@@ -153,7 +153,9 @@ fun HomeScreen() {
             if(navHostController.currentDestination?.route
                 == BottomTab.TabSearch.route
                 ||navHostController.currentDestination?.route
-                == BottomTab.TabSaved.route){
+                == BottomTab.TabSaved.route
+                ||navHostController.currentDestination?.route
+                == BottomTab.TabDsgSearch.route){
                 activity?.finish()
             } else{
                 navHostController.navigateUp()
