@@ -11,6 +11,7 @@ import countryinfo.app.data.repository.DsgSearchRepo
 import countryinfo.app.di.IoDispatcher
 import countryinfo.app.utils.ApiResult
 import countryinfo.app.utils.CONSTANT_STRING_USA
+import countryinfo.app.utils.ConvertSpeechToTextHelper
 import countryinfo.app.utils.EMPTY_STRING
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.*
@@ -23,6 +24,7 @@ import javax.inject.Inject
 class DsgShopVm @Inject constructor(
     private val dsgSearchRepo: DsgSearchRepo,
     private val geocoder: Geocoder,
+    private val speechToTextHelper: ConvertSpeechToTextHelper,
     @IoDispatcher private val dispatcher: CoroutineDispatcher
 ) : ViewModel() {
 
@@ -126,6 +128,15 @@ class DsgShopVm @Inject constructor(
                 val country = addressList[0]?.countryName
                 isAmericaStateFlow.value = country.equals(CONSTANT_STRING_USA)
             }
+        }
+    }
+
+    fun convertSpeechToText() {
+        speechToTextHelper.speechToTextConverter(
+            {
+                updateSearchQuery(it)
+            }) {
+            speechToTextHelper.speechRecognizer.stopListening()
         }
     }
 }

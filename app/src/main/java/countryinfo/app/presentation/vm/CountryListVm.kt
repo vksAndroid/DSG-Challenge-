@@ -13,10 +13,7 @@ import com.google.android.gms.tasks.OnTokenCanceledListener
 import countryinfo.app.data.model.CountryData
 import countryinfo.app.data.repository.CountryListRepo
 import countryinfo.app.di.IoDispatcher
-import countryinfo.app.utils.ApiResult
-import countryinfo.app.utils.EMPTY_STRING
-import countryinfo.app.utils.ScreenOptions
-import countryinfo.app.utils.titleSearch
+import countryinfo.app.utils.*
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -29,6 +26,7 @@ import javax.inject.Inject
 class CountryListVm @Inject constructor(
     private val countryListRepo: CountryListRepo,
     private val mFusedLocationClient: FusedLocationProviderClient,
+    private val speechToTextHelper: ConvertSpeechToTextHelper,
     @IoDispatcher private val dispatcher: CoroutineDispatcher
 ) : ViewModel() {
 
@@ -261,6 +259,15 @@ class CountryListVm @Inject constructor(
                 val data = countryListRepo.isCountryFav(name)
                 isFav.value = data != null
             }
+        }
+    }
+
+    fun convertSpeechToText() {
+        speechToTextHelper.speechToTextConverter(
+            {
+                updateSearchQuery(it)
+            }) {
+            speechToTextHelper.speechRecognizer.stopListening()
         }
     }
 }

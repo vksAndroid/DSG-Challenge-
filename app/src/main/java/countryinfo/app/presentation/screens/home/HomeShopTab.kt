@@ -11,6 +11,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
+import androidx.compose.material.icons.filled.SettingsVoice
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -27,6 +28,7 @@ import countryinfo.app.R
 import countryinfo.app.presentation.vm.DsgShopVm
 import countryinfo.app.uicomponents.scaffold_comp.getDP
 import countryinfo.app.utils.EMPTY_STRING
+import countryinfo.app.utils.checkRecordAudioPermission
 
 @Composable
 fun HomeShopTab(viewModel: DsgShopVm) {
@@ -58,6 +60,7 @@ fun HomeShopTab(viewModel: DsgShopVm) {
 fun SearchTextField(viewModel: DsgShopVm, focus: FocusRequester) {
 
     val query = viewModel.searchQuery().collectAsState().value
+    var isVoicePermissionGranted = checkRecordAudioPermission()
 
     LaunchedEffect(key1 = query) {
         viewModel.searchByDebounce(query)
@@ -87,6 +90,25 @@ fun SearchTextField(viewModel: DsgShopVm, focus: FocusRequester) {
         singleLine = true,
         textStyle = TextStyle(fontSize = 16.sp, color = Color.Black),
         leadingIcon = { Icon(Icons.Default.Search, contentDescription = EMPTY_STRING) },
+        trailingIcon = {
+            if (isVoicePermissionGranted) {
+                IconButton(
+                    onClick = {
+                        if (isVoicePermissionGranted) {
+                            viewModel.convertSpeechToText()
+                        }
+                    },
+                ) {
+                    Icon(
+                        Icons.Default.SettingsVoice,
+                        contentDescription = EMPTY_STRING,
+                        tint = Color.Gray
+                    )
+                }
+            } else {
+                null
+            }
+        },
         colors = TextFieldDefaults.textFieldColors(
             focusedIndicatorColor = Color.Transparent,
             unfocusedIndicatorColor = Color.Transparent,
