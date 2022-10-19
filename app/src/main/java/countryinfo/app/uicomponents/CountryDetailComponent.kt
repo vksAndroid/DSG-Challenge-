@@ -32,7 +32,8 @@ fun CountryDetailComponent(
         modifier = Modifier
             .padding(top = getDP(dimenKey = R.dimen.dp_12),
                 start = getDP(dimenKey = R.dimen.dp_12),
-                end = getDP(dimenKey = R.dimen.dp_12))
+                end = getDP(dimenKey = R.dimen.dp_12),
+                bottom = getDP(dimenKey = R.dimen.dp_4))
             .layoutId(title)
             .fillMaxWidth(0.46f),
         shape = RoundedCornerShape(getDP(dimenKey = R.dimen.dp_12))

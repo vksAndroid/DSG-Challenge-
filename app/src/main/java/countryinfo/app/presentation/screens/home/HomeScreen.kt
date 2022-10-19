@@ -130,11 +130,17 @@ fun HomeScreen() {
         BackHandler(enabled = true) {
             viewModel.title.value = titleSearch
             viewModel.setSavedScreen(ScreenOptions.SearchScreen)
-            navHostController.navigateUp()
-            if (!navHostController.navigateUp()) {
-                // Call finish() on your Activity
+
+            // Handle Back Stack here for tab
+            if(navHostController.currentDestination?.route
+                == BottomTab.TabSearch.route
+                ||navHostController.currentDestination?.route
+                == BottomTab.TabSaved.route){
                 activity?.finish()
+            } else{
+                navHostController.navigateUp()
             }
+
         }
     }
 }

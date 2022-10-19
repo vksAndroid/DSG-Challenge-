@@ -31,9 +31,11 @@
     <dimen name="dp_45">45.dp</dimen>
     <dimen name="dp_50">50.dp</dimen>
     <dimen name="dp_100">100.dp</dimen>
+    <dimen name="dp_90">90.dp</dimen>
     <dimen name="dp_65">65.dp</dimen>
     <dimen name="dp_80">80.dp</dimen>
     <dimen name="dp_220">220.dp</dimen>
     <dimen name="dp_400">400.dp</dimen>
+    <dimen name="dp_60">60.dp</dimen>
 
 </resources>

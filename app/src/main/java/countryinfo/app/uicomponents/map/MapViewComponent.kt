@@ -10,10 +10,7 @@ import androidx.compose.ui.res.stringResource
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
-import com.google.maps.android.compose.GoogleMap
-import com.google.maps.android.compose.Marker
-import com.google.maps.android.compose.MarkerState
-import com.google.maps.android.compose.rememberCameraPositionState
+import com.google.maps.android.compose.*
 import countryinfo.app.R
 import countryinfo.app.presentation.screens.detail.MapType
 import countryinfo.app.uicomponents.scaffold_comp.getDP
@@ -56,7 +53,8 @@ fun MapViewComponent(location: LatLng, locationType: MapType) {
             .fillMaxWidth()
             .height(getDP(dimenKey = R.dimen.dp_400))
             .padding(start = getDP(dimenKey = R.dimen.dp_12), end = getDP(dimenKey = R.dimen.dp_12)),
-        cameraPositionState = zoom
+        cameraPositionState = zoom,
+        uiSettings = MapUiSettings(mapToolbarEnabled = false)
     ) {
         zoom.move(CameraUpdateFactory.newLatLng(location))
         if (locationType == MapType.CurrentLocation) {

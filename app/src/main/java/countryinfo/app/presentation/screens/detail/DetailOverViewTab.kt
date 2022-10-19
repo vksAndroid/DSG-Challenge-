@@ -90,7 +90,7 @@ fun setComponentsUsingConstraints(): ConstraintSet {
             top.linkTo(parent.top, margin = 0.dp)
         }
         constrain(idBasicDetail) {
-            top.linkTo(idCountry.bottom, margin = 10.dp)
+            top.linkTo(idCountry.bottom, margin = 24.dp)
         }
         constrain(idCountry) {
             bottom.linkTo(idTopFlag.bottom)
@@ -99,7 +99,7 @@ fun setComponentsUsingConstraints(): ConstraintSet {
         }
 
         constrain(idTimeZone) {
-            top.linkTo(idBasicDetail.bottom)
+            top.linkTo(idBasicDetail.bottom, margin = 10.dp)
         }
         constrain(idPopulation) {
             start.linkTo(idTimeZone.end)
@@ -109,7 +109,7 @@ fun setComponentsUsingConstraints(): ConstraintSet {
             height = Dimension.fillToConstraints
         }
         constrain(idLanguages) {
-            top.linkTo(idTimeZone.bottom)
+            top.linkTo(idTimeZone.bottom, margin = 10.dp)
             height = Dimension.fillToConstraints
         }
         constrain(idCurrencies) {
@@ -120,7 +120,7 @@ fun setComponentsUsingConstraints(): ConstraintSet {
         }
 
         constrain(idDriverSide) {
-            top.linkTo(idLanguages.bottom)
+            top.linkTo(idLanguages.bottom, margin = 10.dp)
             bottom.linkTo(idCoatOfArm.bottom)
             height = Dimension.fillToConstraints
 

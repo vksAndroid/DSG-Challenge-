@@ -23,7 +23,7 @@ fun ImageCoatOfArm(imageUrl: String) {
         contentDescription = contentDescriptionCoatImage,
         modifier = Modifier
             .layoutId("title")
-            .size(getDP(R.dimen.dp_40), getDP(R.dimen.dp_40))
+            .size(getDP(R.dimen.dp_60), getDP(R.dimen.dp_60))
             .padding(top = getDP(R.dimen.sp_6))
     )
 
