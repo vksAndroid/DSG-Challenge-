@@ -1,5 +1,11 @@
 package countryinfo.app.utils
 
+import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.input.OffsetMapping
+import androidx.compose.ui.text.input.TransformedText
+import java.text.NumberFormat
+import java.util.*
+
 const val EMPTY_STRING = ""
 
 // Navigation Routes
@@ -11,7 +17,7 @@ const val RouteDsgSearch = "dsg"
 
 //Title Names for App Bar
 const val titleOverview = "Overview"
-const val titleMap = "Map"
+const val titleMap = "Maps"
 const val titleSearch = "Search"
 const val titleSaved = "Saved"
 const val titleCountries = "Countries"
@@ -51,4 +57,8 @@ sealed class ScreenOptions {
     object DetailScreen : ScreenOptions()
 
 }
+
+
+fun Long?.formatWithComma(): String =
+    NumberFormat.getNumberInstance(Locale.US).format(this ?: 0)
 

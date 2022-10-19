@@ -15,6 +15,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import countryinfo.app.R
 import countryinfo.app.presentation.graph.BottomTab
 import countryinfo.app.theme.OffWhite
+import countryinfo.app.theme.ThemeBlue
 
 
 @Composable
@@ -56,7 +57,7 @@ fun DsgBottomMenu(
                 modifier = Modifier.testTag("nav_item_${it.title}"),
                 label = { Text(text = it.title) },
                 alwaysShowLabel = true,
-                selectedContentColor = Color.Blue,
+                selectedContentColor = ThemeBlue,
                 unselectedContentColor = Color.Gray,
                 selected = currentRoute == it.route,
                 onClick = {

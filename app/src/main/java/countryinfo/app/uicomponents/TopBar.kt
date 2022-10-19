@@ -8,6 +8,7 @@ import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.ArrowBackIos
 import androidx.compose.material.icons.outlined.Bookmark
 import androidx.compose.material.icons.outlined.BookmarkBorder
 import androidx.compose.runtime.Composable
@@ -17,6 +18,7 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import countryinfo.app.R
+import countryinfo.app.theme.ThemeBlue
 import countryinfo.app.uicomponents.scaffold_comp.getDP
 import countryinfo.app.utils.contentDescriptionSaveCountry
 
@@ -59,7 +61,7 @@ fun TopBar(
                     modifier = Modifier.testTag("save_icon")
                         .padding(8.dp)
                         .clickable { onFavClick.invoke() },
-                    tint = Color.Blue
+                    tint = ThemeBlue
                 )
         }
     )

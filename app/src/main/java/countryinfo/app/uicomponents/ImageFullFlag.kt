@@ -16,7 +16,8 @@ import countryinfo.app.utils.idTopFlag
 
 @Composable
 fun ImageFullFlag(flagImageUrl: String) {
-    AsyncImage(
+
+     AsyncImage(
         model = flagImageUrl,
         placeholder = painterResource(id = R.drawable.default_placeholder),
         contentDescription = stringResource(id = R.string.country_flag),

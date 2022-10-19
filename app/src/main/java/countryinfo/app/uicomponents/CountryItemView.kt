@@ -14,6 +14,7 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.TextUnit
 import coil.compose.AsyncImage
 import countryinfo.app.R
 import countryinfo.app.uicomponents.scaffold_comp.getDP
@@ -36,7 +37,7 @@ fun CountryItemView(
             .fillMaxWidth()
             .padding(getDP(dimenKey = R.dimen.dp_12)),
         onClick = { onItemClicked.invoke() },
-        elevation = getDP(dimenKey = R.dimen.dp_1),
+        elevation = getDP(dimenKey = R.dimen.dp_2),
         shape = RoundedCornerShape(getDP(dimenKey = R.dimen.dp_12))
 
     ) {
@@ -58,20 +59,21 @@ fun CountryItemView(
             Column(
                 modifier = Modifier
                     .align(alignment = Alignment.CenterVertically)
-                    .padding(getDP(dimenKey = R.dimen.dp_4))
+                    .padding(vertical = getDP(dimenKey = R.dimen.dp_10),
+                        horizontal = getDP(dimenKey = R.dimen.dp_10))
             ) {
-                CountryItemTextView(
-                    name = commonName ?: EMPTY_STRING,
+                DsgTextView(
+                    value = commonName ?: EMPTY_STRING,
                     fontWeight = FontWeight.Bold,
                     color = Color.Black
                 )
-                CountryItemTextView(
-                    name = officialName ?: EMPTY_STRING,
+                DsgTextView(
+                    value = officialName ?: EMPTY_STRING,
                     fontWeight = FontWeight.Medium,
                     color = Color.DarkGray
                 )
-                CountryItemTextView(
-                    name = capitalName,
+                DsgTextView(
+                    value = capitalName,
                     fontWeight = FontWeight.Medium,
                     color = Color.Gray
                 )
@@ -84,12 +86,17 @@ fun CountryItemView(
 
 
 @Composable
-fun CountryItemTextView(name: String, fontWeight: FontWeight, color: Color) {
+fun DsgTextView(value: String,
+                        fontWeight: FontWeight,
+                        color: Color = Color.Gray,
+                        fontSize : TextUnit = TextUnit.Unspecified,
+                        modifier : Modifier = Modifier) {
     Text(
-        text = name,
+        text = value,
         fontWeight = fontWeight,
-        style = MaterialTheme.typography.body1,
-        color = color
+         color = color,
+        modifier = modifier,
+        fontSize = fontSize
     )
 }
 
