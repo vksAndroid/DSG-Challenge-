@@ -84,19 +84,3 @@ fun CountryItemView(
 
 }
 
-
-@Composable
-fun DsgTextView(value: String,
-                        fontWeight: FontWeight,
-                        color: Color = Color.Gray,
-                        fontSize : TextUnit = TextUnit.Unspecified,
-                        modifier : Modifier = Modifier) {
-    Text(
-        text = value,
-        fontWeight = fontWeight,
-         color = color,
-        modifier = modifier,
-        fontSize = fontSize
-    )
-}
-
