@@ -87,8 +87,11 @@ fun HomeSearchTab(navController: NavController?, viewModel: CountryListVm) {
 fun SearchTextField(viewModel: CountryListVm) {
     val query = viewModel.searchQuery().collectAsState().value
 
-    LaunchedEffect(key1 = viewModel.searchQuery().collectAsState()) {
-        viewModel.searchByDebounce(query)
+    LaunchedEffect(key1 = query) {
+        if(query!=viewModel.lastSearchItem.value) {
+
+            viewModel.searchByDebounce(query)
+        }
         if (query.isEmpty()) {
             viewModel.clearSearch()
         }
