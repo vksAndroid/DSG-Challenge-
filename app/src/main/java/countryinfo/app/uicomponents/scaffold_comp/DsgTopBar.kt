@@ -8,7 +8,7 @@ import countryinfo.app.utils.ScreenOptions
  * Render Top bar on the basic of current Screen
  * @param title Navigation Controller to handle Routes or Back Stack
  * @param screenOptions Which screen is currently Active Home or Detail
- * @param isSaved Check wether country is saved or not in Database
+ * @param isSaved Check weather country is saved or not in Database
  * @param onSavePress on Country Save click Action button to update values
  * @param onBackPress Navigation Back Press Action
  */

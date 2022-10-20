@@ -8,11 +8,12 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.TextUnit
 
 @Composable
-fun DsgTextView(value: String,
+fun DsgTextView(modifier : Modifier = Modifier,
+                value: String,
                 fontWeight: FontWeight,
                 color: Color = Color.Gray,
                 fontSize : TextUnit = TextUnit.Unspecified,
-                modifier : Modifier = Modifier
+
 ) {
     Text(
         text = value,

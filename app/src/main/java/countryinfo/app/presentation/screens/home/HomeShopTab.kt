@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -36,11 +35,14 @@ import countryinfo.app.R
 import countryinfo.app.data.model.ProductVOs
 import countryinfo.app.presentation.graph.BottomTab
 import countryinfo.app.presentation.vm.DsgShopVm
+import countryinfo.app.uicomponents.LoadingShimmerEffect
 import countryinfo.app.uicomponents.DsgSearchComponent
 import countryinfo.app.uicomponents.scaffold_comp.getDP
 
 @Composable
 fun HomeShopTab(viewModel: DsgShopVm, title: (String) -> Unit) {
+
+    val errorState = viewModel.observeErrorState().collectAsState()
 
     val countList = listOf("5", "10", "15", "20", "25")
     var mExpanded by remember { mutableStateOf(false) }
@@ -55,7 +57,9 @@ fun HomeShopTab(viewModel: DsgShopVm, title: (String) -> Unit) {
         }
     }
 
-    Surface(modifier = Modifier.testTag("home_shop_screen").fillMaxSize(), color = Color.White) {
+    Surface(modifier = Modifier
+        .testTag("home_shop_screen")
+        .fillMaxSize(), color = Color.White) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -83,9 +87,11 @@ fun HomeShopTab(viewModel: DsgShopVm, title: (String) -> Unit) {
                             top.linkTo(parent.top)
                             bottom.linkTo(search.bottom)
                         }
-                        .background(color = Color.LightGray, RoundedCornerShape(
-                            getDP(dimenKey = R.dimen.dp_10)
-                        )),
+                        .background(
+                            color = Color.LightGray, RoundedCornerShape(
+                                getDP(dimenKey = R.dimen.dp_10)
+                            )
+                        ),
 
                     contentAlignment = Alignment.Center
                 ) {
@@ -135,21 +141,31 @@ fun HomeShopTab(viewModel: DsgShopVm, title: (String) -> Unit) {
                     }
                 }
             }
-            LazyColumn(
-                modifier = Modifier.testTag("search_result_list")
-                    .fillMaxWidth()
-                    .fillMaxHeight(),
-                verticalArrangement = Arrangement.spacedBy(10.dp)
-            ) {
-                items(items = getDsgData) { data ->
-                    Text(
-                        text = data.name, color = Color.Black,
-                        modifier = Modifier
-                            .padding(getDP(dimenKey = R.dimen.dp_12)),
-                        textAlign = TextAlign.Start,
-                        maxLines = 2
 
-                    )
+            if (getDsgData.isEmpty() && errorState.value.isEmpty() && viewModel.showShimmer.value) {
+                LazyColumn(Modifier.testTag("shimmer_effect")) {
+                    repeat(7) {
+                        item { LoadingShimmerEffect() }
+                    }
+                }
+            } else {
+                LazyColumn(
+                    modifier = Modifier
+                        .testTag("search_result_list")
+                        .fillMaxWidth()
+                        .fillMaxHeight(),
+                    verticalArrangement = Arrangement.spacedBy(10.dp)
+                ) {
+                    items(items = getDsgData) { data ->
+                        Text(
+                            text = data.name, color = Color.Black,
+                            modifier = Modifier
+                                .padding(getDP(dimenKey = R.dimen.dp_12)),
+                            textAlign = TextAlign.Start,
+                            maxLines = 2
+
+                        )
+                    }
                 }
             }
         }

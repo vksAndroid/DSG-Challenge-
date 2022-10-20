@@ -13,12 +13,11 @@ import org.junit.Before
 import org.junit.Test
 import org.junit.jupiter.api.Assertions
 import retrofit2.Response
-import java.net.URLEncoder
 
 class DsgSearchRepoTest {
 
     private val apiService = mockk<ApiInterface>()
-    val dsgRepo = DsgSearchRepo(apiService)
+    private val dsgRepo = DsgSearchRepo(apiService)
 
     @Before
     fun setUp() {

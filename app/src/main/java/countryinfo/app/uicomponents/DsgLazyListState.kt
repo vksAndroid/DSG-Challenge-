@@ -6,7 +6,7 @@ import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.saveable.rememberSaveable
 
 @Composable
-fun DsgLazyListState(
+fun dsgLazyListState(
     key: String,
     params: String = "",
     initialFirstVisibleItemIndex: Int = 0,
