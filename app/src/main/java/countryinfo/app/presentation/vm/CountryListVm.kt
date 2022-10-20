@@ -38,6 +38,8 @@ class CountryListVm @Inject constructor(
 
     var title = mutableStateOf(titleSearch)
 
+    var lastSearchItem = mutableStateOf(EMPTY_STRING)
+
     var selectedTab = mutableStateOf(titleSearch)
 
     private var textChangedJob: Job? = null
@@ -180,6 +182,7 @@ class CountryListVm @Inject constructor(
     fun getCountriesByName(query: String) {
         searchCountryListState.value = emptyList()
 
+        lastSearchItem.value = query
         apiJob?.cancel()
         apiJob = viewModelScope.launch {
             countryListRepo.getCountriesByName(query)
