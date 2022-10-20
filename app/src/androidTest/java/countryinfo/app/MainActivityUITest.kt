@@ -162,7 +162,7 @@ class MainActivityUITest {
                 searchField.performTextInput("Nike")
                 waitUntil(20000) { countryLazyColumn.fetchSemanticsNodes().isEmpty() }
                 SystemClock.sleep(20000)
-                onNodeWithTag("search_result_text").assertIsDisplayed()
+                onNodeWithTag("search_result_list").assertIsDisplayed()
             }
         }
     }

@@ -130,7 +130,7 @@ fun HomeShopTab(viewModel: DsgShopVm, title: (String) -> Unit) {
                 }
             }
             LazyColumn(
-                modifier = Modifier
+                modifier = Modifier.testTag("search_result_list")
                     .fillMaxWidth()
                     .fillMaxHeight(),
                 verticalArrangement = Arrangement.spacedBy(10.dp)
