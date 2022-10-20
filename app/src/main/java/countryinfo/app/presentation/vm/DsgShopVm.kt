@@ -3,11 +3,9 @@ package countryinfo.app.presentation.vm
 import android.location.Geocoder
 import android.location.Location
 import android.os.Build
-import android.util.Log
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.google.gson.Gson
 import countryinfo.app.data.model.DsgSearchResult
 import countryinfo.app.data.model.ProductVOs
 import countryinfo.app.data.repository.DsgSearchRepo
@@ -84,8 +82,6 @@ class DsgShopVm @Inject constructor(
                                 list.sortByDescending {
                                     it.ratingValue
                                 }
-
-                                Log.d("Search List", Gson().toJson(list))
                                 dsgListState.value = list
                             }
                             is ApiResult.Failure -> {

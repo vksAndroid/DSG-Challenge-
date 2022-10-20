@@ -5,6 +5,8 @@ import android.location.Geocoder
 import android.location.Location
 import android.os.Build
 import androidx.compose.ui.text.intl.Locale
+import countryinfo.app.data.model.DsgSearchResult
+import countryinfo.app.data.model.ProductVOs
 import countryinfo.app.data.repository.DsgSearchRepo
 import countryinfo.app.utils.ApiResult
 import countryinfo.app.utils.ConvertSpeechToTextHelper
@@ -27,9 +29,9 @@ import java.lang.reflect.Modifier
 @OptIn(ExperimentalCoroutinesApi::class)
 class DsgShopVmTest {
 
-    val mockRepo: DsgSearchRepo = mockk(relaxed = true)
-    val mockGeocoder: Geocoder = mockk(relaxed = true)
-    val dispatcher: CoroutineDispatcher = StandardTestDispatcher()
+    private val mockRepo: DsgSearchRepo = mockk(relaxed = true)
+    private val mockGeocoder: Geocoder = mockk(relaxed = true)
+    private val dispatcher: CoroutineDispatcher = StandardTestDispatcher()
 
     private val speechToTextHelper: ConvertSpeechToTextHelper = mockk(relaxed = true)
 
@@ -46,23 +48,29 @@ class DsgShopVmTest {
 
     @Test
     fun `test dsg search return success`() = runTest {
-        val success = ApiResult.Success("abcdef")
-        every { mockRepo.getSearchData("wilson") } returns flow {
+        val result = DsgSearchResult(
+            productVOs = arrayListOf(
+                ProductVOs(name = "Nike"),
+                ProductVOs(name = "Adidas")
+            )
+        )
+        val success = ApiResult.Success(result)
+        every { mockRepo.getSearchData("wilson", "5") } returns flow {
             emit(success)
         }
-        dsgvm.search("wilson")
+        dsgvm.search("wilson", "5")
         delay(500)
-        Assertions.assertEquals("abcdef", dsgvm.observeDsgList().value)
+        Assertions.assertEquals(result.productVOs.size, dsgvm.observeDsgList().value.size)
     }
 
 
     @Test
     fun `test dsg search return failure`() = runTest {
         val failure = ApiResult.Failure("abcdef", Throwable("message"))
-        every { mockRepo.getSearchData("wilson") } returns flow {
+        every { mockRepo.getSearchData("wilson", "5") } returns flow {
             emit(failure)
         }
-        dsgvm.search("wilson")
+        dsgvm.search("wilson", "5")
         delay(500)
         Assertions.assertEquals("abcdef", dsgvm.observeErrorState().value)
     }
@@ -70,7 +78,7 @@ class DsgShopVmTest {
 
     @Test
     fun `test search by debounce`() = runTest {
-        dsgvm.searchByDebounce("india")
+        dsgvm.searchByDebounce("india", "5")
     }
 
     @Test
@@ -79,7 +87,6 @@ class DsgShopVmTest {
         every { locationMock.latitude } returns 23.55555
         every { locationMock.longitude } returns 24.55555
         setStaticFieldViaReflection(Build.VERSION::class.java.getField("SDK_INT"), 33)
-        val defaultLocale = mockk<java.util.Locale>()
 
         mockkStatic(Locale::class)
 
@@ -101,12 +108,6 @@ class DsgShopVmTest {
 
         dsgvm.getCountryByLocation(locationMock)
 
-
-       /* verify {mockGeocoder.getFromLocation(
-            23.55555, 23.55555, 1,
-            capture(slot)
-        ) }*/
-
     }
 
     @Test
@@ -115,7 +116,6 @@ class DsgShopVmTest {
         every { locationMock.latitude } returns 23.55555
         every { locationMock.longitude } returns 24.55555
         setStaticFieldViaReflection(Build.VERSION::class.java.getField("SDK_INT"), 30)
-        val defaultLocale = mockk<java.util.Locale>()
 
         mockkStatic(Locale::class)
 
@@ -128,7 +128,7 @@ class DsgShopVmTest {
             mockGeocoder.getFromLocation(
                 23.55555, 23.55555, 1
             )
-        } returns  list
+        } returns list
 
 
         dsgvm.getCountryByLocation(locationMock)
