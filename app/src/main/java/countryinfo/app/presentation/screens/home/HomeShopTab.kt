@@ -1,7 +1,6 @@
 package countryinfo.app.presentation.screens.home
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -30,12 +29,15 @@ import countryinfo.app.R
 import countryinfo.app.data.model.ProductVOs
 import countryinfo.app.presentation.graph.BottomTab
 import countryinfo.app.presentation.vm.DsgShopVm
+import countryinfo.app.uicomponents.LoadingShimmerEffect
 import countryinfo.app.uicomponents.scaffold_comp.getDP
 import countryinfo.app.utils.EMPTY_STRING
 import countryinfo.app.utils.checkRecordAudioPermission
 
 @Composable
 fun HomeShopTab(viewModel: DsgShopVm, title: (String) -> Unit) {
+
+    val errorState = viewModel.observeErrorState().collectAsState()
 
     val countList = listOf("5", "10", "15", "20", "25")
     var mExpanded by remember { mutableStateOf(false) }
@@ -44,7 +46,9 @@ fun HomeShopTab(viewModel: DsgShopVm, title: (String) -> Unit) {
     title(BottomTab.TabDsgSearch.title)
     val focusRequester = remember { FocusRequester() }
 
-    Surface(modifier = Modifier.testTag("home_shop_screen").fillMaxSize(), color = Color.White) {
+    Surface(modifier = Modifier
+        .testTag("home_shop_screen")
+        .fillMaxSize(), color = Color.White) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -77,9 +81,11 @@ fun HomeShopTab(viewModel: DsgShopVm, title: (String) -> Unit) {
                             top.linkTo(parent.top)
                             bottom.linkTo(search.bottom)
                         }
-                        .background(color = Color.LightGray, RoundedCornerShape(
-                            getDP(dimenKey = R.dimen.dp_10)
-                        )),
+                        .background(
+                            color = Color.LightGray, RoundedCornerShape(
+                                getDP(dimenKey = R.dimen.dp_10)
+                            )
+                        ),
 
                     contentAlignment = Alignment.Center
                 ) {
@@ -129,21 +135,31 @@ fun HomeShopTab(viewModel: DsgShopVm, title: (String) -> Unit) {
                     }
                 }
             }
-            LazyColumn(
-                modifier = Modifier.testTag("search_result_list")
-                    .fillMaxWidth()
-                    .fillMaxHeight(),
-                verticalArrangement = Arrangement.spacedBy(10.dp)
-            ) {
-                items(items = getDsgData) { data ->
-                    Text(
-                        text = data.name, color = Color.Black,
-                        modifier = Modifier
-                            .padding(getDP(dimenKey = R.dimen.dp_12)),
-                        textAlign = TextAlign.Start,
-                        maxLines = 2
 
-                    )
+            if (getDsgData.isEmpty() && errorState.value.isEmpty() && viewModel.showShimmer.value) {
+                LazyColumn(Modifier.testTag("shimmer_effect")) {
+                    repeat(7) {
+                        item { LoadingShimmerEffect() }
+                    }
+                }
+            } else {
+                LazyColumn(
+                    modifier = Modifier
+                        .testTag("search_result_list")
+                        .fillMaxWidth()
+                        .fillMaxHeight(),
+                    verticalArrangement = Arrangement.spacedBy(10.dp)
+                ) {
+                    items(items = getDsgData) { data ->
+                        Text(
+                            text = data.name, color = Color.Black,
+                            modifier = Modifier
+                                .padding(getDP(dimenKey = R.dimen.dp_12)),
+                            textAlign = TextAlign.Start,
+                            maxLines = 2
+
+                        )
+                    }
                 }
             }
         }
@@ -156,7 +172,7 @@ fun HomeShopTab(viewModel: DsgShopVm, title: (String) -> Unit) {
 fun DsgSearchTextField(modifier: Modifier, viewModel: DsgShopVm, focus: FocusRequester) {
 
     val query = viewModel.searchQuery().collectAsState().value
-    var isVoicePermissionGranted = checkRecordAudioPermission()
+    val isVoicePermissionGranted = checkRecordAudioPermission()
 
     LaunchedEffect(key1 = query) {
         viewModel.searchByDebounce(query, viewModel.selectedCount.value)
@@ -175,13 +191,7 @@ fun DsgSearchTextField(modifier: Modifier, viewModel: DsgShopVm, focus: FocusReq
             .testTag("shop_search_text_field")
             .padding(all = getDP(dimenKey = R.dimen.dp_8))
             .focusRequester(focusRequester = focus)
-            .border(
-                width = getDP(dimenKey = R.dimen.dp_8),
-                color = Color.White,
-                shape = RoundedCornerShape(
-                    getDP(dimenKey = R.dimen.dp_20)
-                )
-            ),
+            .height(50.dp),
         singleLine = true,
         textStyle = TextStyle(fontSize = 16.sp, color = Color.Black),
         leadingIcon = { Icon(Icons.Default.Search, contentDescription = EMPTY_STRING) },

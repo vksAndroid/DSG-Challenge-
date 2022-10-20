@@ -38,6 +38,8 @@ class DsgShopVm @Inject constructor(
         EMPTY_STRING
     )
 
+    val showShimmer = mutableStateOf(false)
+
     fun observeErrorState(): StateFlow<String> {
         return errorSate
     }
@@ -69,6 +71,7 @@ class DsgShopVm @Inject constructor(
     }
 
     fun search(searchQuery: String, pageSize: String) {
+        showShimmer.value = true
         viewModelScope.launch {
             withContext(dispatcher) {
                 dsgSearchRepo.getSearchData(searchQuery, pageSize)
@@ -76,12 +79,12 @@ class DsgShopVm @Inject constructor(
                         errorSate.value = it.message.toString()
                     }
                     .collect {
+                        showShimmer.value = false
                         when (it) {
                             is ApiResult.Success<DsgSearchResult> -> {
-                                // Log.d("Search List", Gson().toJson(it.value))
                                 val list = it.value.productVOs
-                                list.sortByDescending {
-                                    it.ratingValue
+                                list.sortByDescending { productVo ->
+                                    productVo.ratingValue
                                 }
                                 dsgListState.value = list
                             }

@@ -6,7 +6,6 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.ParagraphStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
@@ -16,7 +15,6 @@ import androidx.compose.ui.unit.sp
 import countryinfo.app.R
 import countryinfo.app.data.model.CurrenciesName
 import countryinfo.app.uicomponents.scaffold_comp.getDP
-import countryinfo.app.utils.EMPTY_STRING
 import countryinfo.app.utils.formatWithComma
 
 /**
@@ -80,7 +78,7 @@ fun ValueComponent(value: Any) {
 @Composable
 fun RenderText(value : String) {
 
-    DsgTextView(value,FontWeight.Medium, fontSize = 14.sp, modifier = Modifier.padding(getDP(dimenKey = R.dimen.dp_10)))
+    DsgTextView(value=value, fontWeight = FontWeight.Medium, fontSize = 14.sp, modifier = Modifier.padding(getDP(dimenKey = R.dimen.dp_10)))
 
 }
 

@@ -2,10 +2,7 @@ package countryinfo.app.presentation.screens.home
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
@@ -89,7 +86,7 @@ fun HomeSearchTab(navController: NavController?, viewModel: CountryListVm) {
 @Composable
 fun SearchTextField(viewModel: CountryListVm) {
     val query = viewModel.searchQuery().collectAsState().value
-    var isVoicePermissionGranted = checkRecordAudioPermission()
+    val isVoicePermissionGranted = checkRecordAudioPermission()
     LaunchedEffect(key1 = query) {
         viewModel.searchByDebounce(query)
         if (query.isEmpty()) {
@@ -113,11 +110,7 @@ fun SearchTextField(viewModel: CountryListVm) {
             .padding(all = getDP(dimenKey = R.dimen.dp_8))
             .fillMaxWidth()
             .background(SearchBG)
-            .border(
-                width = getDP(dimenKey = R.dimen.dp_8),
-                color = Color.White,
-                shape = RoundedCornerShape(getDP(dimenKey = R.dimen.dp_20))
-            ),
+            .height(50.dp),
         singleLine = true,
         textStyle = TextStyle(fontSize = 16.sp, color = Color.Black),
         leadingIcon = { Icon(Icons.Default.Search, contentDescription = EMPTY_STRING) },

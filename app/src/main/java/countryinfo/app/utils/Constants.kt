@@ -1,8 +1,5 @@
 package countryinfo.app.utils
 
-import androidx.compose.ui.text.AnnotatedString
-import androidx.compose.ui.text.input.OffsetMapping
-import androidx.compose.ui.text.input.TransformedText
 import java.text.NumberFormat
 import java.util.*
 

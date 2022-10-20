@@ -31,7 +31,8 @@ fun CountryMapScreen(
     val countryDetail = viewModel.observeCountryData().collectAsState().value
 
     ConstraintLayout(
-        setComponentsUsingConstraints1(), modifier = Modifier.testTag("country_map_screen")
+        setComponentsUsingConstraints1(), modifier = Modifier
+            .testTag("country_map_screen")
             .fillMaxSize()
     ) {
         LoadContent(
@@ -57,7 +58,8 @@ fun LoadContent(
     LazyColumn(
         modifier = Modifier
             .wrapContentHeight()
-            .fillMaxWidth().padding(bottom = 12.dp),
+            .fillMaxWidth()
+            .padding(bottom = 12.dp),
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
 
@@ -65,13 +67,17 @@ fun LoadContent(
 
             when (item) {
                 is MapType.Header -> {
-                    ConstraintLayout(constraintSet = mapHeaderConstraints(),
-                    modifier = Modifier.fillMaxWidth().wrapContentHeight()) {
-                        countryDetail.flags?.png?.let {
+                    ConstraintLayout(
+                        constraintSet = mapHeaderConstraints(),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .wrapContentHeight()
+                    ) {
+                        countryDetail.flags.png.let {
                             ImageFullFlag(flagImageUrl = it)
                         }
-                        val official = countryDetail.name?.official ?: EMPTY_STRING
-                        val name = countryDetail.name?.common ?: EMPTY_STRING
+                        val official = countryDetail.name.official
+                        val name = countryDetail.name.common
 
                         CountryNameCard(title = name, value = official)
                         CountryBasicDetail(countryDetail)
@@ -95,22 +101,21 @@ fun LoadContent(
                 is MapType.Country -> {
                     MapLabel(
                         textLabel = "${stringResource(id = R.string.country)} - ",
-                        textValue = countryDetail.name?.common ?: EMPTY_STRING
+                        textValue = countryDetail.name.common
                     )
                     val countryLocation: LatLng = try {
 
-                        if (countryDetail.latlng.isEmpty()) {
+                        if (countryDetail.latlng.size < 2) {
                             LatLng(0.0, 0.0)
                         } else {
                             LatLng(
-                                countryDetail.latlng[0] ?: 0.0, countryDetail.latlng[1]
-                                    ?: 0.0
+                                countryDetail.latlng[0], countryDetail.latlng[1]
                             )
                         }
                     } catch (ex: Exception) {
                         LatLng(0.0, 0.0)
                     }
-                        MapViewComponent(countryLocation, MapType.Country)
+                    MapViewComponent(countryLocation, MapType.Country)
 
                 }
                 is MapType.Capital -> {
@@ -129,7 +134,8 @@ fun LoadContent(
                             LatLng(0.0, 0.0)
                         } else {
                             LatLng(
-                                countryDetail.capitalInfo?.latlng?.get(0) ?: 0.0, countryDetail.capitalInfo?.latlng?.get(1)
+                                countryDetail.capitalInfo?.latlng?.get(0) ?: 0.0,
+                                countryDetail.capitalInfo?.latlng?.get(1)
                                     ?: 0.0
                             )
                         }

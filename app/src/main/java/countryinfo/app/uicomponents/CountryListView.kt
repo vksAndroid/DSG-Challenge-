@@ -37,7 +37,7 @@ fun CountryListView(
     } else {
 
         LazyColumn(
-            state = DsgLazyListState(key = "Home"), modifier = Modifier
+            state = dsgLazyListState(key = "Home"), modifier = Modifier
                 .testTag("country_lazy_column")
                 .padding(top = getDP(dimenKey = R.dimen.dp_8))
         ) {

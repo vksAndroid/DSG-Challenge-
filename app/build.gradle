@@ -46,7 +46,7 @@ android {
             pickFirst  '**'
         }
     }
-    buildToolsVersion '32.0.0'
+    buildToolsVersion '32.1.0-rc1'
 
 
 }
@@ -119,7 +119,7 @@ dependencies {
     //Google Map
     implementation 'com.google.maps.android:maps-compose:2.7.2'
     implementation 'com.google.android.gms:play-services-maps:18.1.0'
-    implementation 'com.google.android.gms:play-services-location:20.0.0'
+    implementation 'com.google.android.gms:play-services-location:21.0.0'
 
     //App permission
     implementation 'com.google.accompanist:accompanist-permissions:0.21.1-beta'

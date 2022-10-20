@@ -94,7 +94,7 @@ class DsgShopVmTest {
         val address = mockk<Address>()
         every { address.countryName }.answers { "United States" }
 
-        val list = mutableListOf<Address>(address)
+        val list = mutableListOf(address)
         val slot = slot<Geocoder.GeocodeListener>()
         every {
             mockGeocoder.getFromLocation(
@@ -123,7 +123,7 @@ class DsgShopVmTest {
         val address = mockk<Address>()
         every { address.countryName }.answers { "United States" }
 
-        val list = mutableListOf<Address>(address)
+        val list = mutableListOf(address)
         every {
             mockGeocoder.getFromLocation(
                 23.55555, 23.55555, 1
