@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
 import androidx.compose.material.Divider
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -13,6 +14,7 @@ import androidx.compose.ui.layout.layoutId
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
 import countryinfo.app.R
@@ -36,7 +38,10 @@ fun CountryBasicDetail(countryData: CountryData) {
     ) {
         Row(
             modifier = Modifier
-                .padding(start = getDP(dimenKey = R.dimen.dp_12), end = getDP(dimenKey = R.dimen.dp_12))
+                .padding(
+                    start = getDP(dimenKey = R.dimen.dp_12),
+                    end = getDP(dimenKey = R.dimen.dp_12)
+                )
                 .fillMaxWidth(),
 
             Arrangement.SpaceAround,
@@ -70,12 +75,13 @@ fun CountryBasicDetail(countryData: CountryData) {
 
 
 @Composable
-fun ShowItem(title: String, value: String) {
+fun RowScope.ShowItem(title: String, value: String) {
 
     Column(
-        modifier = Modifier
-            .padding(bottom = getDP(dimenKey = R.dimen.dp_8), top =getDP(dimenKey = R.dimen.dp_8)),
-        horizontalAlignment = Alignment.CenterHorizontally
+        modifier = Modifier.weight(1f)
+            .padding(vertical = getDP(dimenKey = R.dimen.dp_10),
+                horizontal =getDP(dimenKey = R.dimen.dp_2)),
+        horizontalAlignment = Alignment.CenterHorizontally,
     ) {
 
         Text(
@@ -84,11 +90,29 @@ fun ShowItem(title: String, value: String) {
             fontSize = 16.sp,
             modifier = Modifier.padding( end = getDP(R.dimen.dp_10))
         )
-        Text(
-            text = value, color = Color.DarkGray,
-            fontWeight = FontWeight.Medium, fontSize = 14.sp,
-            modifier = Modifier.padding(end = getDP(R.dimen.dp_10), top = getDP(R.dimen.dp_5))
+
+        AutoResizeText(
+            text = value,
+            maxLines = 1,
+            color = Color.DarkGray,
+            fontWeight = FontWeight.Medium,
+             fontSizeRange = FontSizeRange(
+                min = 12.sp,
+                max = 15.sp,
+            ),
+            modifier = Modifier.padding(end = getDP(R.dimen.dp_10), top = getDP(R.dimen.dp_5)),
+            overflow = TextOverflow.Ellipsis,
         )
+
+//        Text(
+//            text = value, color = Color.DarkGray,
+//            fontWeight = FontWeight.Medium, fontSize = 14.sp,
+//            maxLines = 1,
+//                    overflow = TextOverflow.Ellipsis,
+//
+//            softWrap = true,
+//            modifier = Modifier.padding(end = getDP(R.dimen.dp_10), top = getDP(R.dimen.dp_5))
+//        )
     }
 }
 
