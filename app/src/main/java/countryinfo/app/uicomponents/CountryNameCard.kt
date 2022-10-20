@@ -57,18 +57,35 @@ fun CountryNameCard(title: String, value: String) {
                     )
                 )
             )
-            Text(
-                text = value, color = Color.DarkGray,
-                overflow = TextOverflow.Ellipsis,
+
+            AutoResizeText(
+                text = value,
                 maxLines = 2,
+                color = Color.DarkGray,
                 fontWeight = FontWeight.Medium,
-                modifier = Modifier.padding(),
+                fontSizeRange = FontSizeRange(
+                    min = 12.sp,
+                    max = 16.sp,
+                ),
                 style = MaterialTheme.typography.body1.copy(
                     platformStyle = PlatformTextStyle(
                         includeFontPadding = false
                     )
-                )
+                ),
+                 overflow = TextOverflow.Ellipsis,
             )
+//            Text(
+//                text = value, color = Color.DarkGray,
+//                overflow = TextOverflow.Ellipsis,
+//                maxLines = 2,
+//                fontWeight = FontWeight.Medium,
+//                modifier = Modifier.padding(),
+//                style = MaterialTheme.typography.body1.copy(
+//                    platformStyle = PlatformTextStyle(
+//                        includeFontPadding = false
+//                    )
+//                )
+//            )
         }
     }
 }

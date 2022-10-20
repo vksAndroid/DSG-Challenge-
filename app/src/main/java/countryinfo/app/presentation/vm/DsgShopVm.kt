@@ -21,6 +21,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.catch
 import javax.inject.Inject
 
+@Suppress("DEPRECATION")
 @HiltViewModel
 class DsgShopVm @Inject constructor(
     private val dsgSearchRepo: DsgSearchRepo,
@@ -99,7 +100,7 @@ class DsgShopVm @Inject constructor(
     }
 
     fun searchByDebounce(query: String, count: String) {
-        var searchFor = ""
+        var searchFor = EMPTY_STRING
         if (query.length > 1) {
             val searchText = query.trim()
             if (searchText != searchFor) {
