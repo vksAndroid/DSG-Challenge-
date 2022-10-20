@@ -1,5 +1,6 @@
 package countryinfo.app.uicomponents
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
@@ -38,12 +39,7 @@ fun CountryBasicDetail(countryData: CountryData) {
     ) {
         Row(
             modifier = Modifier
-                .padding(
-                    start = getDP(dimenKey = R.dimen.dp_12),
-                    end = getDP(dimenKey = R.dimen.dp_12)
-                )
                 .fillMaxWidth(),
-
             Arrangement.SpaceAround,
             verticalAlignment = Alignment.CenterVertically
         ) {
@@ -79,7 +75,7 @@ fun RowScope.ShowItem(title: String, value: String) {
     Column(
         modifier = Modifier.weight(1f)
             .padding(vertical = getDP(dimenKey = R.dimen.dp_10),
-                horizontal =getDP(dimenKey = R.dimen.dp_2)),
+                horizontal =getDP(dimenKey = R.dimen.dp_5)),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
 
@@ -90,15 +86,11 @@ fun RowScope.ShowItem(title: String, value: String) {
             modifier = Modifier.padding(end = getDP(R.dimen.dp_10))
         )
 
-        AutoResizeText(
+        Text(
             text = value,
             maxLines = 1,
             color = Color.DarkGray,
             fontWeight = FontWeight.Medium,
-             fontSizeRange = FontSizeRange(
-                min = 12.sp,
-                max = 15.sp,
-            ),
             modifier = Modifier.padding(end = getDP(R.dimen.dp_10), top = getDP(R.dimen.dp_5)),
             overflow = TextOverflow.Ellipsis,
         )
