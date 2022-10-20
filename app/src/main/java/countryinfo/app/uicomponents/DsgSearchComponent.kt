@@ -31,7 +31,10 @@ import countryinfo.app.utils.checkRecordAudioPermission
 
 
 @Composable
-fun DsgSearchComponent(query : String, isFocus: Boolean = false, onValueChange : (String)->Unit
+fun DsgSearchComponent(query : String,
+                       isFocus: Boolean = false,
+                       modifier: Modifier = Modifier,
+                       onValueChange : (String)->Unit
                        , onVoiceClick : ()->Unit) {
 
     val focusRequester = remember { FocusRequester() }
@@ -48,7 +51,7 @@ fun DsgSearchComponent(query : String, isFocus: Boolean = false, onValueChange :
             Text(text = stringResource(id = R.string.search),
                 fontWeight = FontWeight.Normal,color = Color.Black)
         },
-        modifier = Modifier
+        modifier = modifier
             .testTag("country_search_text_field")
             .padding(all = getDP(dimenKey = R.dimen.dp_8))
             .fillMaxWidth()

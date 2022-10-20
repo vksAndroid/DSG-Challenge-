@@ -71,11 +71,33 @@ fun HomeShopTab(viewModel: DsgShopVm, title: (String) -> Unit) {
                     .padding(getDP(dimenKey = R.dimen.dp_12))
             ) {
                 val (search, drop) = createRefs()
-                DsgSearchComponent(query = query, isFocus = true,onValueChange = {
+
+                DsgSearchComponent(query = query,
+                    isFocus = true,
+                    modifier = Modifier
+                        .fillMaxWidth(fraction = .85f)
+                        .constrainAs(search) {
+                            start.linkTo(parent.start)
+                            top.linkTo(parent.top)
+                            end.linkTo(drop.start)
+                        },
+                    onValueChange = {
                     viewModel.updateSearchQuery(it)
                 } ) {
                     viewModel.convertSpeechToText()
                 }
+
+//                DsgSearchTextField(
+//                    modifier = Modifier
+//                        .fillMaxWidth(fraction = .85f)
+//                        .constrainAs(search) {
+//                            start.linkTo(parent.start)
+//                            top.linkTo(parent.top)
+//                            end.linkTo(drop.start)
+//                        },
+//                    viewModel = viewModel,
+//                    focus = focusRequester
+//                )
 
                 Box(
                     modifier = Modifier
