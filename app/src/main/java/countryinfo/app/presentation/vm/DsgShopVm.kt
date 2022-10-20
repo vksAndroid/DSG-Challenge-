@@ -20,6 +20,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.catch
 import javax.inject.Inject
 
+@Suppress("DEPRECATION")
 @HiltViewModel
 class DsgShopVm @Inject constructor(
     private val dsgSearchRepo: DsgSearchRepo,
@@ -90,7 +91,7 @@ class DsgShopVm @Inject constructor(
     }
 
     fun searchByDebounce(query: String) {
-        var searchFor = ""
+        var searchFor = EMPTY_STRING
         if (query.length > 1) {
             val searchText = query.trim()
             if (searchText != searchFor) {
@@ -108,25 +109,29 @@ class DsgShopVm @Inject constructor(
     }
 
     fun getCountryByLocation(location: Location) {
-        if (Build.VERSION.SDK_INT >= 33) {
-            geocoder.getFromLocation(
-                location.latitude,
-                location.longitude,
-                1,
-                (Geocoder.GeocodeListener { addresses: MutableList<Address> ->
-                    val country = addresses[0].countryName
-                    isAmericaStateFlow.value = country.equals(CONSTANT_STRING_USA)
-                })
-            )
-        } else {
-            val addressList = geocoder.getFromLocation(
-                location.latitude,
-                location.longitude,
-                1
-            )
-            if ((addressList != null && addressList.size > 0)) {
-                val country = addressList[0]?.countryName
-                isAmericaStateFlow.value = country.equals(CONSTANT_STRING_USA)
+        viewModelScope.launch {
+            withContext(dispatcher) {
+                if (Build.VERSION.SDK_INT >= 33) {
+                    geocoder.getFromLocation(
+                        location.latitude,
+                        location.longitude,
+                        1,
+                        (Geocoder.GeocodeListener { addresses: MutableList<Address> ->
+                            val country = addresses[0].countryName
+                            isAmericaStateFlow.value = country.equals(CONSTANT_STRING_USA)
+                        })
+                    )
+                } else {
+                    val addressList = geocoder.getFromLocation(
+                        location.latitude,
+                        location.longitude,
+                        1
+                    )
+                    if ((addressList != null && addressList.size > 0)) {
+                        val country = addressList[0]?.countryName
+                        isAmericaStateFlow.value = country.equals(CONSTANT_STRING_USA)
+                    }
+                }
             }
         }
     }
