@@ -8,7 +8,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.rule.GrantPermissionRule
 import countryinfo.app.presentation.screens.home.HomeScreen
 import countryinfo.app.theme.CountryInfoTheme
-import countryinfo.app.utils.LocationPermission
+import countryinfo.app.utils.GetAppPermissions
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -169,7 +169,7 @@ class MainActivityUITest {
 
     private fun launchSearchScreen() {
         composeTestRule.activity.setContent {
-            LocationPermission()
+            GetAppPermissions()
             CountryInfoTheme {
                 HomeScreen()
             }

@@ -12,7 +12,7 @@ import com.google.accompanist.permissions.rememberPermissionState
 
 @OptIn(ExperimentalPermissionsApi::class)
 @Composable
-fun getAppPermissions() {
+fun GetAppPermissions() {
 
     val permissionState = rememberMultiplePermissionsState(
         listOf(
