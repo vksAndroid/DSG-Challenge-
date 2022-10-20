@@ -40,7 +40,7 @@ fun HomeShopTab(viewModel: DsgShopVm, title: (String) -> Unit) {
     title(BottomTab.TabDsgSearch.title)
     val focusRequester = remember { FocusRequester() }
 
-    Surface(modifier = Modifier.fillMaxSize(), color = Color.White) {
+    Surface(modifier = Modifier.testTag("home_shop_screen").fillMaxSize(), color = Color.White) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -51,7 +51,7 @@ fun HomeShopTab(viewModel: DsgShopVm, title: (String) -> Unit) {
 
             Text(
                 text = getDsgData.value, color = Color.Black,
-                modifier = Modifier.padding(getDP(dimenKey = R.dimen.dp_12)).verticalScroll(rememberScrollState())
+                modifier = Modifier.testTag("search_result_text").padding(getDP(dimenKey = R.dimen.dp_12)).verticalScroll(rememberScrollState())
             )
 
         }
@@ -79,7 +79,7 @@ fun SearchTextField(viewModel: DsgShopVm, focus: FocusRequester) {
         },
         placeholder = { Text(text = stringResource(id = R.string.search)) },
         modifier = Modifier
-            .testTag("country_search_text_field")
+            .testTag("shop_search_text_field")
             .padding(all = getDP(dimenKey = R.dimen.dp_8))
             .fillMaxWidth()
             .focusRequester(focusRequester = focus)

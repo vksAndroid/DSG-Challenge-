@@ -72,6 +72,16 @@ class MainActivityUITest {
             }
             onAllNodesWithTag("map_view").onFirst().assertIsDisplayed()
             SystemClock.sleep(2000)
+            composeTestRule.onNodeWithTag("back_icon").performClick()
+            savedScreenIconToClick.onChildAt(0).onChildAt(1).performClick()
+            onNodeWithTag("home_saved_screen").assertIsDisplayed()
+            val nodesSize = onAllNodesWithText("Shop @DICK's").fetchSemanticsNodes().size
+            if (nodesSize > 0) {
+                savedScreenIconToClick.onChildAt(0).onChildAt(2).performClick()
+                onNodeWithTag("home_shop_screen").assertIsDisplayed()
+                onNodeWithTag("shop_search_text_field").assertIsDisplayed()
+            }
+            SystemClock.sleep(2000)
         }
     }
 
@@ -132,6 +142,28 @@ class MainActivityUITest {
             waitUntil(20000) { countryLazyColumn.fetchSemanticsNodes().isEmpty() }
             SystemClock.sleep(20000)
             onNodeWithTag("country_lazy_column").assertIsDisplayed()
+        }
+    }
+
+    @Test
+    fun test_shop_search() {
+        with(composeTestRule) {
+            val countryLazyColumn = composeTestRule.onAllNodesWithTag("country_lazy_column", true)
+            waitUntil(20000) { countryLazyColumn.fetchSemanticsNodes().isEmpty() }
+            onNodeWithTag("test_bottom_navigation").assertIsDisplayed()
+            SystemClock.sleep(20000)
+
+            val nodesSize = onAllNodesWithText("Shop @DICK's").fetchSemanticsNodes().size
+            if (nodesSize > 0) {
+                val savedScreenIconToClick = onNodeWithTag("test_bottom_navigation", true)
+                savedScreenIconToClick.onChildAt(0).onChildAt(2).performClick()
+                onNodeWithTag("home_shop_screen").assertIsDisplayed()
+                val searchField = onNodeWithTag("shop_search_text_field").assertIsDisplayed()
+                searchField.performTextInput("Nike")
+                waitUntil(20000) { countryLazyColumn.fetchSemanticsNodes().isEmpty() }
+                SystemClock.sleep(20000)
+                onNodeWithTag("search_result_text").assertIsDisplayed()
+            }
         }
     }
 
