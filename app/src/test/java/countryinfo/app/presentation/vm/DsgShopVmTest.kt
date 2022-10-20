@@ -9,7 +9,9 @@ import countryinfo.app.data.model.DsgSearchResult
 import countryinfo.app.data.model.ProductVOs
 import countryinfo.app.data.repository.DsgSearchRepo
 import countryinfo.app.utils.ApiResult
+import countryinfo.app.utils.CONSTANT_STRING_USA
 import countryinfo.app.utils.ConvertSpeechToTextHelper
+import countryinfo.app.utils.EMPTY_STRING
 import io.mockk.*
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
@@ -20,18 +22,27 @@ import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
 import org.junit.After
+import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
 import org.junit.jupiter.api.Assertions
 import java.lang.reflect.Field
 import java.lang.reflect.Modifier
 
+@Suppress("DEPRECATION")
 @OptIn(ExperimentalCoroutinesApi::class)
 class DsgShopVmTest {
 
     private val mockRepo: DsgSearchRepo = mockk(relaxed = true)
     private val mockGeocoder: Geocoder = mockk(relaxed = true)
     private val dispatcher: CoroutineDispatcher = StandardTestDispatcher()
+
+    private val latitude = 37.0902
+    private val longitude = 95.7129
+    private val latitudeNotUSA = 20.5937
+    private val longitudeNotUSA = 78.9629
+
+    private val locationMock: Location = mockk(relaxed = true)
 
     private val speechToTextHelper: ConvertSpeechToTextHelper = mockk(relaxed = true)
 
@@ -82,10 +93,9 @@ class DsgShopVmTest {
     }
 
     @Test
-    fun `test get location for api 33 and above`() = runTest {
-        val locationMock: Location = mockk(relaxed = true)
-        every { locationMock.latitude } returns 23.55555
-        every { locationMock.longitude } returns 24.55555
+    fun `test get location for api 33 and above isUSA`() = runTest {
+        every { locationMock.latitude } returns latitude
+        every { locationMock.longitude } returns longitude
         setStaticFieldViaReflection(Build.VERSION::class.java.getField("SDK_INT"), 33)
 
         mockkStatic(Locale::class)
@@ -98,7 +108,7 @@ class DsgShopVmTest {
         val slot = slot<Geocoder.GeocodeListener>()
         every {
             mockGeocoder.getFromLocation(
-                23.55555, 23.55555, 1,
+                locationMock.latitude, locationMock.longitude, 1,
                 capture(slot)
             )
         } answers {
@@ -107,18 +117,18 @@ class DsgShopVmTest {
         }
 
         dsgvm.getCountryByLocation(locationMock)
+        Assert.assertEquals(CONSTANT_STRING_USA, list?.get(0)?.countryName ?: EMPTY_STRING)
 
     }
 
     @Test
-    fun `test get location for api 33 and below`() = runTest {
+    fun `test get location for api below 33 isUSA`() = runTest {
         val locationMock: Location = mockk(relaxed = true)
-        every { locationMock.latitude } returns 23.55555
-        every { locationMock.longitude } returns 24.55555
+        every { locationMock.latitude } returns latitude
+        every { locationMock.longitude } returns longitude
         setStaticFieldViaReflection(Build.VERSION::class.java.getField("SDK_INT"), 30)
 
         mockkStatic(Locale::class)
-
 
         val address = mockk<Address>()
         every { address.countryName }.answers { "United States" }
@@ -126,13 +136,37 @@ class DsgShopVmTest {
         val list = mutableListOf<Address>(address)
         every {
             mockGeocoder.getFromLocation(
-                23.55555, 23.55555, 1
+                locationMock.latitude, locationMock.longitude, 1
             )
-        } returns list
+        } returns  list
 
 
         dsgvm.getCountryByLocation(locationMock)
+        Assert.assertEquals(CONSTANT_STRING_USA, list?.get(0)?.countryName ?: EMPTY_STRING)
+    }
 
+
+    @Test
+    fun `test get location isNotUSA`() = runTest {
+        val locationMock: Location = mockk(relaxed = true)
+        every { locationMock.latitude } returns latitudeNotUSA
+        every { locationMock.longitude } returns longitudeNotUSA
+        setStaticFieldViaReflection(Build.VERSION::class.java.getField("SDK_INT"), 30)
+
+        mockkStatic(Locale::class)
+
+        val address = mockk<Address>()
+        every { address.countryName }.answers { "India" }
+
+        val list = mutableListOf<Address>(address)
+        every {
+            mockGeocoder.getFromLocation(
+                locationMock.latitude, locationMock.longitude, 1
+            )
+        } returns list
+
+        dsgvm.getCountryByLocation(locationMock)
+        Assert.assertNotEquals(CONSTANT_STRING_USA, list?.get(0)?.countryName ?: EMPTY_STRING)
     }
 }
 
