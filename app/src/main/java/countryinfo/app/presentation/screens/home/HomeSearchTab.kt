@@ -86,8 +86,8 @@ fun HomeSearchTab(navController: NavController?, viewModel: CountryListVm) {
 @Composable
 fun SearchTextField(viewModel: CountryListVm) {
     val query = viewModel.searchQuery().collectAsState().value
-    var isVoicePermissionGranted = checkRecordAudioPermission()
-    LaunchedEffect(key1 = query) {
+
+    LaunchedEffect(key1 = viewModel.searchQuery().collectAsState()) {
         viewModel.searchByDebounce(query)
         if (query.isEmpty()) {
             viewModel.clearSearch()
@@ -115,25 +115,6 @@ fun SearchTextField(viewModel: CountryListVm) {
         singleLine = true,
         textStyle = TextStyle(fontSize = 16.sp, color = Color.Black),
         leadingIcon = { Icon(Icons.Default.Search, contentDescription = EMPTY_STRING) },
-        trailingIcon = {
-            if (isVoicePermissionGranted) {
-                IconButton(
-                    onClick = {
-                        if (isVoicePermissionGranted) {
-                            viewModel.convertSpeechToText()
-                        }
-                    },
-                ) {
-                    Icon(
-                        Icons.Default.SettingsVoice,
-                        contentDescription = EMPTY_STRING,
-                        tint = Color.Gray
-                    )
-                }
-            } else {
-                null
-            }
-        },
         colors = TextFieldDefaults.textFieldColors(
             focusedIndicatorColor = Color.Transparent,
             unfocusedIndicatorColor = Color.Transparent,

@@ -31,8 +31,4 @@ sealed class BottomTab(
         Icons.Outlined.StarBorder
     )
 
-    object TabDsgSearch : BottomTab(
-        titleDsgSearch, RouteDsgSearch,
-        Icons.Outlined.MapsUgc
-    )
 }

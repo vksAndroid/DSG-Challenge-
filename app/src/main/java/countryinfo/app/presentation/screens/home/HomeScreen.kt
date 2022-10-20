@@ -20,7 +20,6 @@ import countryinfo.app.R
 import countryinfo.app.presentation.graph.BottomTab
 import countryinfo.app.presentation.graph.DsgNavigationGraph
 import countryinfo.app.presentation.vm.CountryListVm
-import countryinfo.app.presentation.vm.DsgShopVm
 import countryinfo.app.uicomponents.scaffold_comp.DsgBottomBar
 import countryinfo.app.uicomponents.scaffold_comp.DsgSnackBar
 import countryinfo.app.uicomponents.scaffold_comp.DsgTopBar
@@ -40,8 +39,6 @@ fun HomeScreen() {
 
     val viewModel: CountryListVm = hiltViewModel()
 
-    val searchVm: DsgShopVm = hiltViewModel()
-
     val isFav by rememberSaveable { mutableStateOf(viewModel.isFav) }
 
     val clickedTab by rememberSaveable { mutableStateOf(viewModel.selectedTab) }
@@ -59,27 +56,14 @@ fun HomeScreen() {
 
     val errorState = viewModel.observeErrorState().collectAsState()
 
-    val dsgErrorState = searchVm.observeErrorState().collectAsState()
-
     val noInterNetMessage = stringResource(id = R.string.there_is_no_internet)
 
-    val isAmerica = searchVm.observeIsAmerica().collectAsState().value
-    if (checkLocationPermission()) {
-        viewModel.getCurrentLatLong()
-        val currentLocation =
-            viewModel.observeCurrentLocation().collectAsState().value
-        searchVm.getCountryByLocation(currentLocation)
-    }
-
-    LaunchedEffect(key1 = errorState.value, key2 = isConnected, key3 = dsgErrorState.value) {
+    LaunchedEffect(key1 = errorState.value, key2 = isConnected) {
 
         if (!isConnected) {
             scaffoldState.snackbarHostState.showSnackbar(noInterNetMessage)
         } else if (errorState.value.isNotEmpty()) {
             scaffoldState.snackbarHostState.showSnackbar(errorState.value)
-        }
-        else if (dsgErrorState.value.isNotEmpty()) {
-            scaffoldState.snackbarHostState.showSnackbar(dsgErrorState.value)
         }
     }
 
@@ -104,9 +88,7 @@ fun HomeScreen() {
         bottomBar = {
             DsgBottomBar(
                 navController = navHostController,
-                screenOptions = getSaveScreen.value,
-                isCurrentLocationAmerica = isAmerica
-            )
+                screenOptions = getSaveScreen.value)
         },
         scaffoldState = scaffoldState,
 
@@ -134,7 +116,7 @@ fun HomeScreen() {
                         BottomTab.TabOverview.route
 
                     DsgNavigationGraph(
-                        navController = navHostController, viewModel = viewModel,searchVm, route
+                        navController = navHostController, viewModel = viewModel, route
                     )
 
                     DsgSnackBar(
@@ -153,9 +135,7 @@ fun HomeScreen() {
             if(navHostController.currentDestination?.route
                 == BottomTab.TabSearch.route
                 ||navHostController.currentDestination?.route
-                == BottomTab.TabSaved.route
-                ||navHostController.currentDestination?.route
-                == BottomTab.TabDsgSearch.route){
+                == BottomTab.TabSaved.route){
                 activity?.finish()
             } else{
                 navHostController.navigateUp()

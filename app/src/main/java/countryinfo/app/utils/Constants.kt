@@ -1,8 +1,5 @@
 package countryinfo.app.utils
 
-import androidx.compose.ui.text.AnnotatedString
-import androidx.compose.ui.text.input.OffsetMapping
-import androidx.compose.ui.text.input.TransformedText
 import java.text.NumberFormat
 import java.util.*
 
@@ -13,7 +10,6 @@ const val RouteOverview = "overview"
 const val RouteMap = "map"
 const val RouteSearch = "search"
 const val RouteSaved = "saved"
-const val RouteDsgSearch = "dsg"
 
 //Title Names for App Bar
 const val titleOverview = "Overview"
@@ -21,14 +17,11 @@ const val titleMap = "Maps"
 const val titleSearch = "Search"
 const val titleSaved = "Saved"
 const val titleCountries = "Countries"
-const val titleDsgSearch = "Shop @DICK's"
 
 // Content Description
 const val contentDescriptionCoatImage = "Coat Image of Country"
 const val contentDescriptionSaveCountry = "Save Country"
 const val contentDescriptionDriverSide = "Driver Side"
-
-const val CONSTANT_STRING_USA = "United States"
 
 // Time Duration Values
 const val duration_1000 = 1000
