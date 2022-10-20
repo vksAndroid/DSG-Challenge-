@@ -1,6 +1,7 @@
 package countryinfo.app.data
 
 import countryinfo.app.data.model.CountryData
+import countryinfo.app.data.model.DsgSearchResult
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Path
@@ -16,6 +17,6 @@ interface ApiInterface {
     suspend fun getCountryByName(@Path("query") query: String): Response<List<CountryData>>
 
     @GET
-    suspend fun getDsgSearchByName(@Url url : String): Response<String>
+    suspend fun getDsgSearchByName(@Url url : String): Response<DsgSearchResult>
 
 }

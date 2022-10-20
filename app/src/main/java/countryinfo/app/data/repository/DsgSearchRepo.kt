@@ -14,12 +14,13 @@ import javax.inject.Singleton
 class DsgSearchRepo @Inject constructor(private var client: ApiInterface) {
 
 
-    fun getSearchData(searchQuery: String) = flow {
+    fun getSearchData(searchQuery: String, pageSize : String) = flow {
 
         val query: String = encode(
             Gson().toJson(
                 SearchVO(
-                    searchQuery
+                    searchTerm = searchQuery,
+                   pageSize =  pageSize
                 )
             ), Charsets.UTF_8.name()
         )
