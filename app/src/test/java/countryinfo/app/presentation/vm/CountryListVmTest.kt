@@ -4,6 +4,7 @@ import com.google.android.gms.location.FusedLocationProviderClient
 import countryinfo.app.data.model.CountryData
 import countryinfo.app.data.repository.CountryListRepo
 import countryinfo.app.utils.ApiResult
+import countryinfo.app.utils.ConvertSpeechToTextHelper
 import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.mockk
@@ -27,12 +28,13 @@ class CountryListVmTest {
     private val repo: CountryListRepo = mockk(relaxed = true)
     private val mockedFusedLocation: FusedLocationProviderClient = mockk(relaxed = true)
     private lateinit var vm: CountryListVm
+    private val speechToTextHelperMock: ConvertSpeechToTextHelper = mockk(relaxed = true)
 
     @OptIn(ExperimentalCoroutinesApi::class)
     @Before
     fun setUp() {
         Dispatchers.setMain(dispatcher)
-        vm = CountryListVm(repo, mockedFusedLocation, dispatcher)
+        vm = CountryListVm(repo, mockedFusedLocation, speechToTextHelperMock, dispatcher)
     }
 
     @After
@@ -87,6 +89,19 @@ class CountryListVmTest {
         Assertions.assertEquals(3, vm.observeSearchCountryList().value.size)
     }
 
+
+    @Test
+    fun `get Country list  by name emit error data`() = runTest {
+        val failure = ApiResult.Failure("abcdef", Throwable("message"))
+        every { repo.getCountriesByName("abcd") } returns flow {
+            emit(failure)
+        }
+        vm.getCountriesByName("abcd")
+        delay(500)
+        Assertions.assertEquals(0, vm.observeSearchCountryList().value.size)
+        Assertions.assertEquals("abcdef", vm.observeErrorState().value)
+    }
+
     @Test
     fun `test save Favourite`() = runTest {
         val data = CountryData()
@@ -107,16 +122,16 @@ class CountryListVmTest {
     @Test
     fun `test all Favourite`() = runTest {
         val data = CountryData()
-        coEvery{ repo.getALlFavourite() }.answers{ listOf(data) }
+        coEvery { repo.getALlFavourite() }.answers { listOf(data) }
         vm.getALlFavourite()
         delay(500)
-        Assertions.assertEquals(1,vm.observeSavedCountryList().value.size)
+        Assertions.assertEquals(1, vm.observeSavedCountryList().value.size)
     }
 
     @Test
     fun `test is added to Favourite return true`() = runTest {
         val data = CountryData(cca3 = "abd")
-        coEvery{ repo.isCountryFav("abcde") }.answers{ data }
+        coEvery { repo.isCountryFav("abcde") }.answers { data }
         vm.isCountryFav("abcde")
         delay(500)
         Assertions.assertTrue(vm.isFav.value)
@@ -124,7 +139,7 @@ class CountryListVmTest {
 
     @Test
     fun `test is added to Favourite return false`() = runTest {
-        coEvery{ repo.isCountryFav("abcde") }.answers{ null }
+        coEvery { repo.isCountryFav("abcde") }.answers { null }
         vm.isCountryFav("abcde")
         delay(500)
         Assertions.assertFalse(vm.isFav.value)

@@ -27,7 +27,7 @@ import countryinfo.app.utils.idBasicDetail
 fun CountryBasicDetail(countryData: CountryData) {
 
     Card(
-        elevation =getDP(dimenKey = R.dimen.dp_2),
+        elevation = getDP(dimenKey = R.dimen.dp_2),
         modifier = Modifier
             .testTag("country_basic_details_card")
             .layoutId(idBasicDetail)
@@ -36,14 +36,17 @@ fun CountryBasicDetail(countryData: CountryData) {
     ) {
         Row(
             modifier = Modifier
-                .padding(start = getDP(dimenKey = R.dimen.dp_12), end = getDP(dimenKey = R.dimen.dp_12))
+                .padding(
+                    start = getDP(dimenKey = R.dimen.dp_12),
+                    end = getDP(dimenKey = R.dimen.dp_12)
+                )
                 .fillMaxWidth(),
 
             Arrangement.SpaceAround,
             verticalAlignment = Alignment.CenterVertically
         ) {
 
-            ShowItem(stringResource(id = R.string.region), countryData.region!!)
+            ShowItem(stringResource(id = R.string.region), countryData.region)
 
             Divider(
                 modifier = Modifier
@@ -61,10 +64,9 @@ fun CountryBasicDetail(countryData: CountryData) {
                 color = Color.LightGray
             )
 
-            ShowItem(stringResource(id = R.string.capital), countryData.capital[0])
-
+            val capital = if (countryData.capital.isNotEmpty()) countryData.capital[0] else ""
+            ShowItem(stringResource(id = R.string.capital), capital)
         }
-
     }
 }
 
@@ -74,7 +76,7 @@ fun ShowItem(title: String, value: String) {
 
     Column(
         modifier = Modifier
-            .padding(bottom = getDP(dimenKey = R.dimen.dp_8), top =getDP(dimenKey = R.dimen.dp_8)),
+            .padding(bottom = getDP(dimenKey = R.dimen.dp_8), top = getDP(dimenKey = R.dimen.dp_8)),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
 
@@ -82,7 +84,7 @@ fun ShowItem(title: String, value: String) {
             text = title, fontWeight = FontWeight.Bold,
             color = Color.DarkGray,
             fontSize = 16.sp,
-            modifier = Modifier.padding( end = getDP(R.dimen.dp_10))
+            modifier = Modifier.padding(end = getDP(R.dimen.dp_10))
         )
         Text(
             text = value, color = Color.DarkGray,

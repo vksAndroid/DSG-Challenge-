@@ -1,12 +1,15 @@
 package countryinfo.app.presentation.vm
 
-import android.location.Address
 import android.location.Geocoder
 import android.location.Location
 import android.os.Build
 import android.util.Log
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.google.gson.Gson
+import countryinfo.app.data.model.DsgSearchResult
+import countryinfo.app.data.model.ProductVOs
 import countryinfo.app.data.repository.DsgSearchRepo
 import countryinfo.app.di.IoDispatcher
 import countryinfo.app.utils.ApiResult
@@ -29,6 +32,8 @@ class DsgShopVm @Inject constructor(
     @IoDispatcher private val dispatcher: CoroutineDispatcher
 ) : ViewModel() {
 
+    var selectedCount = mutableStateOf("5")
+
     private var textChangedJob: Job? = null
 
     private val errorSate: MutableStateFlow<String> = MutableStateFlow(
@@ -39,10 +44,10 @@ class DsgShopVm @Inject constructor(
         return errorSate
     }
 
-    private val dsgListState: MutableStateFlow<String> =
-        MutableStateFlow("")
+    private val dsgListState: MutableStateFlow<List<ProductVOs>> =
+        MutableStateFlow(emptyList())
 
-    fun observeDsgList(): StateFlow<String> {
+    fun observeDsgList(): StateFlow<List<ProductVOs>> {
         return dsgListState
     }
 
@@ -57,7 +62,7 @@ class DsgShopVm @Inject constructor(
     }
 
     fun clearSearch() {
-        dsgListState.value = EMPTY_STRING
+        dsgListState.value = emptyList()
         textChangedJob?.cancel()
     }
 
@@ -65,23 +70,31 @@ class DsgShopVm @Inject constructor(
         _searchQuery.value = query
     }
 
-    fun search(searchQuery: String) {
+    fun search(searchQuery: String, pageSize: String) {
         viewModelScope.launch {
             withContext(dispatcher) {
-                dsgSearchRepo.getSearchData(searchQuery)
+                dsgSearchRepo.getSearchData(searchQuery, pageSize)
                     .catch {
-                        errorSate.value
+                        errorSate.value = it.message.toString()
                     }
                     .collect {
                         when (it) {
-                            is ApiResult.Success<String> -> {
-                                // countryListState.emit(it.value)
-                                Log.d("Collect", it.toString())
-                                dsgListState.value = it.value
+                            is ApiResult.Success<DsgSearchResult> -> {
+                                // Log.d("Search List", Gson().toJson(it.value))
+                                val list = it.value.productVOs
+                                list.sortByDescending {
+                                    it.ratingValue
+                                }
 
+                                Log.d("Search List", Gson().toJson(list))
+                                dsgListState.value = list
+                            }
+                            is ApiResult.Failure -> {
+                                it.message?.let { error ->
+                                    errorSate.value = error
+                                }
                             }
                             else -> {
-                                errorSate.value = it.toString()
                             }
                         }
 
@@ -90,7 +103,7 @@ class DsgShopVm @Inject constructor(
         }
     }
 
-    fun searchByDebounce(query: String) {
+    fun searchByDebounce(query: String, count: String) {
         var searchFor = EMPTY_STRING
         if (query.length > 1) {
             val searchText = query.trim()
@@ -98,10 +111,10 @@ class DsgShopVm @Inject constructor(
                 searchFor = searchText
 
                 textChangedJob?.cancel()
-                textChangedJob = viewModelScope.launch(Dispatchers.Main) {
+                textChangedJob = viewModelScope.launch(dispatcher) {
                     delay(700L)
                     if (searchText == searchFor) {
-                        search(searchText)
+                        search(searchText, count)
                     }
                 }
             }
@@ -109,18 +122,18 @@ class DsgShopVm @Inject constructor(
     }
 
     fun getCountryByLocation(location: Location) {
+
         viewModelScope.launch {
             withContext(dispatcher) {
                 if (Build.VERSION.SDK_INT >= 33) {
                     geocoder.getFromLocation(
                         location.latitude,
                         location.longitude,
-                        1,
-                        (Geocoder.GeocodeListener { addresses: MutableList<Address> ->
-                            val country = addresses[0].countryName
-                            isAmericaStateFlow.value = country.equals(CONSTANT_STRING_USA)
-                        })
-                    )
+                        1
+                    ) { addresses ->
+                        val country = addresses[0].countryName
+                        isAmericaStateFlow.value = country.equals(CONSTANT_STRING_USA)
+                    }
                 } else {
                     val addressList = geocoder.getFromLocation(
                         location.latitude,
@@ -134,14 +147,18 @@ class DsgShopVm @Inject constructor(
                 }
             }
         }
+
     }
 
     fun convertSpeechToText() {
-        speechToTextHelper.speechToTextConverter(
-            {
-                updateSearchQuery(it)
-            }) {
-            speechToTextHelper.speechRecognizer.stopListening()
+        viewModelScope.launch {
+            speechToTextHelper.speechToTextConverter(
+                {
+                    updateSearchQuery(it)
+                }) {
+                speechToTextHelper.speechRecognizer.stopListening()
+            }
         }
+
     }
 }
