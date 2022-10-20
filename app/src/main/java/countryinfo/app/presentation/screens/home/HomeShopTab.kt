@@ -75,6 +75,7 @@ fun HomeShopTab(viewModel: DsgShopVm, title: (String) -> Unit) {
                 DsgSearchComponent(query = query,
                     isFocus = true,
                     modifier = Modifier
+                        .testTag("shop_search_text_field")
                         .fillMaxWidth(fraction = .85f)
                         .constrainAs(search) {
                             start.linkTo(parent.start)
