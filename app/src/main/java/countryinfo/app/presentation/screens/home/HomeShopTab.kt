@@ -3,8 +3,6 @@ package countryinfo.app.presentation.screens.home
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -18,18 +16,13 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.filled.ArrowDropUp
-import androidx.compose.material.icons.filled.Search
-import androidx.compose.material.icons.filled.SettingsVoice
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.testTag
-import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import countryinfo.app.R
 import countryinfo.app.data.model.ProductVOs
@@ -87,18 +80,6 @@ fun HomeShopTab(viewModel: DsgShopVm, title: (String) -> Unit) {
                 } ) {
                     viewModel.convertSpeechToText()
                 }
-
-//                DsgSearchTextField(
-//                    modifier = Modifier
-//                        .fillMaxWidth(fraction = .85f)
-//                        .constrainAs(search) {
-//                            start.linkTo(parent.start)
-//                            top.linkTo(parent.top)
-//                            end.linkTo(drop.start)
-//                        },
-//                    viewModel = viewModel,
-//                    focus = focusRequester
-//                )
 
                 Box(
                     modifier = Modifier

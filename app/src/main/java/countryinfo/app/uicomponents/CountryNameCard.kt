@@ -11,8 +11,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.layoutId
 import androidx.compose.ui.platform.testTag
-import androidx.compose.ui.text.ExperimentalTextApi
-import androidx.compose.ui.text.PlatformTextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -23,7 +21,6 @@ import countryinfo.app.uicomponents.scaffold_comp.getDP
 import countryinfo.app.utils.idCountry
 
 
-@OptIn(ExperimentalTextApi::class)
 @Composable
 fun CountryNameCard(title: String, value: String) {
 
@@ -31,7 +28,8 @@ fun CountryNameCard(title: String, value: String) {
         elevation = 1.5.dp,
         shape = RoundedCornerShape(getDP(dimenKey = R.dimen.dp_10)),
         backgroundColor = OffWhite,
-        modifier = Modifier.testTag("country_name_card")
+        modifier = Modifier
+            .testTag("country_name_card")
             .layoutId(idCountry)
             .wrapContentHeight(Alignment.Bottom)
             .fillMaxWidth(0.6f)
@@ -40,10 +38,11 @@ fun CountryNameCard(title: String, value: String) {
         Column(
             modifier = Modifier
                 .wrapContentHeight()
-                .padding(getDP(dimenKey = R.dimen.dp_15)
-                    , end = getDP(dimenKey = R.dimen.dp_15),
+                .padding(
+                    getDP(dimenKey = R.dimen.dp_15), end = getDP(dimenKey = R.dimen.dp_15),
                     top = getDP(dimenKey = R.dimen.dp_4),
-                    bottom = getDP(dimenKey = R.dimen.dp_8)),
+                    bottom = getDP(dimenKey = R.dimen.dp_8)
+                ),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             Text(
@@ -51,11 +50,7 @@ fun CountryNameCard(title: String, value: String) {
                 color = Color.Black,
                 maxLines = 1,
                 fontSize = 22.sp,
-                style = MaterialTheme.typography.body1.copy(
-                    platformStyle = PlatformTextStyle(
-                        includeFontPadding = false
-                    )
-                )
+                style = MaterialTheme.typography.body1
             )
 
             AutoResizeText(
@@ -67,12 +62,8 @@ fun CountryNameCard(title: String, value: String) {
                     min = 12.sp,
                     max = 16.sp,
                 ),
-                style = MaterialTheme.typography.body1.copy(
-                    platformStyle = PlatformTextStyle(
-                        includeFontPadding = false
-                    )
-                ),
-                 overflow = TextOverflow.Ellipsis,
+                style = MaterialTheme.typography.body1,
+                overflow = TextOverflow.Ellipsis,
             )
 //            Text(
 //                text = value, color = Color.DarkGray,

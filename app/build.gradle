@@ -43,7 +43,7 @@ android {
     }
     packagingOptions {
         resources {
-            pickFirst  '**'
+            pickFirst '**'
         }
     }
     buildToolsVersion '32.1.0-rc1'
@@ -130,7 +130,6 @@ dependencies {
 
     // LeakCanary :- debugImplementation because LeakCanary should only run in debug builds.
     debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.9.1'
-
 
 
 }

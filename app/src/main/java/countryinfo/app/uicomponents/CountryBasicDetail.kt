@@ -51,7 +51,7 @@ fun CountryBasicDetail(countryData: CountryData) {
                 color = Color.LightGray
             )
 
-            ShowItem(stringResource(id = R.string.subregion), countryData.subregion ?: "")
+            ShowItem(stringResource(id = R.string.subregion), countryData.subregion)
 
             Divider(
                 modifier = Modifier
