@@ -46,8 +46,14 @@ fun HomeShopTab(viewModel: DsgShopVm, title: (String) -> Unit) {
     var mExpanded by remember { mutableStateOf(false) }
     var selectedIndex by remember { mutableStateOf(0) }
     val getDsgData: List<ProductVOs> = viewModel.observeDsgList().collectAsState().value
+    val query = viewModel.searchQuery().collectAsState().value
     title(BottomTab.TabDsgSearch.title)
-    val focusRequester = remember { FocusRequester() }
+    LaunchedEffect(key1 = query) {
+        viewModel.searchByDebounce(query, viewModel.selectedCount.value)
+        if (query.isEmpty()) {
+            viewModel.clearSearch()
+        }
+    }
 
     Surface(modifier = Modifier.testTag("home_shop_screen").fillMaxSize(), color = Color.White) {
         Column(
@@ -61,17 +67,12 @@ fun HomeShopTab(viewModel: DsgShopVm, title: (String) -> Unit) {
                     .padding(getDP(dimenKey = R.dimen.dp_12))
             ) {
                 val (search, drop) = createRefs()
-                DsgSearchTextField(
-                    modifier = Modifier
-                        .fillMaxWidth(fraction = .85f)
-                        .constrainAs(search) {
-                            start.linkTo(parent.start)
-                            top.linkTo(parent.top)
-                            end.linkTo(drop.start)
-                        },
-                    viewModel = viewModel,
-                    focus = focusRequester
-                )
+                DsgSearchComponent(query = query, isFocus = true,onValueChange = {
+                    viewModel.updateSearchQuery(it)
+                } ) {
+                    viewModel.convertSpeechToText()
+                }
+
                 Box(
                     modifier = Modifier
                         .fillMaxWidth(.15f)
@@ -157,65 +158,65 @@ fun HomeShopTab(viewModel: DsgShopVm, title: (String) -> Unit) {
 }
 
 
-@Composable
-fun DsgSearchTextField(modifier: Modifier, viewModel: DsgShopVm, focus: FocusRequester) {
-
-    val query = viewModel.searchQuery().collectAsState().value
-    var isVoicePermissionGranted = checkRecordAudioPermission()
-
-    LaunchedEffect(key1 = query) {
-        viewModel.searchByDebounce(query, viewModel.selectedCount.value)
-        if (query.isEmpty()) {
-            viewModel.clearSearch()
-        }
-    }
-
-    TextField(
-        value = query,
-        onValueChange = {
-            viewModel.updateSearchQuery(it)
-        },
-        placeholder = { Text(text = stringResource(id = R.string.search)) },
-        modifier = modifier
-            .testTag("shop_search_text_field")
-            .padding(all = getDP(dimenKey = R.dimen.dp_8))
-            .focusRequester(focusRequester = focus)
-            .border(
-                width = getDP(dimenKey = R.dimen.dp_8),
-                color = Color.White,
-                shape = RoundedCornerShape(
-                    getDP(dimenKey = R.dimen.dp_20)
-                )
-            ),
-        singleLine = true,
-        textStyle = TextStyle(fontSize = 16.sp, color = Color.Black),
-        leadingIcon = { Icon(Icons.Default.Search, contentDescription = EMPTY_STRING) },
-        trailingIcon = {
-            if (isVoicePermissionGranted) {
-                IconButton(
-                    onClick = {
-                        if (isVoicePermissionGranted) {
-                            viewModel.convertSpeechToText()
-                        }
-                    },
-                ) {
-                    Icon(
-                        Icons.Default.SettingsVoice,
-                        contentDescription = EMPTY_STRING,
-                        tint = Color.Gray
-                    )
-                }
-            } else {
-                null
-            }
-        },
-        colors = TextFieldDefaults.textFieldColors(
-            focusedIndicatorColor = Color.Transparent,
-            unfocusedIndicatorColor = Color.Transparent,
-            cursorColor = Color.Gray
-        ),
-        shape = RoundedCornerShape(getDP(dimenKey = R.dimen.dp_20))
-    )
-
-    focus.requestFocus()
-}
+//@Composable
+//fun DsgSearchTextField(modifier: Modifier, viewModel: DsgShopVm, focus: FocusRequester) {
+//
+//    val query = viewModel.searchQuery().collectAsState().value
+//    var isVoicePermissionGranted = checkRecordAudioPermission()
+//
+//    LaunchedEffect(key1 = query) {
+//        viewModel.searchByDebounce(query, viewModel.selectedCount.value)
+//        if (query.isEmpty()) {
+//            viewModel.clearSearch()
+//        }
+//    }
+//
+//    TextField(
+//        value = query,
+//        onValueChange = {
+//            viewModel.updateSearchQuery(it)
+//        },
+//        placeholder = { Text(text = stringResource(id = R.string.search)) },
+//        modifier = modifier
+//            .testTag("shop_search_text_field")
+//            .padding(all = getDP(dimenKey = R.dimen.dp_8))
+//            .focusRequester(focusRequester = focus)
+//            .border(
+//                width = getDP(dimenKey = R.dimen.dp_8),
+//                color = Color.White,
+//                shape = RoundedCornerShape(
+//                    getDP(dimenKey = R.dimen.dp_20)
+//                )
+//            ),
+//        singleLine = true,
+//        textStyle = TextStyle(fontSize = 16.sp, color = Color.Black),
+//        leadingIcon = { Icon(Icons.Default.Search, contentDescription = EMPTY_STRING) },
+//        trailingIcon = {
+//            if (isVoicePermissionGranted) {
+//                IconButton(
+//                    onClick = {
+//                        if (isVoicePermissionGranted) {
+//                            viewModel.convertSpeechToText()
+//                        }
+//                    },
+//                ) {
+//                    Icon(
+//                        Icons.Default.SettingsVoice,
+//                        contentDescription = EMPTY_STRING,
+//                        tint = Color.Gray
+//                    )
+//                }
+//            } else {
+//                null
+//            }
+//        },
+//        colors = TextFieldDefaults.textFieldColors(
+//            focusedIndicatorColor = Color.Transparent,
+//            unfocusedIndicatorColor = Color.Transparent,
+//            cursorColor = Color.Gray
+//        ),
+//        shape = RoundedCornerShape(getDP(dimenKey = R.dimen.dp_20))
+//    )
+//
+//    focus.requestFocus()
+//}
