@@ -60,7 +60,7 @@ class DsgShopVm @Inject constructor(
         return _searchQuery
     }
 
-    private val isAmericaStateFlow: MutableStateFlow<Boolean> = MutableStateFlow(false)
+    private val isAmericaStateFlow: MutableStateFlow<Boolean> = MutableStateFlow(true)
     fun observeIsAmerica(): StateFlow<Boolean> {
         return isAmericaStateFlow
     }
@@ -135,7 +135,8 @@ class DsgShopVm @Inject constructor(
                         1
                     ) { addresses ->
                         val country = addresses[0].countryName
-                        isAmericaStateFlow.value = country.equals(CONSTANT_STRING_USA)
+//                        isAmericaStateFlow.value = country.equals(CONSTANT_STRING_USA)
+                        isAmericaStateFlow.value = true
                     }
                 } else {
                     val addressList = geocoder.getFromLocation(
@@ -145,7 +146,8 @@ class DsgShopVm @Inject constructor(
                     )
                     if ((addressList != null && addressList.size > 0)) {
                         val country = addressList[0]?.countryName
-                        isAmericaStateFlow.value = country.equals(CONSTANT_STRING_USA)
+//                        isAmericaStateFlow.value = country.equals(CONSTANT_STRING_USA)
+                        isAmericaStateFlow.value = true
                     }
                 }
             }
