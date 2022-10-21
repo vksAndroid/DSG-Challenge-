@@ -20,6 +20,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -30,6 +31,7 @@ import countryinfo.app.presentation.graph.BottomTab
 import countryinfo.app.presentation.vm.DsgShopVm
 import countryinfo.app.uicomponents.LoadingShimmerEffect
 import countryinfo.app.uicomponents.DsgSearchComponent
+import countryinfo.app.uicomponents.RequestContentPermission
 import countryinfo.app.uicomponents.scaffold_comp.getDP
 
 @Composable
@@ -42,6 +44,8 @@ fun HomeShopTab(viewModel: DsgShopVm, title: (String) -> Unit) {
     var selectedIndex by remember { mutableStateOf(0) }
     val getDsgData: List<ProductVOs> = viewModel.observeDsgList().collectAsState().value
     val query = viewModel.searchQuery().collectAsState().value
+    viewModel.identifyImageToSearch(LocalContext.current)
+    RequestContentPermission()
     title(BottomTab.TabDsgSearch.title)
     LaunchedEffect(key1 = query) {
         viewModel.searchByDebounce(query, viewModel.selectedCount.value)

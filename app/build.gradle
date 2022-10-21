@@ -81,6 +81,9 @@ dependencies {
     implementation 'androidx.multidex:multidex:2.0.1'
     //hilt
     implementation("com.google.dagger:hilt-android:2.44")
+    implementation 'androidx.appcompat:appcompat:1.5.1'
+    implementation 'com.google.android.material:material:1.4.0'
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
     testImplementation 'org.junit.jupiter:junit-jupiter'
     testImplementation 'org.junit.jupiter:junit-jupiter'
     kapt("com.google.dagger:hilt-android-compiler:2.44")
@@ -128,5 +131,7 @@ dependencies {
     implementation "androidx.room:room-ktx:2.4.3"
     kapt "androidx.room:room-compiler:2.4.3"
 
+    implementation 'org.pytorch:pytorch_android_lite:1.9.0'
+    implementation 'org.pytorch:pytorch_android_torchvision:1.9.0'
 
 }

@@ -1,5 +1,6 @@
 package countryinfo.app.presentation.vm
 
+import android.content.Context
 import android.location.Geocoder
 import android.location.Location
 import android.os.Build
@@ -10,10 +11,7 @@ import countryinfo.app.data.model.DsgSearchResult
 import countryinfo.app.data.model.ProductVOs
 import countryinfo.app.data.repository.DsgSearchRepo
 import countryinfo.app.di.IoDispatcher
-import countryinfo.app.utils.ApiResult
-import countryinfo.app.utils.CONSTANT_STRING_USA
-import countryinfo.app.utils.ConvertSpeechToTextHelper
-import countryinfo.app.utils.EMPTY_STRING
+import countryinfo.app.utils.*
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -159,5 +157,9 @@ class DsgShopVm @Inject constructor(
             }
         }
 
+    }
+
+    fun identifyImageToSearch(context: Context) {
+        _searchQuery.value = IdentifyImage().findImageDetail(context)
     }
 }
