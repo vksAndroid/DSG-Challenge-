@@ -53,18 +53,18 @@ fun DsgSearchComponent(query : String,
         },
         modifier = modifier
             .testTag("country_search_text_field")
+            .border(
+                width = getDP(dimenKey = R.dimen.dp_16),
+                color = Color.White,
+                shape = RoundedCornerShape(getDP(dimenKey = R.dimen.dp_25))
+            )
             .padding(all = getDP(dimenKey = R.dimen.dp_8))
             .fillMaxWidth()
             .background(SearchBG)
-            .focusRequester(focusRequester)
-            .border(
-                width = getDP(dimenKey = R.dimen.dp_8),
-                color = Color.White,
-                shape = RoundedCornerShape(getDP(dimenKey = R.dimen.dp_20))
-            ),
+            .focusRequester(focusRequester),
         singleLine = true,
         textStyle = TextStyle(fontSize = 16.sp, color = Color.Black),
-        leadingIcon = { Icon(Icons.Default.Search, contentDescription = EMPTY_STRING) },
+        leadingIcon = { Icon(Icons.Default.Search, contentDescription = EMPTY_STRING, tint = Color.Gray) },
         trailingIcon = {
             if (isVoicePermissionGranted) {
                 IconButton(
