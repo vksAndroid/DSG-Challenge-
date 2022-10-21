@@ -1,5 +1,6 @@
 package countryinfo.app.uicomponents
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
@@ -8,11 +9,16 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import coil.compose.AsyncImage
+import coil.compose.rememberAsyncImagePainter
+import coil.request.CachePolicy
+import coil.request.ImageRequest
 import countryinfo.app.R
 import countryinfo.app.uicomponents.scaffold_comp.getDP
 import countryinfo.app.utils.EMPTY_STRING
@@ -30,7 +36,8 @@ fun CountryItemView(
 
 
     Card(
-        modifier = Modifier.testTag("country_item_view")
+        modifier = Modifier
+            .testTag("country_item_view")
             .fillMaxWidth()
             .padding(getDP(dimenKey = R.dimen.dp_12)),
         onClick = { onItemClicked.invoke() },
@@ -45,19 +52,30 @@ fun CountryItemView(
 
         ) {
 
-            AsyncImage(
-                model = countryFlag, contentDescription = stringResource(R.string.country_flag),
-                placeholder = painterResource(id = R.drawable.default_placeholder),
-                modifier = Modifier
-                    .size(width = getDP(dimenKey = R.dimen.dp_100),
-                        height = getDP(dimenKey = R.dimen.dp_65))
-                    .padding(getDP(dimenKey = R.dimen.dp_8))
+            val painterModel = rememberAsyncImagePainter(
+                model = ImageRequest.Builder(LocalContext.current)
+                    .data(countryFlag).crossfade(true).diskCachePolicy(CachePolicy.ENABLED)
+                    .placeholder(R.drawable.default_placeholder).build()
             )
+
+            Image(
+                painter = painterModel, contentDescription = "",
+                modifier = Modifier
+                    .size(
+                        width = getDP(dimenKey = R.dimen.dp_100),
+                        height = getDP(dimenKey = R.dimen.dp_65)
+                    )
+                    .padding(getDP(dimenKey = R.dimen.dp_8)),
+                contentScale = ContentScale.Crop
+            )
+
             Column(
                 modifier = Modifier
                     .align(alignment = Alignment.CenterVertically)
-                    .padding(vertical = getDP(dimenKey = R.dimen.dp_10),
-                        horizontal = getDP(dimenKey = R.dimen.dp_10))
+                    .padding(
+                        vertical = getDP(dimenKey = R.dimen.dp_10),
+                        horizontal = getDP(dimenKey = R.dimen.dp_10)
+                    )
             ) {
                 DsgTextView(
                     value = commonName ?: EMPTY_STRING,
