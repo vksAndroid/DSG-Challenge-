@@ -8,7 +8,7 @@ import org.tensorflow.lite.support.tensorbuffer.TensorBuffer
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
 
-object TensorFLowHelper {
+object TensorFlowHelper {
 
     val imageSize = 224
 

@@ -167,31 +167,35 @@ class DsgShopVm @Inject constructor(
         viewModelScope.launch {
             withContext(dispatcher) {
                 photoUri?.let {
-                    var bitmap: Bitmap? = null
+                    var bitmap: Bitmap?
 
-                    if (Build.VERSION.SDK_INT < 28) {
-                        bitmap = MediaStore.Images.Media.getBitmap(context.contentResolver, it)
-                    } else {
-                        val source = ImageDecoder.createSource(context.contentResolver, it)
-                        bitmap = ImageDecoder.decodeBitmap(
-                            source
-                        ) { decoder, _, _ ->
-                            decoder.allocator = ImageDecoder.ALLOCATOR_SOFTWARE
-                            decoder.isMutableRequired = true
+                    try {
+                        if (Build.VERSION.SDK_INT < 28) {
+                            bitmap = MediaStore.Images.Media.getBitmap(context.contentResolver, it)
+                        } else {
+                            val source = ImageDecoder.createSource(context.contentResolver, it)
+                            bitmap = ImageDecoder.decodeBitmap(
+                                source
+                            ) { decoder, _, _ ->
+                                decoder.allocator = ImageDecoder.ALLOCATOR_SOFTWARE
+                                decoder.isMutableRequired = true
+                            }
                         }
-                    }
-                    bitmap?.let { bt ->
-                        var scaledBitmap = Bitmap.createScaledBitmap(
-                            bt,
-                            TensorFLowHelper.imageSize,
-                            TensorFLowHelper.imageSize, false
-                        )
-                        TensorFLowHelper.classifyImage(scaledBitmap, context) {
-                            _searchQuery.value = it
-                            bt.recycle()
-                            scaledBitmap = null
-                            bitmap = null
+                        bitmap?.let { bt ->
+                            var scaledBitmap = Bitmap.createScaledBitmap(
+                                bt,
+                                TensorFlowHelper.imageSize,
+                                TensorFlowHelper.imageSize, false
+                            )
+                            TensorFlowHelper.classifyImage(scaledBitmap, context) { searchResults ->
+                                _searchQuery.value = searchResults
+                                bt.recycle()
+                                scaledBitmap = null
+                                bitmap = null
+                            }
                         }
+                    } catch (exception: Exception) {
+                        errorSate.value = exception.message.toString()
                     }
 
                 }
