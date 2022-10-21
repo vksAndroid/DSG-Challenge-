@@ -66,8 +66,8 @@ fun CountryBasicDetail(countryData: CountryData) {
                 color = Color.LightGray
             )
 
-            ShowItem(stringResource(id = R.string.capital), countryData.capital[0])
-
+            val capital = if (countryData.capital.isNotEmpty()) countryData.capital[0] else ""
+            ShowItem(stringResource(id = R.string.capital), capital)
         }
 
     }
