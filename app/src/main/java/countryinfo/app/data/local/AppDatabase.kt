@@ -6,7 +6,7 @@ import androidx.room.TypeConverters
 import countryinfo.app.data.local.dataconverters.Converters
 import countryinfo.app.data.model.CountryData
 
-@Database(entities = [CountryData::class], version = 1)
+@Database(entities = [CountryData::class], version = 1, exportSchema = false)
 @TypeConverters(value = [Converters::class])
 abstract class AppDatabase : RoomDatabase() {
 

@@ -6,7 +6,7 @@ import com.google.gson.annotations.SerializedName
 @Entity
 data class CoatOfArms(
 
-    @SerializedName("png") var png: String? = null,
-    @SerializedName("svg") var svg: String? = null
+    @SerializedName("png") var png: String = "",
+    @SerializedName("svg") var svg: String = ""
 
 )

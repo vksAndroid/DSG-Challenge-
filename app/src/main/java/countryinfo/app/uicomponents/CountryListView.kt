@@ -40,14 +40,14 @@ fun CountryListView(
             items(items = countryList) { countryData ->
 
                 CountryItemView(
-                    commonName = countryData.name?.common,
-                    officialName = countryData.name?.official,
+                    commonName = countryData.name.common,
+                    officialName = countryData.name.official,
                     capitalName = if (countryData.capital.isNotEmpty()) {
                         countryData.capital[0]
                     } else {
                         EMPTY_STRING
                     },
-                    countryFlag = countryData.flags?.png,
+                    countryFlag = countryData.flags.png,
                     onItemClicked = {
                         changeState.invoke(countryData)
 

@@ -15,7 +15,4 @@ interface ApiInterface {
     @GET("/v3.1/name/{query}")
     suspend fun getCountryByName(@Path("query") query: String): Response<List<CountryData>>
 
-    @GET
-    suspend fun getDsgSearchByName(@Url url : String): Response<String>
-
 }

@@ -67,11 +67,11 @@ fun LoadContent(
                 is MapType.Header -> {
                     ConstraintLayout(constraintSet = mapHeaderConstraints(),
                     modifier = Modifier.fillMaxWidth().wrapContentHeight()) {
-                        countryDetail.flags?.png?.let {
+                        countryDetail.flags.png.let {
                             ImageFullFlag(flagImageUrl = it)
                         }
-                        val official = countryDetail.name?.official ?: EMPTY_STRING
-                        val name = countryDetail.name?.common ?: EMPTY_STRING
+                        val official = countryDetail.name.official
+                        val name = countryDetail.name.common
 
                         CountryNameCard(title = name, value = official)
                         CountryBasicDetail(countryDetail)
@@ -95,7 +95,7 @@ fun LoadContent(
                 is MapType.Country -> {
                     MapLabel(
                         textLabel = "${stringResource(id = R.string.country)} - ",
-                        textValue = countryDetail.name?.common ?: EMPTY_STRING
+                        textValue = countryDetail.name.common
                     )
                     val countryLocation: LatLng = try {
 
@@ -103,8 +103,7 @@ fun LoadContent(
                             LatLng(0.0, 0.0)
                         } else {
                             LatLng(
-                                countryDetail.latlng[0] ?: 0.0, countryDetail.latlng[1]
-                                    ?: 0.0
+                                countryDetail.latlng[0], countryDetail.latlng[1]
                             )
                         }
                     } catch (ex: Exception) {

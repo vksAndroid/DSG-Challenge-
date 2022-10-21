@@ -35,11 +35,11 @@ fun DetailOverViewTab(viewModel: CountryListVm) {
                 rememberScrollState()
             ).padding(bottom = 12.dp)
     ) {
-        ImageFullFlag(flagImageUrl = countryDetail.flags?.png!!)
+        ImageFullFlag(flagImageUrl = countryDetail.flags.png)
 
         CountryNameCard(
-            title = countryDetail.name?.common!!,
-            value = countryDetail.name?.official!!
+            title = countryDetail.name.common,
+            value = countryDetail.name.official
         )
 
         CountryBasicDetail(countryDetail)
@@ -48,13 +48,11 @@ fun DetailOverViewTab(viewModel: CountryListVm) {
 
                 CountryDetailComponent(title = stringResource(id = R.string.currencies), value = countryDetail.currencies)
 
-                countryDetail.car?.side?.let {
+                countryDetail.car.side.let {
                     CountryDetailComponent(title = stringResource(id = R.string.car_driver_side), value = it, isDriverItem = true)
                 }
 
-                countryDetail.population?.let {
-                    CountryDetailComponent(title = stringResource(id = R.string.population), value = it)
-                }
+        CountryDetailComponent(title = stringResource(id = R.string.population), value = countryDetail.population)
 
                  CountryDetailComponent(title = stringResource(id = R.string.timezones), value = countryDetail.timezones)
 

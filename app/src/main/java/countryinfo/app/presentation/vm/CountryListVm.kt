@@ -26,7 +26,6 @@ import javax.inject.Inject
 class CountryListVm @Inject constructor(
     private val countryListRepo: CountryListRepo,
     private val mFusedLocationClient: FusedLocationProviderClient,
-    private val speechToTextHelper: ConvertSpeechToTextHelper,
     @IoDispatcher private val dispatcher: CoroutineDispatcher
 ) : ViewModel() {
 
@@ -265,12 +264,4 @@ class CountryListVm @Inject constructor(
         }
     }
 
-    fun convertSpeechToText() {
-        speechToTextHelper.speechToTextConverter(
-            {
-                updateSearchQuery(it)
-            }) {
-            speechToTextHelper.speechRecognizer.stopListening()
-        }
-    }
 }
