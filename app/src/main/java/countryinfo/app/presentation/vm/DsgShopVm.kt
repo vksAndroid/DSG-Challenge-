@@ -150,7 +150,6 @@ class DsgShopVm @Inject constructor(
                 }
             }
         }
-
     }
 
     fun convertSpeechToText() {
@@ -181,14 +180,17 @@ class DsgShopVm @Inject constructor(
                             decoder.isMutableRequired = true
                         }
                     }
-                    bitmap?.let {
-                        val scaledBitmap = Bitmap.createScaledBitmap(
-                            it,
+                    bitmap?.let { bt ->
+                        var scaledBitmap = Bitmap.createScaledBitmap(
+                            bt,
                             TensorFLowHelper.imageSize,
                             TensorFLowHelper.imageSize, false
                         )
                         TensorFLowHelper.classifyImage(scaledBitmap, context) {
                             _searchQuery.value = it
+                            bt.recycle()
+                            scaledBitmap = null
+                            bitmap = null
                         }
                     }
 

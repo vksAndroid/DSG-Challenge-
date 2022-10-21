@@ -24,7 +24,6 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -36,7 +35,6 @@ import countryinfo.app.presentation.vm.DsgShopVm
 import countryinfo.app.uicomponents.LoadingShimmerEffect
 import countryinfo.app.uicomponents.DsgSearchComponent
 import countryinfo.app.uicomponents.scaffold_comp.getDP
-import countryinfo.app.utils.TensorFLowHelper
 
 @Composable
 fun HomeShopTab(viewModel: DsgShopVm, title: (String) -> Unit) {
@@ -45,15 +43,12 @@ fun HomeShopTab(viewModel: DsgShopVm, title: (String) -> Unit) {
         mutableStateOf<Uri?>(null)
     }
 
-    val context = LocalContext.current
-
     val launcher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.GetContent(),
         onResult = {
             photoUri = it
         }
     )
-
 
     val errorState = viewModel.observeErrorState().collectAsState()
 
@@ -83,7 +78,8 @@ fun HomeShopTab(viewModel: DsgShopVm, title: (String) -> Unit) {
     ) {
         Column(
             modifier = Modifier
-                .fillMaxSize()
+                .fillMaxSize(),
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
 
             ConstraintLayout(
@@ -175,13 +171,12 @@ fun HomeShopTab(viewModel: DsgShopVm, title: (String) -> Unit) {
                 }
             }
 
-            Button(onClick = {
+            OutlinedButton(onClick = {
                 launcher.launch("image/*")
-            }, modifier = Modifier.fillMaxWidth()) {
-                Text(text = "Pick an image", color = Color.Black)
+            }, modifier = Modifier.fillMaxWidth(.8f)) {
+                Text(text = "Pick an image", color = Color.Black,
+                )
             }
-
-
 
             if (getDsgData.isEmpty() && errorState.value.isEmpty() && viewModel.showShimmer.value) {
                 LazyColumn(Modifier.testTag("shimmer_effect")) {
@@ -210,6 +205,5 @@ fun HomeShopTab(viewModel: DsgShopVm, title: (String) -> Unit) {
                 }
             }
         }
-
     }
 }
