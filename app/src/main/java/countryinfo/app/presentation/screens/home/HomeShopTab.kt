@@ -1,5 +1,9 @@
 package countryinfo.app.presentation.screens.home
 
+import android.graphics.Bitmap
+import android.net.Uri
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -20,6 +24,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -31,9 +36,24 @@ import countryinfo.app.presentation.vm.DsgShopVm
 import countryinfo.app.uicomponents.LoadingShimmerEffect
 import countryinfo.app.uicomponents.DsgSearchComponent
 import countryinfo.app.uicomponents.scaffold_comp.getDP
+import countryinfo.app.utils.TensorFLowHelper
 
 @Composable
 fun HomeShopTab(viewModel: DsgShopVm, title: (String) -> Unit) {
+
+    var photoUri by remember {
+        mutableStateOf<Uri?>(null)
+    }
+
+    val context = LocalContext.current
+
+    val launcher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.GetContent(),
+        onResult = {
+            photoUri = it
+        }
+    )
+
 
     val errorState = viewModel.observeErrorState().collectAsState()
 
@@ -50,13 +70,22 @@ fun HomeShopTab(viewModel: DsgShopVm, title: (String) -> Unit) {
         }
     }
 
-    Surface(modifier = Modifier
-        .testTag("home_shop_screen")
-        .fillMaxSize(), color = Color.White) {
+    LaunchedEffect(key1 = photoUri) {
+        if (photoUri != null) {
+            viewModel.getStringData(photoUri)
+        }
+    }
+
+    Surface(
+        modifier = Modifier
+            .testTag("home_shop_screen")
+            .fillMaxSize(), color = Color.White
+    ) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
         ) {
+
             ConstraintLayout(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -76,8 +105,8 @@ fun HomeShopTab(viewModel: DsgShopVm, title: (String) -> Unit) {
                             end.linkTo(drop.start)
                         },
                     onValueChange = {
-                    viewModel.updateSearchQuery(it)
-                } ) {
+                        viewModel.updateSearchQuery(it)
+                    }) {
                     viewModel.convertSpeechToText()
                 }
 
@@ -146,6 +175,14 @@ fun HomeShopTab(viewModel: DsgShopVm, title: (String) -> Unit) {
                 }
             }
 
+            Button(onClick = {
+                launcher.launch("image/*")
+            }, modifier = Modifier.fillMaxWidth()) {
+                Text(text = "Pick an image", color = Color.Black)
+            }
+
+
+
             if (getDsgData.isEmpty() && errorState.value.isEmpty() && viewModel.showShimmer.value) {
                 LazyColumn(Modifier.testTag("shimmer_effect")) {
                     repeat(7) {
@@ -176,67 +213,3 @@ fun HomeShopTab(viewModel: DsgShopVm, title: (String) -> Unit) {
 
     }
 }
-
-
-//@Composable
-//fun DsgSearchTextField(modifier: Modifier, viewModel: DsgShopVm, focus: FocusRequester) {
-//
-//    val query = viewModel.searchQuery().collectAsState().value
-//    var isVoicePermissionGranted = checkRecordAudioPermission()
-//
-//    LaunchedEffect(key1 = query) {
-//        viewModel.searchByDebounce(query, viewModel.selectedCount.value)
-//        if (query.isEmpty()) {
-//            viewModel.clearSearch()
-//        }
-//    }
-//
-//    TextField(
-//        value = query,
-//        onValueChange = {
-//            viewModel.updateSearchQuery(it)
-//        },
-//        placeholder = { Text(text = stringResource(id = R.string.search)) },
-//        modifier = modifier
-//            .testTag("shop_search_text_field")
-//            .padding(all = getDP(dimenKey = R.dimen.dp_8))
-//            .focusRequester(focusRequester = focus)
-//            .border(
-//                width = getDP(dimenKey = R.dimen.dp_8),
-//                color = Color.White,
-//                shape = RoundedCornerShape(
-//                    getDP(dimenKey = R.dimen.dp_20)
-//                )
-//            ),
-//        singleLine = true,
-//        textStyle = TextStyle(fontSize = 16.sp, color = Color.Black),
-//        leadingIcon = { Icon(Icons.Default.Search, contentDescription = EMPTY_STRING) },
-//        trailingIcon = {
-//            if (isVoicePermissionGranted) {
-//                IconButton(
-//                    onClick = {
-//                        if (isVoicePermissionGranted) {
-//                            viewModel.convertSpeechToText()
-//                        }
-//                    },
-//                ) {
-//                    Icon(
-//                        Icons.Default.SettingsVoice,
-//                        contentDescription = EMPTY_STRING,
-//                        tint = Color.Gray
-//                    )
-//                }
-//            } else {
-//                null
-//            }
-//        },
-//        colors = TextFieldDefaults.textFieldColors(
-//            focusedIndicatorColor = Color.Transparent,
-//            unfocusedIndicatorColor = Color.Transparent,
-//            cursorColor = Color.Gray
-//        ),
-//        shape = RoundedCornerShape(getDP(dimenKey = R.dimen.dp_20))
-//    )
-//
-//    focus.requestFocus()
-//}

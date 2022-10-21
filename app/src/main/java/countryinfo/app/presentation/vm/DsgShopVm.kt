@@ -1,8 +1,13 @@
 package countryinfo.app.presentation.vm
 
+import android.content.Context
+import android.graphics.Bitmap
+import android.graphics.ImageDecoder
 import android.location.Geocoder
 import android.location.Location
+import android.net.Uri
 import android.os.Build
+import android.provider.MediaStore
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -10,11 +15,9 @@ import countryinfo.app.data.model.DsgSearchResult
 import countryinfo.app.data.model.ProductVOs
 import countryinfo.app.data.repository.DsgSearchRepo
 import countryinfo.app.di.IoDispatcher
-import countryinfo.app.utils.ApiResult
-import countryinfo.app.utils.CONSTANT_STRING_USA
-import countryinfo.app.utils.ConvertSpeechToTextHelper
-import countryinfo.app.utils.EMPTY_STRING
+import countryinfo.app.utils.*
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -24,6 +27,7 @@ import javax.inject.Inject
 @Suppress("DEPRECATION")
 @HiltViewModel
 class DsgShopVm @Inject constructor(
+    @ApplicationContext private val context: Context,
     private val dsgSearchRepo: DsgSearchRepo,
     private val geocoder: Geocoder,
     private val speechToTextHelper: ConvertSpeechToTextHelper,
@@ -158,6 +162,39 @@ class DsgShopVm @Inject constructor(
                 speechToTextHelper.speechRecognizer.stopListening()
             }
         }
+    }
 
+    fun getStringData(photoUri: Uri?) {
+        viewModelScope.launch {
+            withContext(dispatcher) {
+                photoUri?.let {
+                    var bitmap: Bitmap? = null
+
+                    if (Build.VERSION.SDK_INT < 28) {
+                        bitmap = MediaStore.Images.Media.getBitmap(context.contentResolver, it)
+                    } else {
+                        val source = ImageDecoder.createSource(context.contentResolver, it)
+                        bitmap = ImageDecoder.decodeBitmap(
+                            source
+                        ) { decoder, _, _ ->
+                            decoder.allocator = ImageDecoder.ALLOCATOR_SOFTWARE
+                            decoder.isMutableRequired = true
+                        }
+                    }
+                    bitmap?.let {
+                        val scaledBitmap = Bitmap.createScaledBitmap(
+                            it,
+                            TensorFLowHelper.imageSize,
+                            TensorFLowHelper.imageSize, false
+                        )
+                        TensorFLowHelper.classifyImage(scaledBitmap, context) {
+                            _searchQuery.value = it
+                        }
+                    }
+
+                }
+            }
+
+        }
     }
 }
