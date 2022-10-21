@@ -10,8 +10,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.SettingsVoice
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
@@ -23,7 +21,6 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 import countryinfo.app.R
-import countryinfo.app.presentation.vm.CountryListVm
 import countryinfo.app.theme.SearchBG
 import countryinfo.app.uicomponents.scaffold_comp.getDP
 import countryinfo.app.utils.EMPTY_STRING
@@ -56,7 +53,7 @@ fun DsgSearchComponent(query : String,
             .border(
                 width = getDP(dimenKey = R.dimen.dp_16),
                 color = Color.White,
-                shape = RoundedCornerShape(getDP(dimenKey = R.dimen.dp_25))
+                shape = RoundedCornerShape(getDP(dimenKey = R.dimen.dp_30))
             )
             .padding(all = getDP(dimenKey = R.dimen.dp_8))
             .fillMaxWidth()
