@@ -75,7 +75,7 @@ class MainActivityUITest {
             composeTestRule.onNodeWithTag("back_icon").performClick()
             savedScreenIconToClick.onChildAt(0).onChildAt(1).performClick()
             onNodeWithTag("home_saved_screen").assertIsDisplayed()
-            val nodesSize = onAllNodesWithText("Shop @DICK's").fetchSemanticsNodes().size
+            val nodesSize = onAllNodesWithText("Shop @DICK'S").fetchSemanticsNodes().size
             if (nodesSize > 0) {
                 savedScreenIconToClick.onChildAt(0).onChildAt(2).performClick()
                 onNodeWithTag("home_shop_screen").assertIsDisplayed()
@@ -153,7 +153,7 @@ class MainActivityUITest {
             onNodeWithTag("test_bottom_navigation").assertIsDisplayed()
             SystemClock.sleep(20000)
 
-            val nodesSize = onAllNodesWithText("Shop @DICK's").fetchSemanticsNodes().size
+            val nodesSize = onAllNodesWithText("Shop @DICK'S").fetchSemanticsNodes().size
             if (nodesSize > 0) {
                 val savedScreenIconToClick = onNodeWithTag("test_bottom_navigation", true)
                 savedScreenIconToClick.onChildAt(0).onChildAt(2).performClick()
