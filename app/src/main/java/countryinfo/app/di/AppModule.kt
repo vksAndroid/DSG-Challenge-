@@ -1,6 +1,7 @@
 package countryinfo.app.di
 
 import android.content.Context
+import android.content.res.AssetManager
 import android.speech.SpeechRecognizer
 import countryinfo.app.utils.ConvertSpeechToTextHelper
 import dagger.Module
@@ -24,6 +25,12 @@ class AppModule {
     @Provides
     fun provideConvertSpeechToTextHelper(speechRecognizer: SpeechRecognizer): ConvertSpeechToTextHelper {
         return ConvertSpeechToTextHelper(speechRecognizer)
+    }
+
+    @Singleton
+    @Provides
+    fun provideAssetManager(@ApplicationContext appContext: Context): AssetManager {
+        return appContext.assets
     }
 
 }
