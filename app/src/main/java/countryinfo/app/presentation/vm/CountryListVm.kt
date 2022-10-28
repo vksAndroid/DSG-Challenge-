@@ -226,6 +226,18 @@ class CountryListVm @Inject constructor(
         }
     }
 
+    /**
+     * @param screen - Setting up data of Selected Screen
+     * @param selectedCountry - When user clicked on Any country item it will saved in view model
+     *
+     */
+    fun updateScreenData(screen : ScreenOptions,selectedCountry : CountryData) {
+
+        setSavedScreen(screen)
+        updateCountryData(selectedCountry)
+        isCountryFav(selectedCountry.cca3)
+    }
+
     fun addFavourite(countryItem: CountryData) {
         viewModelScope.launch {
             withContext(dispatcher) {

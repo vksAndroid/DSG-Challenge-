@@ -78,16 +78,13 @@ fun HomeSearchTab(navController: NavController?, viewModel: CountryListVm) {
 
             if (searchList.value.isEmpty() && query.length < 2) {
                 CountryListView(true, isConnected, errorState, navController, countryList.value) {
-                    viewModel.setSavedScreen(ScreenOptions.DetailScreen)
-                    viewModel.updateCountryData(it)
-                    viewModel.isCountryFav(it.cca3)
+
+                    viewModel.updateScreenData(ScreenOptions.DetailScreen,it)
+
                 }
             } else {
                 CountryListView(true, isConnected, errorState, navController, searchList.value) {
-                    viewModel.setSavedScreen(ScreenOptions.DetailScreen)
-                    viewModel.updateCountryData(it)
-                    viewModel.isCountryFav(it.cca3)
-
+                    viewModel.updateScreenData(ScreenOptions.DetailScreen,it)
                 }
             }
         }
