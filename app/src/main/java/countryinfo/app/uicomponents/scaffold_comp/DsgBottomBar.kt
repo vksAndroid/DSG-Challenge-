@@ -12,12 +12,14 @@ import countryinfo.app.utils.ScreenOptions
 @Composable
 fun DsgBottomBar(
     navController: NavController,
-    screenOptions: ScreenOptions) {
+    screenOptions: ScreenOptions,
+    isCurrentLocationAmerica: Boolean
+) {
 
     when (screenOptions) {
 
         ScreenOptions.SearchScreen -> {
-            DsgBottomMenu(navController, false)
+            DsgBottomMenu(navController, false, isCurrentLocationAmerica)
         }
         ScreenOptions.DetailScreen -> {
             DsgBottomMenu(navController, true)

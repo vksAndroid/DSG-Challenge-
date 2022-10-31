@@ -51,9 +51,6 @@ fun DetailOverViewTab(viewModel: CountryListVm) {
         countryDetail.car.side.let {
             CountryDetailComponent(title = stringResource(id = R.string.car_driver_side), uiComp = { DriveSideComponent(it) })
         }
-        countryDetail.car.side.let {
-            CountryDetailComponent(title = stringResource(id = R.string.car_driver_side), value = it, isDriverItem = true)
-        }
 
         CountryDetailComponent(title = stringResource(id = R.string.population), uiComp = { ValueComponent(countryDetail.population) })
 

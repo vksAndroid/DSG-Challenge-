@@ -8,7 +8,9 @@ import countryinfo.app.presentation.screens.detail.CountryMapScreen
 import countryinfo.app.presentation.screens.detail.DetailOverViewTab
 import countryinfo.app.presentation.screens.home.HomeSavedTab
 import countryinfo.app.presentation.screens.home.HomeSearchTab
+import countryinfo.app.presentation.screens.home.HomeShopTab
 import countryinfo.app.presentation.vm.CountryListVm
+import countryinfo.app.presentation.vm.DsgShopVm
 import countryinfo.app.utils.titleSaved
 import countryinfo.app.utils.titleSearch
 
@@ -16,6 +18,7 @@ import countryinfo.app.utils.titleSearch
 fun DsgNavigationGraph(
     navController: NavHostController,
     viewModel: CountryListVm,
+    shopViewModel: DsgShopVm,
     route: String
 ) {
 
@@ -53,6 +56,12 @@ fun DsgNavigationGraph(
 
         }
 
+        composable(BottomTab.TabDsgSearch.route) {
+            HomeShopTab(
+                viewModel = shopViewModel
+            ) {viewModel.title.value = it}
+
+        }
 
     }
 }
