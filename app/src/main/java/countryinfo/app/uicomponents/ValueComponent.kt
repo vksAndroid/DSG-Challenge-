@@ -27,17 +27,13 @@ import countryinfo.app.utils.formatWithComma
 fun ValueComponent(value: Any) {
 
     when (value) {
-        is String ->
-            RenderText(value)
+        is String -> RenderText(value)
 
-        is ArrayList<*> ->
-            RenderList(list = value)
+        is ArrayList<*> -> RenderList(list = value)
 
-        is Map<*, *> ->
-            RenderCurrency(map = value)
+        is Map<*, *> -> RenderCurrency(map = value)
 
-        is Int ->
-            RenderText(value.toString().toLongOrNull().formatWithComma())
+        is Int -> RenderText(value.toString().toLongOrNull().formatWithComma())
 
         else -> RenderText("$value")
 
@@ -46,24 +42,16 @@ fun ValueComponent(value: Any) {
 }
 
 @Composable
-fun RenderText(value : String) {
-
-    DsgTextView(value=value, fontWeight = FontWeight.Medium, fontSize = 14.sp, modifier = Modifier.padding(getDP(dimenKey = R.dimen.dp_10)))
-
-}
-
-@Composable
-fun RenderCurrency(map : Map<*,*>) {
+fun RenderCurrency(map: Map<*, *>) {
 
     if (map.size <= 1) {
         for (currency in map) {
 
-            val name = if (currency.value is String)
-                currency.value as String
+            val name = if (currency.value is String) currency.value as String
             else {
                 val currencyModel = (currency.value as CurrenciesName)
 
-                "${currency.key} (${ currencyModel.symbol + " " + currencyModel.name})"
+                "${currency.key} (${currencyModel.symbol + " " + currencyModel.name})"
 
             }
             RenderText(value = name)
@@ -89,15 +77,16 @@ fun RenderText(value: String) {
         lines = 2,
         modifier = Modifier.padding(getDP(dimenKey = R.dimen.dp_5))
     )
-fun RenderList(list : ArrayList<*>) {
-    if (list.size <= 1)
-        RenderText(list[0].toString())
-    else
-        Column {
-            list.forEach { data ->
-                BulletItem(data.toString())
-            }
+}
+
+@Composable
+fun RenderList(list: ArrayList<*>) {
+    if (list.size <= 1) RenderText(list[0].toString())
+    else Column {
+        list.forEach { data ->
+            BulletItem(data.toString())
         }
+    }
 }
 
 @Composable
@@ -114,8 +103,7 @@ fun BulletItem(data: String) {
                 append("\t\t")
                 append(data)
             }
-        },
-        modifier = Modifier.padding(
+        }, modifier = Modifier.padding(
             getDP(dimenKey = R.dimen.dp_4)
         ), style = bulletTextStyle
     )
