@@ -29,11 +29,13 @@ fun DetailOverViewTab(viewModel: CountryListVm) {
     viewModel.title.value = titleCountries
 
     ConstraintLayout(
-        setComponentsUsingConstraints(), modifier = Modifier.testTag("detail_overview_screen")
+        setComponentsUsingConstraints(), modifier = Modifier
+            .testTag("detail_overview_screen")
             .fillMaxSize()
             .verticalScroll(
                 rememberScrollState()
-            ).padding(bottom = 12.dp)
+            )
+            .padding(bottom = 12.dp)
     ) {
         ImageFullFlag(flagImageUrl = countryDetail.flags.png)
 
@@ -44,7 +46,7 @@ fun DetailOverViewTab(viewModel: CountryListVm) {
 
         CountryBasicDetail(countryDetail)
 
-                 CountryDetailComponent(title = stringResource(id = R.string.languages), value = countryDetail.languages)
+                CountryDetailComponent(title = stringResource(id = R.string.languages), value = countryDetail.languages)
 
                 CountryDetailComponent(title = stringResource(id = R.string.currencies), value = countryDetail.currencies)
 
@@ -52,9 +54,9 @@ fun DetailOverViewTab(viewModel: CountryListVm) {
                     CountryDetailComponent(title = stringResource(id = R.string.car_driver_side), value = it, isDriverItem = true)
                 }
 
-        CountryDetailComponent(title = stringResource(id = R.string.population), value = countryDetail.population)
+                CountryDetailComponent(title = stringResource(id = R.string.population), value = countryDetail.population)
 
-                 CountryDetailComponent(title = stringResource(id = R.string.timezones), value = countryDetail.timezones)
+                CountryDetailComponent(title = stringResource(id = R.string.timezones), value = countryDetail.timezones)
 
                 countryDetail.coatOfArms?.png?.let {
                     CountryDetailComponent(
@@ -103,7 +105,7 @@ fun setComponentsUsingConstraints(): ConstraintSet {
             start.linkTo(idTimeZone.end)
             top.linkTo(idTimeZone.top)
             bottom.linkTo(idTimeZone.bottom)
-
+            end.linkTo(parent.end)
             height = Dimension.fillToConstraints
         }
         constrain(idLanguages) {
@@ -114,6 +116,7 @@ fun setComponentsUsingConstraints(): ConstraintSet {
             start.linkTo(idLanguages.end)
             bottom.linkTo(idLanguages.bottom)
             top.linkTo(idLanguages.top)
+            end.linkTo(parent.end)
             height = Dimension.fillToConstraints
         }
 
@@ -126,6 +129,7 @@ fun setComponentsUsingConstraints(): ConstraintSet {
         constrain(idCoatOfArm) {
             start.linkTo(idDriverSide.end)
             top.linkTo(idLanguages.bottom)
+            end.linkTo(parent.end)
         }
     }
 }

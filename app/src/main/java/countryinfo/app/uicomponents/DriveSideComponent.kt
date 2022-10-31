@@ -4,7 +4,6 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -29,10 +28,11 @@ fun DriveSideComponent(driverSide: String) {
         modifier = Modifier.padding(top = getDP(dimenKey = R.dimen.dp_12))
     ) {
 
-        Text(
-            text = stringResource(id = R.string.left), fontWeight = FontWeight.Normal,
+        DsgTextView(
+            value = stringResource(id = R.string.left), fontWeight = FontWeight.Normal,
             color = if (isLeft) Color.DarkGray else Color.LightGray,
             fontSize = 16.sp,
+            style = null,
             modifier = Modifier.padding(start = 0.dp, end = getDP(dimenKey = R.dimen.dp_10))
         )
 
@@ -42,10 +42,11 @@ fun DriveSideComponent(driverSide: String) {
             modifier = Modifier.size(width = getDP(dimenKey = R.dimen.dp_20)
                 , height = getDP(dimenKey = R.dimen.dp_20))
         )
-        Text(
-            text = stringResource(id = R.string.right), fontWeight = FontWeight.Normal,
+        DsgTextView(
+            value = stringResource(id = R.string.right), fontWeight = FontWeight.Normal,
             color = if (isLeft) Color.LightGray else Color.DarkGray,
             fontSize = 16.sp,
+            style = null,
             modifier = Modifier.padding(start = getDP(dimenKey = R.dimen.dp_10),
                 end = getDP(dimenKey = R.dimen.dp_10))
         )

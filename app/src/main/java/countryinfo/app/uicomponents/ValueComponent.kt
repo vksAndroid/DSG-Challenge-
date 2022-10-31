@@ -5,18 +5,16 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.ParagraphStyle
 import androidx.compose.ui.text.buildAnnotatedString
-import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextIndent
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.sp
 import countryinfo.app.R
 import countryinfo.app.data.model.CurrenciesName
+import countryinfo.app.theme.bulletTextStyle
 import countryinfo.app.uicomponents.scaffold_comp.getDP
-import countryinfo.app.utils.EMPTY_STRING
 import countryinfo.app.utils.formatWithComma
 
 /**
@@ -47,16 +45,16 @@ fun ValueComponent(value: Any) {
             if (value.size <= 1) {
                 for (currency in value) {
 
-                     val name = if (currency.value is String)
-                         currency.value as String
+                    val name = if (currency.value is String)
+                        currency.value as String
                     else {
                         val currencyModel = (currency.value as CurrenciesName)
 
-                         "${currency.key} (${ currencyModel.symbol + " " + currencyModel.name})"
+                        "${currency.key} (${currencyModel.symbol + " " + currencyModel.name})"
 
-                     }
+                    }
                     RenderText(value = name)
-                 }
+                }
             } else {
                 Column {
 
@@ -71,17 +69,24 @@ fun ValueComponent(value: Any) {
         is Int -> {
             RenderText(value.toString().toLongOrNull().formatWithComma())
         }
-        else -> { RenderText("$value") }
+        else -> {
+            RenderText("$value")
+        }
 
     }
 
 }
 
 @Composable
-fun RenderText(value : String) {
+fun RenderText(value: String) {
 
-    DsgTextView(value,FontWeight.Medium, fontSize = 14.sp, modifier = Modifier.padding(getDP(dimenKey = R.dimen.dp_10)))
-
+    DsgTextView(
+        value = value,
+        style = bulletTextStyle,
+        textAlign = TextAlign.Center,
+        lines = 2,
+        modifier = Modifier.padding(getDP(dimenKey = R.dimen.dp_5))
+    )
 }
 
 @Composable
@@ -99,9 +104,9 @@ fun BulletItem(data: String) {
                 append(data)
             }
         },
-        color = Color.Gray,
-        fontWeight = FontWeight.Medium, fontSize = 14.sp,
-        modifier = Modifier.padding(getDP(dimenKey = R.dimen.dp_4))
+        modifier = Modifier.padding(
+            getDP(dimenKey = R.dimen.dp_4)
+        ), style = bulletTextStyle
     )
 
 }

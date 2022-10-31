@@ -31,7 +31,8 @@ fun CountryMapScreen(
     val countryDetail = viewModel.observeCountryData().collectAsState().value
 
     ConstraintLayout(
-        setComponentsUsingConstraints1(), modifier = Modifier.testTag("country_map_screen")
+        setComponentsUsingConstraints1(), modifier = Modifier
+            .testTag("country_map_screen")
             .fillMaxSize()
     ) {
         LoadContent(
@@ -57,7 +58,8 @@ fun LoadContent(
     LazyColumn(
         modifier = Modifier
             .wrapContentHeight()
-            .fillMaxWidth().padding(bottom = 12.dp),
+            .fillMaxWidth()
+            .padding(bottom = 12.dp),
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
 
@@ -66,7 +68,9 @@ fun LoadContent(
             when (item) {
                 is MapType.Header -> {
                     ConstraintLayout(constraintSet = mapHeaderConstraints(),
-                    modifier = Modifier.fillMaxWidth().wrapContentHeight()) {
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .wrapContentHeight()) {
                         countryDetail.flags.png.let {
                             ImageFullFlag(flagImageUrl = it)
                         }
@@ -186,7 +190,7 @@ fun mapHeaderConstraints(): ConstraintSet {
             top.linkTo(parent.top)
         }
         constrain(idBasicDetail) {
-            top.linkTo(idCountry.bottom, margin = 10.dp)
+            top.linkTo(idCountry.bottom, margin = 24.dp)
         }
         constrain(idCountry) {
             bottom.linkTo(idTopFlag.bottom)
