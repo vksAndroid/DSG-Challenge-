@@ -24,22 +24,14 @@ import kotlinx.coroutines.launch
 @Composable
 fun DsgBottomMenu(
     navController: NavController,
-    isDetailScreen: Boolean = true,
-    isCurrentLocationAmerica: Boolean = false
-) {
+    isDetailScreen: Boolean = true) {
 
     val menuItems = if (isDetailScreen)
         listOf(
             BottomTab.TabOverview,
             BottomTab.TabMap
         )
-    else if (isCurrentLocationAmerica) {
-        listOf(
-            BottomTab.TabSearch,
-            BottomTab.TabSaved,
-            BottomTab.TabDsgSearch
-        )
-    } else {
+    else {
         listOf(
             BottomTab.TabSearch,
             BottomTab.TabSaved

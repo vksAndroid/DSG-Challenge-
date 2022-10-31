@@ -26,13 +26,10 @@ import javax.inject.Inject
 class CountryListVm @Inject constructor(
     private val countryListRepo: CountryListRepo,
     private val mFusedLocationClient: FusedLocationProviderClient,
-    private val speechToTextHelper: ConvertSpeechToTextHelper,
     @IoDispatcher private val dispatcher: CoroutineDispatcher
 ) : ViewModel() {
 
     private var apiJob: Job? = null
-
-    private var changeErrorMsg = false
 
     var isFav = mutableStateOf(false)
 
@@ -226,6 +223,18 @@ class CountryListVm @Inject constructor(
         }
     }
 
+    /**
+     * @param screen - Setting up data of Selected Screen
+     * @param selectedCountry - When user clicked on Any country item it will saved in view model
+     *
+     */
+    fun updateScreenData(screen : ScreenOptions,selectedCountry : CountryData) {
+        setSavedScreen(screen)
+        updateCountryData(selectedCountry)
+        isCountryFav(selectedCountry.cca3)
+    }
+
+
     fun addFavourite(countryItem: CountryData) {
         viewModelScope.launch {
             withContext(dispatcher) {
@@ -265,12 +274,4 @@ class CountryListVm @Inject constructor(
         }
     }
 
-    fun convertSpeechToText() {
-        speechToTextHelper.speechToTextConverter(
-            {
-                updateSearchQuery(it)
-            }) {
-            speechToTextHelper.speechRecognizer.stopListening()
-        }
-    }
 }

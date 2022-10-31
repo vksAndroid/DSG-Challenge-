@@ -8,18 +8,16 @@ import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
-import coil.compose.AsyncImage
 import coil.compose.rememberAsyncImagePainter
 import coil.request.CachePolicy
 import coil.request.ImageRequest
 import countryinfo.app.R
+import countryinfo.app.theme.dsgTitleBlackBold
+import countryinfo.app.theme.dsgTitleDarkGrayMedium
+import countryinfo.app.theme.dsgTitleGrayMedium
 import countryinfo.app.uicomponents.scaffold_comp.getDP
 import countryinfo.app.utils.EMPTY_STRING
 
@@ -78,19 +76,13 @@ fun CountryItemView(
                     )
             ) {
                 DsgTextView(
-                    value = commonName ?: EMPTY_STRING,
-                    fontWeight = FontWeight.Bold,
-                    color = Color.Black
+                    value = commonName ?: EMPTY_STRING, style = dsgTitleBlackBold
                 )
                 DsgTextView(
-                    value = officialName ?: EMPTY_STRING,
-                    fontWeight = FontWeight.Medium,
-                    color = Color.DarkGray
+                    value = officialName ?: EMPTY_STRING, style = dsgTitleDarkGrayMedium
                 )
                 DsgTextView(
-                    value = capitalName,
-                    fontWeight = FontWeight.Medium,
-                    color = Color.Gray
+                    value = capitalName, style = dsgTitleGrayMedium
                 )
             }
         }

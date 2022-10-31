@@ -12,7 +12,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.ConstraintSet
+import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
+import com.google.maps.android.compose.CameraPositionState
+import com.google.maps.android.compose.rememberCameraPositionState
 import countryinfo.app.R
 import countryinfo.app.data.model.CountryData
 import countryinfo.app.presentation.vm.CountryListVm
@@ -67,12 +70,10 @@ fun LoadContent(
 
             when (item) {
                 is MapType.Header -> {
-                    ConstraintLayout(
-                        constraintSet = mapHeaderConstraints(),
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .wrapContentHeight()
-                    ) {
+                    ConstraintLayout(constraintSet = mapHeaderConstraints(),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .wrapContentHeight()) {
                         countryDetail.flags.png.let {
                             ImageFullFlag(flagImageUrl = it)
                         }
@@ -94,7 +95,10 @@ fun LoadContent(
                             textLabel = stringResource(id = R.string.your_current_location),
                             textValue = EMPTY_STRING
                         )
-                        MapViewComponent(currentLatLng, MapType.CurrentLocation)
+                        MapViewComponent(currentLatLng, true, MapZoomLevel(
+                            location = currentLatLng,
+                            zoom =  15f
+                        ))
                     }
                 }
 
@@ -115,7 +119,10 @@ fun LoadContent(
                     } catch (ex: Exception) {
                         LatLng(0.0, 0.0)
                     }
-                    MapViewComponent(countryLocation, MapType.Country)
+                        MapViewComponent(countryLocation, false, MapZoomLevel(
+                            location = countryLocation,
+                            zoom =  6f
+                        ))
 
                 }
                 is MapType.Capital -> {
@@ -143,7 +150,10 @@ fun LoadContent(
                         LatLng(0.0, 0.0)
                     }
 
-                    MapViewComponent(capitalLocation, MapType.Capital)
+                    MapViewComponent(capitalLocation, false, MapZoomLevel(
+                        location = capitalLocation,
+                        zoom = 11f
+                    ))
                 }
             }
         }
@@ -193,13 +203,20 @@ fun mapHeaderConstraints(): ConstraintSet {
             top.linkTo(parent.top)
         }
         constrain(idBasicDetail) {
-            top.linkTo(idCountry.bottom, margin = 10.dp)
+            top.linkTo(idCountry.bottom, margin = 24.dp)
         }
         constrain(idCountry) {
             bottom.linkTo(idTopFlag.bottom)
             top.linkTo(idTopFlag.bottom)
             start.linkTo(parent.start, margin = 12.dp)
         }
+    }
+}
+
+@Composable
+fun MapZoomLevel(location: LatLng, zoom: Float): CameraPositionState {
+    return rememberCameraPositionState {
+        position = CameraPosition.fromLatLngZoom(location, zoom)
     }
 }
 

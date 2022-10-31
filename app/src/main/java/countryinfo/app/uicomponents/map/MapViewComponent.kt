@@ -8,11 +8,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import com.google.android.gms.maps.CameraUpdateFactory
-import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
 import com.google.maps.android.compose.*
 import countryinfo.app.R
-import countryinfo.app.presentation.screens.detail.MapType
 import countryinfo.app.uicomponents.scaffold_comp.getDP
 
 /**
@@ -20,32 +18,7 @@ import countryinfo.app.uicomponents.scaffold_comp.getDP
  * @param locationType Type of Location like Country,Capitala dn region
  */
 @Composable
-fun MapViewComponent(location: LatLng, locationType: MapType) {
-
-    val cameraCurrentLocation = rememberCameraPositionState {
-        position = CameraPosition.fromLatLngZoom(location, 15f)
-    }
-
-    val cameraCountry = rememberCameraPositionState {
-        position = CameraPosition.fromLatLngZoom(location, 6f)
-    }
-
-    val cameraCapital = rememberCameraPositionState {
-        position = CameraPosition.fromLatLngZoom(location, 11f)
-    }
-
-    val zoom = when (locationType) {
-        is MapType.CurrentLocation -> {
-            cameraCurrentLocation
-        }
-        is MapType.Country -> {
-            cameraCountry
-        }
-        is MapType.Capital -> {
-            cameraCapital
-        }
-        else -> {cameraCapital}
-    }
+fun MapViewComponent(location: LatLng, showMarker: Boolean, zoom: CameraPositionState) {
 
     GoogleMap(
         modifier = Modifier
@@ -59,7 +32,7 @@ fun MapViewComponent(location: LatLng, locationType: MapType) {
             zoom.move(CameraUpdateFactory.newLatLng(location))
         }
     ) {
-        if (locationType == MapType.CurrentLocation) {
+        if (showMarker) {
             Marker(
                 state = MarkerState(location),
                 title = stringResource(id = R.string.your_current_location),
