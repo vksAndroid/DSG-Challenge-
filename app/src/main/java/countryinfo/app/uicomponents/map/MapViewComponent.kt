@@ -8,6 +8,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import com.google.android.gms.maps.CameraUpdateFactory
+import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
 import com.google.maps.android.compose.*
 import countryinfo.app.R
@@ -18,7 +19,11 @@ import countryinfo.app.uicomponents.scaffold_comp.getDP
  * @param locationType Type of Location like Country,Capitala dn region
  */
 @Composable
-fun MapViewComponent(location: LatLng, showMarker: Boolean, zoom: CameraPositionState) {
+fun MapViewComponent(location: LatLng, showMarker: Boolean, zoomLevel: Float) {
+
+    val cameraPositionState =  rememberCameraPositionState {
+        position = CameraPosition.fromLatLngZoom(location, zoomLevel)
+    }
 
     GoogleMap(
         modifier = Modifier
@@ -26,10 +31,10 @@ fun MapViewComponent(location: LatLng, showMarker: Boolean, zoom: CameraPosition
             .fillMaxWidth()
             .height(getDP(dimenKey = R.dimen.dp_400))
             .padding(start = getDP(dimenKey = R.dimen.dp_12), end = getDP(dimenKey = R.dimen.dp_12)),
-        cameraPositionState = zoom,
+        cameraPositionState = cameraPositionState,
         uiSettings = MapUiSettings(mapToolbarEnabled = false),
         onMapLoaded = {
-            zoom.move(CameraUpdateFactory.newLatLng(location))
+            cameraPositionState.move(CameraUpdateFactory.newLatLng(location))
         }
     ) {
         if (showMarker) {
