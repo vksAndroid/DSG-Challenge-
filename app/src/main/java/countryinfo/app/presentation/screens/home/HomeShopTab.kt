@@ -1,12 +1,8 @@
 package countryinfo.app.presentation.screens.home
 
-import android.graphics.Bitmap
 import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -14,9 +10,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.filled.ArrowDropUp
@@ -32,8 +25,8 @@ import countryinfo.app.R
 import countryinfo.app.data.model.ProductVOs
 import countryinfo.app.presentation.graph.BottomTab
 import countryinfo.app.presentation.vm.DsgShopVm
-import countryinfo.app.uicomponents.LoadingShimmerEffect
 import countryinfo.app.uicomponents.DsgSearchComponent
+import countryinfo.app.uicomponents.LoadingShimmerEffect
 import countryinfo.app.uicomponents.scaffold_comp.getDP
 
 @Composable
