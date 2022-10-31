@@ -31,8 +31,6 @@ class CountryListVm @Inject constructor(
 
     private var apiJob: Job? = null
 
-    private var changeErrorMsg = false
-
     var isFav = mutableStateOf(false)
 
     var title = mutableStateOf(titleSearch)
@@ -231,7 +229,6 @@ class CountryListVm @Inject constructor(
      *
      */
     fun updateScreenData(screen : ScreenOptions,selectedCountry : CountryData) {
-
         setSavedScreen(screen)
         updateCountryData(selectedCountry)
         isCountryFav(selectedCountry.cca3)

@@ -14,7 +14,6 @@ import androidx.compose.ui.unit.dp
 import countryinfo.app.R
 import countryinfo.app.theme.detailsTextStyle
 import countryinfo.app.uicomponents.scaffold_comp.getDP
-import countryinfo.app.utils.EMPTY_STRING
 
 @Composable
 fun CountryDetailComponent(
@@ -52,12 +51,6 @@ fun CountryDetailComponent(
             )
 
             uiComp()
-//            if (isImage)
-//                ImageCoatOfArm(imageUrl)
-//            else if (isDriverItem)
-//                DriveSideComponent(value as String)
-//            else
-//                ValueComponent(value = value)
 
         }
     }

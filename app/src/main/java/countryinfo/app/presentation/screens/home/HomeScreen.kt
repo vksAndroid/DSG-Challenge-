@@ -24,7 +24,6 @@ import countryinfo.app.uicomponents.scaffold_comp.DsgBottomBar
 import countryinfo.app.uicomponents.scaffold_comp.DsgSnackBar
 import countryinfo.app.uicomponents.scaffold_comp.DsgTopBar
 import countryinfo.app.utils.ScreenOptions
-import countryinfo.app.utils.checkLocationPermission
 import countryinfo.app.utils.networkconnection.ConnectionState
 import countryinfo.app.utils.networkconnection.connectivityState
 import countryinfo.app.utils.titleSearch
