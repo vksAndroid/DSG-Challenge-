@@ -4,7 +4,6 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Icon
-import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
@@ -33,12 +32,15 @@ fun TopBar(
 ) {
     TopAppBar(contentColor = Color.Black,
         title = {
-            Text(
-                text = title,
-                modifier = Modifier.testTag("top_bar")
+            DsgTextView(
+                value = title,
+                modifier = Modifier
+                    .testTag("top_bar")
                     .fillMaxWidth()
                     .padding(end = 64.dp),
-                textAlign = if(isShowNavigation)TextAlign.Start else TextAlign.Center
+                style = null,
+                color = Color.Black,
+                textAlign = if (isShowNavigation) TextAlign.Start else TextAlign.Center
             )
         },
 
@@ -47,7 +49,8 @@ fun TopBar(
                 Icon(
                     Icons.Default.ArrowBack,
                     contentDescription = "",
-                    modifier = Modifier.testTag("back_icon")
+                    modifier = Modifier
+                        .testTag("back_icon")
                         .padding(getDP(dimenKey = R.dimen.dp_8))
                         .clickable { clickAction.invoke() }
                 )
@@ -57,7 +60,8 @@ fun TopBar(
                 Icon(
                     if (isSaved) Icons.Outlined.Bookmark else Icons.Outlined.BookmarkBorder,
                     contentDescription = contentDescriptionSaveCountry,
-                    modifier = Modifier.testTag("save_icon")
+                    modifier = Modifier
+                        .testTag("save_icon")
                         .padding(8.dp)
                         .clickable { onFavClick.invoke() },
                     tint = ThemeBlue

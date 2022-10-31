@@ -38,60 +38,84 @@ fun CountryBasicDetail(countryData: CountryData) {
         Row(
             modifier = Modifier
                 .fillMaxWidth(),
-            Arrangement.SpaceAround,
+            horizontalArrangement = Arrangement.SpaceAround,
             verticalAlignment = Alignment.CenterVertically
         ) {
 
-            ShowItem(stringResource(id = R.string.region), countryData.region)
+            repeat(3) {
 
-            Divider(
-                modifier = Modifier
-                    .width(getDP(dimenKey = R.dimen.dp_1))
-                    .height(getDP(dimenKey = R.dimen.dp_30)),
-                color = Color.LightGray
-            )
+                Box(
+                    modifier = Modifier
+                        .weight(1f),
+                ) {
 
-            ShowItem(stringResource(id = R.string.subregion), countryData.subregion)
+                    when (it) {
+                        0 -> {
+                            ShowItem(stringResource(id = R.string.region), countryData.region)
+                        }
+                        1 -> {
+                            ShowItem(stringResource(id = R.string.subregion), countryData.subregion)
+                        }
+                        else -> {
+                            val capital =
+                                if (countryData.capital.isNotEmpty()) countryData.capital[0] else ""
+                            ShowItem(stringResource(id = R.string.capital), capital)
+                        }
+                    }
+                }
 
-            Divider(
-                modifier = Modifier
-                    .width(getDP(dimenKey = R.dimen.dp_1))
-                    .height(getDP(dimenKey = R.dimen.dp_30)),
-                color = Color.LightGray
-            )
-
-            val capital = if (countryData.capital.isNotEmpty()) countryData.capital[0] else ""
-            ShowItem(stringResource(id = R.string.capital), capital)
+                if (it < 2) {
+                    Divider(
+                        modifier = Modifier
+                            .width(getDP(dimenKey = R.dimen.dp_1))
+                            .height(getDP(dimenKey = R.dimen.dp_30)),
+                        color = Color.LightGray
+                    )
+                }
+            }
         }
     }
 }
 
 
 @Composable
-fun RowScope.ShowItem(title: String, value: String) {
+fun ShowItem(title: String, value: String) {
 
     Column(
-        modifier = Modifier.weight(1f)
-            .padding(vertical = getDP(dimenKey = R.dimen.dp_10),
-                horizontal =getDP(dimenKey = R.dimen.dp_5)),
+        modifier = Modifier
+            .padding(
+                vertical = getDP(dimenKey = R.dimen.dp_10),
+                horizontal = getDP(dimenKey = R.dimen.dp_2)
+            )
+            .fillMaxWidth(),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
 
-        Text(
-            text = title, fontWeight = FontWeight.Bold,
-            color = Color.DarkGray,
-            fontSize = 16.sp,
-            modifier = Modifier.padding(end = getDP(R.dimen.dp_10))
+        DsgTextView(
+            value = title,
+            style = countryBasicDetailTitle,
+            modifier = Modifier
+                .fillMaxWidth(),
+            textAlign = TextAlign.Center
+
         )
 
-        Text(
+        AutoResizeText(
             text = value,
             maxLines = 1,
-            color = Color.DarkGray,
+            color = Color.Gray,
             fontWeight = FontWeight.Medium,
-            modifier = Modifier.padding(end = getDP(R.dimen.dp_10), top = getDP(R.dimen.dp_5)),
+            fontSizeRange = FontSizeRange(
+                min = 12.sp,
+                max = 15.sp,
+            ),
+            textAlign = TextAlign.Center,
+            modifier = Modifier
+                .padding(all = getDP(R.dimen.dp_5))
+                .fillMaxWidth(),
             overflow = TextOverflow.Ellipsis,
         )
+
     }
 }
 

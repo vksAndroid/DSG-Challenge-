@@ -94,7 +94,7 @@ fun LoadContent(
                             textLabel = stringResource(id = R.string.your_current_location),
                             textValue = EMPTY_STRING
                         )
-                        MapViewComponent(currentLatLng, MapType.CurrentLocation)
+                        MapViewComponent(currentLatLng, true, 15f)
                     }
                 }
 
@@ -115,7 +115,7 @@ fun LoadContent(
                     } catch (ex: Exception) {
                         LatLng(0.0, 0.0)
                     }
-                    MapViewComponent(countryLocation, MapType.Country)
+                        MapViewComponent(countryLocation, false, 6f)
 
                 }
                 is MapType.Capital -> {
@@ -143,7 +143,7 @@ fun LoadContent(
                         LatLng(0.0, 0.0)
                     }
 
-                    MapViewComponent(capitalLocation, MapType.Capital)
+                    MapViewComponent(capitalLocation, false, 11f)
                 }
             }
         }
@@ -193,7 +193,7 @@ fun mapHeaderConstraints(): ConstraintSet {
             top.linkTo(parent.top)
         }
         constrain(idBasicDetail) {
-            top.linkTo(idCountry.bottom, margin = 10.dp)
+            top.linkTo(idCountry.bottom, margin = 24.dp)
         }
         constrain(idCountry) {
             bottom.linkTo(idTopFlag.bottom)

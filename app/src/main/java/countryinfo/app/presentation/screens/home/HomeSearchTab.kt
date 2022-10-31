@@ -14,6 +14,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
@@ -78,15 +82,12 @@ fun HomeSearchTab(navController: NavController?, viewModel: CountryListVm) {
 
             if (searchList.value.isEmpty() && query.length < 2) {
                 CountryListView(true, isConnected, errorState, navController, countryList.value) {
-                    viewModel.setSavedScreen(ScreenOptions.DetailScreen)
-                    viewModel.updateCountryData(it)
-                    viewModel.isCountryFav(it.cca3)
+                    viewModel.updateScreenData(ScreenOptions.DetailScreen,it)
+
                 }
             } else {
                 CountryListView(true, isConnected, errorState, navController, searchList.value) {
-                    viewModel.setSavedScreen(ScreenOptions.DetailScreen)
-                    viewModel.updateCountryData(it)
-                    viewModel.isCountryFav(it.cca3)
+                    viewModel.updateScreenData(ScreenOptions.DetailScreen,it)
 
                 }
             }

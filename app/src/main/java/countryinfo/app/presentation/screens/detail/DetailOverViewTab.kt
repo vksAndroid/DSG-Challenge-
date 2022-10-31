@@ -15,10 +15,7 @@ import androidx.constraintlayout.compose.ConstraintSet
 import androidx.constraintlayout.compose.Dimension
 import countryinfo.app.R
 import countryinfo.app.presentation.vm.CountryListVm
-import countryinfo.app.uicomponents.CountryBasicDetail
-import countryinfo.app.uicomponents.CountryDetailComponent
-import countryinfo.app.uicomponents.CountryNameCard
-import countryinfo.app.uicomponents.ImageFullFlag
+import countryinfo.app.uicomponents.*
 import countryinfo.app.utils.*
 
 @Composable
@@ -29,11 +26,13 @@ fun DetailOverViewTab(viewModel: CountryListVm) {
     viewModel.title.value = titleCountries
 
     ConstraintLayout(
-        setComponentsUsingConstraints(), modifier = Modifier.testTag("detail_overview_screen")
+        setComponentsUsingConstraints(), modifier = Modifier
+            .testTag("detail_overview_screen")
             .fillMaxSize()
             .verticalScroll(
                 rememberScrollState()
-            ).padding(bottom = 12.dp)
+            )
+            .padding(bottom = 12.dp)
     ) {
         ImageFullFlag(flagImageUrl = countryDetail.flags.png)
 
@@ -44,26 +43,28 @@ fun DetailOverViewTab(viewModel: CountryListVm) {
 
         CountryBasicDetail(countryDetail)
 
-                 CountryDetailComponent(title = stringResource(id = R.string.languages), value = countryDetail.languages)
+        CountryDetailComponent(title = stringResource(id = R.string.languages)
+        ) { ValueComponent(value = countryDetail.languages) }
 
-                CountryDetailComponent(title = stringResource(id = R.string.currencies), value = countryDetail.currencies)
+        CountryDetailComponent(title = stringResource(id = R.string.currencies), uiComp = { RenderCurrency(map = countryDetail.currencies) })
 
+        countryDetail.car.side.let {
+            CountryDetailComponent(title = stringResource(id = R.string.car_driver_side), uiComp = { DriveSideComponent(it) })
+        }
         countryDetail.car.side.let {
             CountryDetailComponent(title = stringResource(id = R.string.car_driver_side), value = it, isDriverItem = true)
         }
 
-        CountryDetailComponent(title = stringResource(id = R.string.population), value = countryDetail.population)
+        CountryDetailComponent(title = stringResource(id = R.string.population), uiComp = { ValueComponent(countryDetail.population) })
 
-                 CountryDetailComponent(title = stringResource(id = R.string.timezones), value = countryDetail.timezones)
+        CountryDetailComponent(title = stringResource(id = R.string.timezones), uiComp = { RenderList(list = countryDetail.timezones) })
 
-                countryDetail.coatOfArms?.png?.let {
-                    CountryDetailComponent(
-                        isImage = true,
-                        imageUrl = it,
-                        title = stringResource(id = R.string.coat_of_arms),
-                        value = EMPTY_STRING
-                    )
-                }
+        countryDetail.coatOfArms?.png?.let {
+            CountryDetailComponent(
+                title = stringResource(id = R.string.coat_of_arms),
+                uiComp = { ImageCoatOfArm(it) }
+            )
+        }
 
     }
 
@@ -126,6 +127,7 @@ fun setComponentsUsingConstraints(): ConstraintSet {
         constrain(idCoatOfArm) {
             start.linkTo(idDriverSide.end)
             top.linkTo(idLanguages.bottom)
+            end.linkTo(parent.end)
         }
     }
 }

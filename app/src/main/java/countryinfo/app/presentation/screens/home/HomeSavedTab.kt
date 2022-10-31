@@ -48,9 +48,8 @@ fun HomeSavedTab(navController: NavController?, viewModel: CountryListVm) {
                     navController,
                     countrySavedList.value
                 ) {
-                    viewModel.setSavedScreen(ScreenOptions.DetailScreen)
-                    viewModel.updateCountryData(it)
-                    viewModel.isCountryFav(it.cca3)
+                    viewModel.updateScreenData(ScreenOptions.DetailScreen,it)
+
                 }
             }
         }

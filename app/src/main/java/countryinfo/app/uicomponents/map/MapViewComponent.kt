@@ -12,7 +12,6 @@ import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
 import com.google.maps.android.compose.*
 import countryinfo.app.R
-import countryinfo.app.presentation.screens.detail.MapType
 import countryinfo.app.uicomponents.scaffold_comp.getDP
 
 /**
@@ -20,31 +19,10 @@ import countryinfo.app.uicomponents.scaffold_comp.getDP
  * @param locationType Type of Location like Country,Capitala dn region
  */
 @Composable
-fun MapViewComponent(location: LatLng, locationType: MapType) {
+fun MapViewComponent(location: LatLng, showMarker: Boolean, zoomLevel: Float) {
 
-    val cameraCurrentLocation = rememberCameraPositionState {
-        position = CameraPosition.fromLatLngZoom(location, 15f)
-    }
-
-    val cameraCountry = rememberCameraPositionState {
-        position = CameraPosition.fromLatLngZoom(location, 6f)
-    }
-
-    val cameraCapital = rememberCameraPositionState {
-        position = CameraPosition.fromLatLngZoom(location, 11f)
-    }
-
-    val zoom = when (locationType) {
-        is MapType.CurrentLocation -> {
-            cameraCurrentLocation
-        }
-        is MapType.Country -> {
-            cameraCountry
-        }
-        is MapType.Capital -> {
-            cameraCapital
-        }
-        else -> {cameraCapital}
+    val cameraPositionState =  rememberCameraPositionState {
+        position = CameraPosition.fromLatLngZoom(location, zoomLevel)
     }
 
     GoogleMap(
@@ -53,13 +31,13 @@ fun MapViewComponent(location: LatLng, locationType: MapType) {
             .fillMaxWidth()
             .height(getDP(dimenKey = R.dimen.dp_400))
             .padding(start = getDP(dimenKey = R.dimen.dp_12), end = getDP(dimenKey = R.dimen.dp_12)),
-        cameraPositionState = zoom,
+        cameraPositionState = cameraPositionState,
         uiSettings = MapUiSettings(mapToolbarEnabled = false),
         onMapLoaded = {
-            zoom.move(CameraUpdateFactory.newLatLng(location))
+            cameraPositionState.move(CameraUpdateFactory.newLatLng(location))
         }
     ) {
-        if (locationType == MapType.CurrentLocation) {
+        if (showMarker) {
             Marker(
                 state = MarkerState(location),
                 title = stringResource(id = R.string.your_current_location),
