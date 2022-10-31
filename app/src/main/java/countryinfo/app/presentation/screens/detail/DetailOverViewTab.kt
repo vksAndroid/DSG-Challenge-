@@ -52,7 +52,7 @@ fun DetailOverViewTab(viewModel: CountryListVm) {
             CountryDetailComponent(title = stringResource(id = R.string.car_driver_side), uiComp = { DriveSideComponent(it) })
         }
 
-        CountryDetailComponent(title = stringResource(id = R.string.population), uiComp = { RenderText(countryDetail.population.toString()) })
+        CountryDetailComponent(title = stringResource(id = R.string.population), uiComp = { ValueComponent(countryDetail.population) })
 
         CountryDetailComponent(title = stringResource(id = R.string.timezones), uiComp = { RenderList(list = countryDetail.timezones) })
 

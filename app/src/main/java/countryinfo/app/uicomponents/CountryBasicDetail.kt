@@ -60,7 +60,7 @@ fun CountryBasicDetail(countryData: CountryData) {
                         else -> {
                             val capital =
                                 if (countryData.capital.isNotEmpty()) countryData.capital[0] else ""
-                            ShowItem(stringResource(id = R.string.region), capital)
+                            ShowItem(stringResource(id = R.string.capital), capital)
                         }
                     }
                 }
