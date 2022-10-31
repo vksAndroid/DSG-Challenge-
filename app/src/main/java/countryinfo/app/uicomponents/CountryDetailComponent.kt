@@ -21,10 +21,8 @@ import countryinfo.app.utils.EMPTY_STRING
 
 @Composable
 fun CountryDetailComponent(
-    isImage: Boolean = false,
-    imageUrl: String = EMPTY_STRING,
-    title: String, value: Any,
-    isDriverItem: Boolean = false
+    title: String,
+    uiComp: Unit
 ) {
 
     Card(
@@ -51,12 +49,14 @@ fun CountryDetailComponent(
                 fontSize = 16.sp,
                 modifier = Modifier.padding( end = getDP(dimenKey = R.dimen.dp_10))
             )
-            if (isImage)
-                ImageCoatOfArm(imageUrl)
-            else if (isDriverItem)
-                DriveSideComponent(value as String)
-            else
-                ValueComponent(value = value)
+
+            uiComp
+//            if (isImage)
+//                ImageCoatOfArm(imageUrl)
+//            else if (isDriverItem)
+//                DriveSideComponent(value as String)
+//            else
+//                ValueComponent(value = value)
 
         }
     }
