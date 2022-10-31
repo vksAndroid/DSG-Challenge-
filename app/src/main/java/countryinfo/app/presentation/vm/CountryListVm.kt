@@ -151,7 +151,7 @@ class CountryListVm @Inject constructor(
     fun getCountryList() {
         viewModelScope.launch {
             withContext(dispatcher) {
-                val result = countryListRepo.getCountryList()
+                val result = countryListRepo.getCountryListLocalJson()
                 result.catch { exception ->
                     exception.message?.let { errorSate.value }
                     // ApiResult.Failure(exception.message, exception.cause)

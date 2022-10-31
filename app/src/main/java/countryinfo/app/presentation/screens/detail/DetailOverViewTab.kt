@@ -43,22 +43,23 @@ fun DetailOverViewTab(viewModel: CountryListVm) {
 
         CountryBasicDetail(countryDetail)
 
-        CountryDetailComponent(title = stringResource(id = R.string.languages), ValueComponent(value = countryDetail.languages))
+        CountryDetailComponent(title = stringResource(id = R.string.languages)
+        ) { ValueComponent(value = countryDetail.languages) }
 
-        CountryDetailComponent(title = stringResource(id = R.string.currencies), uiComp = RenderCurrency(map = countryDetail.currencies))
+        CountryDetailComponent(title = stringResource(id = R.string.currencies), uiComp = { RenderCurrency(map = countryDetail.currencies) })
 
         countryDetail.car.side.let {
-            CountryDetailComponent(title = stringResource(id = R.string.car_driver_side), uiComp = DriveSideComponent(it))
+            CountryDetailComponent(title = stringResource(id = R.string.car_driver_side), uiComp = { DriveSideComponent(it) })
         }
 
-        CountryDetailComponent(title = stringResource(id = R.string.population), uiComp = RenderText(countryDetail.population.toString()))
+        CountryDetailComponent(title = stringResource(id = R.string.population), uiComp = { RenderText(countryDetail.population.toString()) })
 
-        CountryDetailComponent(title = stringResource(id = R.string.timezones), uiComp = RenderList(list = countryDetail.timezones))
+        CountryDetailComponent(title = stringResource(id = R.string.timezones), uiComp = { RenderList(list = countryDetail.timezones) })
 
         countryDetail.coatOfArms?.png?.let {
                     CountryDetailComponent(
                         title = stringResource(id = R.string.coat_of_arms),
-                        uiComp = ImageCoatOfArm(it)
+                        uiComp = { ImageCoatOfArm(it) }
                     )
         }
 

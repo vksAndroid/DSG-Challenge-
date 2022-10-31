@@ -22,7 +22,7 @@ import countryinfo.app.utils.EMPTY_STRING
 @Composable
 fun CountryDetailComponent(
     title: String,
-    uiComp: Unit
+    uiComp: @Composable() () -> Unit
 ) {
 
     Card(
@@ -50,7 +50,7 @@ fun CountryDetailComponent(
                 modifier = Modifier.padding( end = getDP(dimenKey = R.dimen.dp_10))
             )
 
-            uiComp
+            uiComp()
 //            if (isImage)
 //                ImageCoatOfArm(imageUrl)
 //            else if (isDriverItem)

@@ -138,15 +138,17 @@ class DsgShopVm @Inject constructor(
                         isAmericaStateFlow.value = country.equals(CONSTANT_STRING_USA)
                     }
                 } else {
-                    val addressList = geocoder.getFromLocation(
-                        location.latitude,
-                        location.longitude,
-                        1
-                    )
-                    if ((addressList != null && addressList.size > 0)) {
-                        val country = addressList[0]?.countryName
-                        isAmericaStateFlow.value = country.equals(CONSTANT_STRING_USA)
-                    }
+                    isAmericaStateFlow.value = false
+
+//                    val addressList = geocoder.getFromLocation(
+//                        location.latitude,
+//                        location.longitude,
+//                        1
+//                    )
+//                    if ((addressList != null && addressList.size > 0)) {
+//                        val country = addressList[0]?.countryName
+//                        isAmericaStateFlow.value = country.equals(CONSTANT_STRING_USA)
+//                    }
                 }
             }
         }
