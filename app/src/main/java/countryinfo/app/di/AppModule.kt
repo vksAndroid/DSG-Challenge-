@@ -25,6 +25,10 @@ class AppModule {
     @Provides
     fun provideConvertSpeechToTextHelper(speechRecognizer: SpeechRecognizer): ConvertSpeechToTextHelper {
         return ConvertSpeechToTextHelper(speechRecognizer)
+    }
+
+    @Singleton
+    @Provides
     fun provideAssetManager(@ApplicationContext appContext: Context): AssetManager {
         return appContext.assets
     }
