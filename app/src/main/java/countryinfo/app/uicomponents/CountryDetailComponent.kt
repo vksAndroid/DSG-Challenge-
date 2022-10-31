@@ -18,7 +18,7 @@ import countryinfo.app.uicomponents.scaffold_comp.getDP
 @Composable
 fun CountryDetailComponent(
     title: String,
-    uiComp: @Composable() () -> Unit
+    uiComp: @Composable () -> Unit
 ) {
 
     Card(
