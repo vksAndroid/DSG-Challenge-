@@ -152,7 +152,6 @@ class CountryListVm @Inject constructor(
                 val result = countryListRepo.getCountryList()
                 result.catch { exception ->
                     exception.message?.let { errorSate.value }
-                    // ApiResult.Failure(exception.message, exception.cause)
                 }
                 result.collect {
                     when (it) {

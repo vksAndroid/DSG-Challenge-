@@ -1,16 +1,21 @@
 package countryinfo.app.data.repository
 
+import android.content.res.AssetManager
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import countryinfo.app.data.ApiInterface
 import countryinfo.app.data.local.CountriesDao
 import countryinfo.app.data.model.CountryData
 import countryinfo.app.utils.ApiResult
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import java.io.IOException
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class CountryListRepo @Inject constructor(private var client: ApiInterface, private var dao: CountriesDao) {
+class CountryListRepo @Inject constructor(private var client: ApiInterface, private var dao: CountriesDao
+                                          , private var assetManager: AssetManager) {
     /**
      * Get country list
      *
@@ -45,6 +50,26 @@ class CountryListRepo @Inject constructor(private var client: ApiInterface, priv
         } else {
             emit(ApiResult.Failure(response.message(), Throwable(response.errorBody().toString())))
         }
+    }
+
+    /**
+     * Get country list from local Json
+     *
+     * @return list of countries
+     */
+    fun getCountryListLocalJson(): Flow<ApiResult<List<CountryData>>> = flow {
+        emit(ApiResult.Loading)
+        lateinit var jsonString: String
+        try {
+            jsonString = assetManager.open("demo_country_response.json")
+                .bufferedReader()
+                .use { it.readText() }
+        } catch (ioException: IOException) {
+            emit(ApiResult.Failure(ioException.message, Throwable(ioException.message)))
+        }
+
+        val listCountryType = object : TypeToken<List<CountryData>>() {}.type
+        emit(ApiResult.Success(Gson().fromJson(jsonString, listCountryType)))
     }
 
     /**
